@@ -59,27 +59,31 @@ export default function ProposalThreePage() {
 
         {/* Contenu centré */}
         <section className="relative z-20 flex min-h-[calc(100vh-126px)] flex-col items-center justify-center px-6 pb-16 pt-4 lg:px-16 lg:pb-20 lg:pt-6">
-          <div className="w-full max-w-4xl text-center">
+          <div className="w-full max-w-3xl text-center">
             <div className="hero-panel">
-
-              {/* Subtitle */}
-              <p className="mt-7 max-w-xl mx-auto text-base font-medium text-[#617182] sm:text-lg">
-                {activeMarket.subtitle}
-              </p>
-
+              {/* Headline */}
               <motion.h1
                 key={activeMarket.id + "-h1"}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7 }}
-                className="mt-8 text-5xl font-light italic leading-[1] tracking-tight text-[#1a2535] sm:text-7xl xl:text-8xl font-serif"
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-5xl font-black leading-[1.05] tracking-[-0.01em] text-[#1a2535] sm:text-6xl"
               >
                 Trouvez le bien idéal
                 <br />
-                <span className="font-normal not-italic text-[#3B5998] opacity-90">
-                  en quelques secondes
-                </span>
+                <span className="text-[#3B5998]">en quelques secondes</span>
               </motion.h1>
+
+              <motion.p
+                key={activeMarket.id + "-sub"}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mt-4 text-base text-[#617182] sm:text-lg"
+              >
+                Avec recherche classique ou IA intelligente ·{" "}
+                {activeMarket.country}
+              </motion.p>
 
               {/* Search & Filters */}
               <div className="mt-8">
@@ -97,11 +101,30 @@ export default function ProposalThreePage() {
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-center">
+              {/* <div className="mt-6 flex justify-center">
                 <QuickFilters
                   activeKey={null}
                   onSelect={(key) => submitSearch({ filter: key })}
                 />
+              </div> */}
+              <div className="mt-4 flex flex-nowrap overflow-x-auto gap-2 pb-1 scrollbar-hide sm:flex-wrap sm:justify-center sm:overflow-visible sm:pb-0">
+                {[
+                  {
+                    label: "Appartement à votre proximité",
+                    key: "appartement",
+                  },
+                  { label: "Maison avec piscine", key: "piscine" },
+                  { label: "Villa avec terrasse", key: "villa" },
+                ].map(({ label, key }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => submitSearch({ filter: key })}
+                    className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-white/70 bg-white/65 px-4 py-2 text-[0.70rem] font-semibold uppercase tracking-[0.13em] text-[#3d4e5c] shadow-[0_4px_12px_rgba(20,28,40,0.06)] backdrop-blur-sm transition hover:border-[#3B5998]/40 hover:text-[#3B5998]"
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
             </div>
           </div>

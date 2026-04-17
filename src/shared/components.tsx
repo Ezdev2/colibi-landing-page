@@ -32,6 +32,7 @@ import {
   ArrowRight,
   Maximize,
   BellRing,
+  List,
 } from "lucide-react";
 
 import type { Market, ProposalKey, SearchFormState, SearchMode } from "./types";
@@ -224,7 +225,7 @@ export function TopNav({
         {/* ── LEFT: logo + nav desktop ── */}
         <div className="flex items-center gap-8">
           <Link to={buildPath("/", { country: countryId })}>
-            <img src="/images/logo-blue.png" alt="Logo" className="w-16" />
+            <img src="/images/Logo_blanc.png" alt="Logo" className="w-16" />
           </Link>
         </div>
         {/* Nav desktop uniquement */}
@@ -552,7 +553,7 @@ export function SearchPanel({
   return (
     <div className={`glass-card rounded-[30px] ${compact ? "p-4 sm:p-5" : "p-5 sm:p-6"}`}>
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      {/* <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[#677484]">
             {content.title}
@@ -564,16 +565,16 @@ export function SearchPanel({
         <div className="flex-shrink-0 inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl border border-white/70 bg-white/62 text-[#3B5998]">
           <SlidersHorizontal className="h-4 w-4 sm:h-5 sm:w-5" />
         </div>
-      </div>
+      </div> */}
 
       {/* Mode classic */}
       {mode === "classic" && (
-        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <FieldShell icon={<Home className="h-4 w-4" />} label="Type de bien">
             <select
               value={form.propertyType}
               onChange={(e) => setForm((c) => ({ ...c, propertyType: e.target.value }))}
-              className="mt-3 w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+              className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>Maison</option>
               <option>Appartement</option>
@@ -583,11 +584,11 @@ export function SearchPanel({
             </select>
           </FieldShell>
 
-          <FieldShell icon={<MapPin className="h-4 w-4" />} label="Secteur">
+          <FieldShell icon={<MapPin className="h-4 w-4" />} label="Adresse">
             <input
               value={form.location}
               onChange={(e) => setForm((c) => ({ ...c, location: e.target.value }))}
-              className="mt-3 w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
+              className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
               placeholder="Quartier, commune, zone"
             />
           </FieldShell>
@@ -596,7 +597,7 @@ export function SearchPanel({
             <select
               value={form.budget}
               onChange={(e) => setForm((c) => ({ ...c, budget: e.target.value }))}
-              className="mt-3 w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+              className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>1 M€ – 3 M€</option>
               <option>3 M€ – 8 M€</option>
@@ -609,7 +610,7 @@ export function SearchPanel({
             <select
               value={form.surface}
               onChange={(e) => setForm((c) => ({ ...c, surface: e.target.value }))}
-              className="mt-3 w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+              className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>150 m² +</option>
               <option>250 m² +</option>
@@ -622,7 +623,7 @@ export function SearchPanel({
 
       {/* Mode AI */}
       {mode === "ai" && (
-        <div className="mt-5">
+        <div className="">
           <FieldShell
             icon={<Sparkles className="h-4 w-4" />}
             label="Prompt IA"
@@ -640,12 +641,12 @@ export function SearchPanel({
 
       {/* Mode offmarket */}
       {mode === "offmarket" && (
-        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <FieldShell icon={<Home className="h-4 w-4" />} label="Typologie visée">
             <select
               value={form.offmarketType}
               onChange={(e) => setForm((c) => ({ ...c, offmarketType: e.target.value }))}
-              className="mt-3 w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+              className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>Maison</option>
               <option>Appartement</option>
@@ -659,7 +660,7 @@ export function SearchPanel({
             <input
               value={form.offmarketArea}
               onChange={(e) => setForm((c) => ({ ...c, offmarketArea: e.target.value }))}
-              className="mt-3 w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
+              className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
               placeholder="Secteur premium ciblé"
             />
           </FieldShell>
@@ -668,7 +669,7 @@ export function SearchPanel({
             <select
               value={form.offmarketBudget}
               onChange={(e) => setForm((c) => ({ ...c, offmarketBudget: e.target.value }))}
-              className="mt-3 w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+              className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>Confidentiel</option>
               <option>5 M€ +</option>
@@ -681,7 +682,7 @@ export function SearchPanel({
             <select
               value={form.offmarketTiming}
               onChange={(e) => setForm((c) => ({ ...c, offmarketTiming: e.target.value }))}
-              className="mt-3 w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+              className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>Sous 6 mois</option>
               <option>Sous 12 mois</option>
@@ -693,23 +694,23 @@ export function SearchPanel({
       )}
 
       {/* CTA buttons */}
-      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center justify-center w-full">
         <button
           type="button"
           onClick={onSearch}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
+          className="w-full  inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
         >
-          {content.action}
-          <Search className="h-4 w-4" />
+          <List className="h-4 w-4" />
+          Rechercher dans la liste
         </button>
 
         <button
           type="button"
           onClick={onInterest}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+          className="w-full  inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
         >
-          <Heart className="h-4 w-4" />
-          Marquer mon intérêt
+          <MapPin className="h-4 w-4" />
+          Recherche sur la carte
         </button>
       </div>
     </div>
@@ -800,7 +801,7 @@ export function MarketStoryCard({ market }: { market: Market }) {
         />
       </div>
 
-      <div className="mt-5">
+      <div className="">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#677484]">
           {market.country} — Plus populaire
         </p>
@@ -880,6 +881,163 @@ export function ListingsSection({
             </p>
             <h2 className="mt-3 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
               Derniers biens disponibles
+            </h2>
+          </div>
+          {/* Category filters */}
+          <div className="flex flex-wrap gap-2">
+            {["Tous", "Maison", "Appartement", "Villa", "Bungallow", "Autre"].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => {
+                  document
+                    .getElementById("listings")
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#d6dce6] bg-white px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#3d4e5c] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Cards grid */}
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {displayedListings.map((listing, index) => (
+            <motion.article
+              key={listing.id}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.45, delay: index * 0.07 }}
+              className="overflow-hidden rounded-[28px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
+            >
+              {/* Image */}
+              <div className="relative h-52 overflow-hidden">
+                <img
+                  src={getMarket(listing.country).image}
+                  alt={listing.title}
+                  className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                  style={{ objectPosition: listing.focus }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+
+                {/* Badge */}
+                <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+                  {listing.offmarket ? (
+                    <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+                      Off-market
+                    </span>
+                  ) : index === 0 ? (
+                    <span className="rounded-full bg-[#e85d30]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+                      Nouveau
+                    </span>
+                  ) : index === 1 ? (
+                    <span className="rounded-full bg-[#2da05b]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+                      Bonne affaire
+                    </span>
+                  ) : index === 2 ? (
+                    <span className="rounded-full bg-[#e8a020]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+                      Très consulté
+                    </span>
+                  ) : null}
+                </div>
+
+                {/* Title overlay */}
+                <div className="absolute bottom-3 left-4 right-4">
+                  <p className="text-[0.63rem] font-semibold uppercase tracking-[0.18em] text-white/75">
+                    {listing.district}
+                  </p>
+                  <h3 className="mt-1 text-lg font-black uppercase leading-tight tracking-[0.06em] text-white">
+                    {listing.title}
+                  </h3>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="p-4">
+                <div className="flex items-baseline justify-between">
+                  <p className="text-lg font-black tracking-tight text-[#22303a]">
+                    {listing.price}
+                  </p>
+                  <button
+                    type="button"
+                    className="rounded-full border border-[#d6dce4] p-1.5 text-[#8a97a4] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                  >
+                    <Heart className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+
+                <div className="mt-2 flex flex-wrap items-center gap-3 text-[0.68rem] text-[#667484]">
+                  <span className="flex items-center gap-1">
+                    <Building2 className="h-3 w-3" />
+                    {listing.surface}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <BedDouble className="h-3 w-3" />
+                    {listing.suites}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {listing.district}
+                  </span>
+                </div>
+
+                <p className="mt-2 text-[0.68rem] text-[#8a97a4]">
+                  Publié il y à {index + 1} jour{index > 0 ? "s" : ""}
+                  {index === 2 && (
+                    <span className="ml-2 inline-flex items-center gap-1 text-[#e8a020]">
+                      · Très consulté
+                    </span>
+                  )}
+                </p>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="mt-10 flex justify-center">
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="inline-flex items-center gap-2 rounded-full bg-[#3B5998] px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(59,89,152,0.32)] transition hover:brightness-105"
+          >
+            Voir tous les biens
+            <ArrowUpRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function MostViewSection({
+  activeMarket,
+}: {
+  activeMarket: Market;
+  onNavigate: (path: string) => void;
+}) {
+  const displayedListings = listings.filter(
+    (l) => l.country === activeMarket.id,
+  );
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  return (
+    <section
+      id="listing"
+      className="bg-white/80 backdrop-blur-sm border-t border-[#d7d1c7]"
+    >
+      <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
+        {/* Header */}
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#677484]">
+              {activeMarket.country}
+            </p>
+            <h2 className="mt-3 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
+              Plus populaires
             </h2>
           </div>
           {/* Category filters */}
@@ -1257,7 +1415,7 @@ export function MascotWidget({
                 className="inline-flex items-center gap-2 rounded-full border border-[#3B5998]/20 bg-white/80 px-5 py-2.5 text-[0.72rem] font-semibold text-[#3B5998] shadow-[0_8px_20px_rgba(59,89,152,0.12)] backdrop-blur-sm transition hover:bg-white"
               >
                 <Sparkles className="h-4 w-4" />
-                Trouver un bien avec IA →
+                En savoir plus sur nous →
               </button>
             </motion.div>
 

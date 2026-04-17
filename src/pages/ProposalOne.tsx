@@ -9,10 +9,20 @@ import {
   ProposalSideRail,
   MascotWidget,
   WhyIASection,
+  FieldShell,
+  MostViewSection,
 } from "../shared/components";
-import { quickFilters } from "../shared/data";
-import { buildPath } from "../shared/utils";
 import { useNavigate } from "react-router-dom";
+
+import {
+  Building2,
+  Calendar,
+  Home,
+  Infinity as InfinityIcon,
+  Landmark,
+  ShieldCheck,
+  List,
+} from "lucide-react";
 
 export default function ProposalOnePage() {
   const {
@@ -25,6 +35,10 @@ export default function ProposalOnePage() {
     submitSearch,
   } = useHeroSearch("/");
   const navigate = useNavigate();
+
+    const handleMapSearch = () => {
+    submitSearch(); 
+  };
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#f6f3ed] text-[#1f2933]">
@@ -80,8 +94,8 @@ export default function ProposalOnePage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-4 text-base text-[#617182] sm:text-lg"
             >
-              Avec recherche classique ou IA intelligente ·{" "}
-              {activeMarket.country}
+              Votre bien idéal avec l'IA ou la recherche classique · Opérant sur toute la France et la Belgique
+              {/* {activeMarket.country} */}
             </motion.p>
 
             {/* Search tabs — scrollable horizontalement sur mobile */}
@@ -123,7 +137,7 @@ export default function ProposalOnePage() {
             </div>
 
             {/* Search input box — pleine largeur sur mobile */}
-            <motion.div
+            {/* <motion.div
               layout
               className="mx-auto mt-5 w-full max-w-2xl rounded-[20px] border border-white/75 bg-white/80 p-3 sm:p-4 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl"
             >
@@ -198,7 +212,216 @@ export default function ProposalOnePage() {
                   </button>
                 </div>
               )}
-            </motion.div>
+            </motion.div> */}
+
+            <div
+              className="glass-card rounded-[30px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75"
+            >
+              {/* Mode classic */}
+              {mode === "classic" && (
+                <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <FieldShell
+                    icon={<Home className="h-4 w-4" />}
+                    label="Type de bien"
+                  >
+                    <select
+                      value={form.propertyType}
+                      onChange={(e) =>
+                        setForm((c) => ({ ...c, propertyType: e.target.value }))
+                      }
+                      className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                    >
+                      <option>Maison</option>
+                      <option>Appartement</option>
+                      <option>Penthouse</option>
+                      <option>Terrain</option>
+                      <option>Villa</option>
+                    </select>
+                  </FieldShell>
+
+                  <FieldShell
+                    icon={<MapPin className="h-4 w-4" />}
+                    label="Adresse"
+                  >
+                    <input
+                      value={form.location}
+                      onChange={(e) =>
+                        setForm((c) => ({ ...c, location: e.target.value }))
+                      }
+                      className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
+                      placeholder="Quartier, commune, zone"
+                    />
+                  </FieldShell>
+
+                  <FieldShell
+                    icon={<Landmark className="h-4 w-4" />}
+                    label="Budget"
+                  >
+                    <select
+                      value={form.budget}
+                      onChange={(e) =>
+                        setForm((c) => ({ ...c, budget: e.target.value }))
+                      }
+                      className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                    >
+                      <option>1 M€ – 3 M€</option>
+                      <option>3 M€ – 8 M€</option>
+                      <option>8 M€ – 15 M€</option>
+                      <option>15 M€ +</option>
+                    </select>
+                  </FieldShell>
+
+                  <FieldShell
+                    icon={<Building2 className="h-4 w-4" />}
+                    label="Surface"
+                  >
+                    <select
+                      value={form.surface}
+                      onChange={(e) =>
+                        setForm((c) => ({ ...c, surface: e.target.value }))
+                      }
+                      className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                    >
+                      <option>150 m² +</option>
+                      <option>250 m² +</option>
+                      <option>400 m² +</option>
+                      <option>800 m² +</option>
+                    </select>
+                  </FieldShell>
+                </div>
+              )}
+
+              {/* Mode AI */}
+              {mode === "ai" && (
+                <div className="mb-5">
+                  <FieldShell
+                    icon={<img 
+      src="/images/avatar-mascot.png" 
+      alt="IA Mascot" 
+      className="h-10 w-10  border-1 border-[#3B5998]/50 p-0.5 rounded-full object-cover"
+    />}
+                    label="Décrivez le bien idéal"
+                    className="min-h-[160px]"
+                  >
+                    <textarea
+                      value={form.aiPrompt}
+                      onChange={(e) =>
+                        setForm((c) => ({ ...c, aiPrompt: e.target.value }))
+                      }
+                      className="mt-3 min-h-[50px] w-full resize-none bg-transparent text-sm font-medium leading-7 text-[#283340] outline-none placeholder:text-[#7a8795]"
+                      placeholder="Décrivez le bien idéal : volume, lumière, style architectural..."
+                    />
+                  </FieldShell>
+                </div>
+              )}
+
+              {/* Mode offmarket */}
+              {mode === "offmarket" && (
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {/* <FieldShell
+                    icon={<Home className="h-4 w-4" />}
+                    label="Typologie visée"
+                  >
+                    <select
+                      value={form.offmarketType}
+                      onChange={(e) =>
+                        setForm((c) => ({
+                          ...c,
+                          offmarketType: e.target.value,
+                        }))
+                      }
+                      className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                    >
+                      <option>Maison</option>
+                      <option>Appartement</option>
+                      <option>Penthouse</option>
+                      <option>Immeuble</option>
+                      <option>Terrain</option>
+                    </select>
+                  </FieldShell> */}
+
+                  {/* <FieldShell
+                    icon={<MapPin className="h-4 w-4" />}
+                    label="Zone confidentielle"
+                  >
+                    <input
+                      value={form.offmarketArea}
+                      onChange={(e) =>
+                        setForm((c) => ({
+                          ...c,
+                          offmarketArea: e.target.value,
+                        }))
+                      }
+                      className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
+                      placeholder="Secteur premium ciblé"
+                    />
+                  </FieldShell> */}
+
+                  {/* <FieldShell
+                    icon={<ShieldCheck className="h-4 w-4" />}
+                    label="Enveloppe"
+                  >
+                    <select
+                      value={form.offmarketBudget}
+                      onChange={(e) =>
+                        setForm((c) => ({
+                          ...c,
+                          offmarketBudget: e.target.value,
+                        }))
+                      }
+                      className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                    >
+                      <option>Confidentiel</option>
+                      <option>5 M€ +</option>
+                      <option>10 M€ +</option>
+                      <option>20 M€ +</option>
+                    </select>
+                  </FieldShell> */}
+
+                  {/* <FieldShell
+                    icon={<Calendar className="h-4 w-4" />}
+                    label="Horizon d'acquisition"
+                  >
+                    <select
+                      value={form.offmarketTiming}
+                      onChange={(e) =>
+                        setForm((c) => ({
+                          ...c,
+                          offmarketTiming: e.target.value,
+                        }))
+                      }
+                      className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                    >
+                      <option>Sous 6 mois</option>
+                      <option>Sous 12 mois</option>
+                      <option>Veille active</option>
+                      <option>Long terme</option>
+                    </select>
+                  </FieldShell> */}
+                </div>
+              )}
+
+              {/* CTA buttons */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center w-full">
+                <button
+                  type="button"
+                  onClick={() => submitSearch()}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
+                >
+                  <List className="h-4 w-4" />
+                  Rechercher dans la liste
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleMapSearch}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                >
+                  <MapPin className="h-4 w-4" />
+                  Recherche sur la carte
+                </button>
+              </div>
+            </div>
 
             {/* Quick filters — scrollable sur mobile */}
             <div className="mt-4 flex flex-nowrap overflow-x-auto gap-2 pb-1 scrollbar-hide sm:flex-wrap sm:justify-center sm:overflow-visible sm:pb-0">
@@ -227,12 +450,16 @@ export default function ProposalOnePage() {
         onNavigate={(p) => navigate(p)}
       />
 
+      <MostViewSection
+        activeMarket={activeMarket}
+        onNavigate={(p) => navigate(p)}
+      />
       <WhyIASection />
 
       {/* ── FOOTER ───────────────────────────────────────────────── */}
       <Footer market={activeMarket} />
 
-      <ProposalSideRail countryId={activeMarket.id} current="one" />
+      {/* <ProposalSideRail countryId={activeMarket.id} current="one" /> */}
       <MascotWidget />
     </main>
   );
