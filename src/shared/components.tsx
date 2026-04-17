@@ -1447,8 +1447,8 @@ export function Footer({ market }: { market: Market }) {
       title: "Explorer",
       links: [
         "Appartements",
-        "Investissement locatif",
-        "Propriétés de luxe",
+        "Maison",
+        "Villa",
       ],
     },
   ];

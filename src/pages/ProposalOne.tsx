@@ -318,7 +318,7 @@ export default function ProposalOnePage() {
                   <FieldShell
                     icon={
                       <img
-                        src="/images/avatar-mascot.png"
+                        src="/images/avatar-mascot.jpg"
                         alt="IA Mascot"
                         className="h-10 w-10  border-1 border-[#3B5998]/50 p-0.5 rounded-full object-cover"
                       />
