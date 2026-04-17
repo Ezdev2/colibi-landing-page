@@ -215,7 +215,7 @@ export default function ProposalOnePage() {
             </motion.div> */}
 
             <div
-              className="glass-card rounded-[30px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75"
+              className="glass-card rounded-[20px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75"
             >
               {/* Mode classic */}
               {mode === "classic" && (

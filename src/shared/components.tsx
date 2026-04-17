@@ -870,7 +870,7 @@ export function ListingsSection({
   return (
     <section
       id="listing"
-      className="bg-white/80 backdrop-blur-sm border-t border-[#d7d1c7]"
+      className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
     >
       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
         {/* Header */}
@@ -911,7 +911,7 @@ export function ListingsSection({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45, delay: index * 0.07 }}
-              className="overflow-hidden rounded-[28px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
+              className="overflow-hidden rounded-[16px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
             >
               {/* Image */}
               <div className="relative h-52 overflow-hidden">
@@ -1027,7 +1027,7 @@ export function MostViewSection({
   return (
     <section
       id="listing"
-      className="bg-white/80 backdrop-blur-sm border-t border-[#d7d1c7]"
+      className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
     >
       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
         {/* Header */}
@@ -1068,7 +1068,7 @@ export function MostViewSection({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45, delay: index * 0.07 }}
-              className="overflow-hidden rounded-[28px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
+              className="overflow-hidden rounded-[16px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
             >
               {/* Image */}
               <div className="relative h-52 overflow-hidden">
