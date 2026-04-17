@@ -36,8 +36,8 @@ export default function ProposalOnePage() {
   } = useHeroSearch("/");
   const navigate = useNavigate();
 
-    const handleMapSearch = () => {
-    submitSearch(); 
+  const handleMapSearch = () => {
+    submitSearch();
   };
 
   return (
@@ -94,7 +94,8 @@ export default function ProposalOnePage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-4 text-base text-[#617182] sm:text-lg"
             >
-              Votre bien idéal avec l'IA ou la recherche classique · Opérant sur toute la France et la Belgique
+              Votre bien idéal avec l'IA ou la recherche classique · Opérant sur
+              toute la France et la Belgique
               {/* {activeMarket.country} */}
             </motion.p>
 
@@ -214,11 +215,9 @@ export default function ProposalOnePage() {
               )}
             </motion.div> */}
 
-            <div
-              className="glass-card rounded-[20px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75"
-            >
-              {/* Mode classic */}
-              {mode === "classic" && (
+            {/* Mode classic */}
+            {mode === "classic" && (
+              <div className="glass-card rounded-[20px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
                 <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <FieldShell
                     icon={<Home className="h-4 w-4" />}
@@ -289,17 +288,41 @@ export default function ProposalOnePage() {
                     </select>
                   </FieldShell>
                 </div>
-              )}
+                {/* CTA buttons */}
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center w-full">
+                  <button
+                    type="button"
+                    onClick={() => submitSearch()}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
+                  >
+                    <List className="h-4 w-4" />
+                    Rechercher dans la liste
+                  </button>
 
-              {/* Mode AI */}
-              {mode === "ai" && (
+                  <button
+                    type="button"
+                    onClick={handleMapSearch}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    Rechercher sur la carte
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Mode AI */}
+            {mode === "ai" && (
+              <div className="glass-card rounded-[20px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
                 <div className="mb-5">
                   <FieldShell
-                    icon={<img 
-      src="/images/avatar-mascot.png" 
-      alt="IA Mascot" 
-      className="h-10 w-10  border-1 border-[#3B5998]/50 p-0.5 rounded-full object-cover"
-    />}
+                    icon={
+                      <img
+                        src="/images/avatar-mascot.png"
+                        alt="IA Mascot"
+                        className="h-10 w-10  border-1 border-[#3B5998]/50 p-0.5 rounded-full object-cover"
+                      />
+                    }
                     label="Décrivez le bien idéal"
                     className="min-h-[160px]"
                   >
@@ -313,10 +336,12 @@ export default function ProposalOnePage() {
                     />
                   </FieldShell>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Mode offmarket */}
-              {mode === "offmarket" && (
+            {/* Mode offmarket */}
+            {mode === "offmarket" && (
+              <div className="glass-card rounded-[20px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {/* <FieldShell
                     icon={<Home className="h-4 w-4" />}
@@ -399,47 +424,46 @@ export default function ProposalOnePage() {
                     </select>
                   </FieldShell> */}
                 </div>
-              )}
+                {/* CTA buttons */}
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center w-full">
+                  <button
+                    type="button"
+                    onClick={() => submitSearch()}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
+                  >
+                     <MapPin className="h-4 w-4" />
+                    Rechercher sur la carte
+                  </button>
 
-              {/* CTA buttons */}
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center w-full">
-                <button
-                  type="button"
-                  onClick={() => submitSearch()}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
-                >
-                  <List className="h-4 w-4" />
-                  Rechercher dans la liste
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleMapSearch}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
-                >
-                  <MapPin className="h-4 w-4" />
-                  Recherche sur la carte
-                </button>
+                  <button
+                    type="button"
+                    onClick={handleMapSearch}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    Rechercher via l'IA
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
+          </div>
 
-            {/* Quick filters — scrollable sur mobile */}
-            <div className="mt-4 flex flex-nowrap overflow-x-auto gap-2 pb-1 scrollbar-hide sm:flex-wrap sm:justify-center sm:overflow-visible sm:pb-0">
-              {[
-                { label: "Appartement à votre proximité", key: "appartement" },
-                { label: "Maison avec piscine", key: "piscine" },
-                { label: "Villa avec terrasse", key: "villa" },
-              ].map(({ label, key }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => submitSearch({ filter: key })}
-                  className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-white/70 bg-white/65 px-4 py-2 text-[0.70rem] font-semibold uppercase tracking-[0.13em] text-[#3d4e5c] shadow-[0_4px_12px_rgba(20,28,40,0.06)] backdrop-blur-sm transition hover:border-[#3B5998]/40 hover:text-[#3B5998]"
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+          {/* Quick filters — scrollable sur mobile */}
+          <div className="mt-4 flex flex-nowrap overflow-x-auto gap-2 pb-1 scrollbar-hide sm:flex-wrap sm:justify-center sm:overflow-visible sm:pb-0">
+            {[
+              { label: "Appartement à votre proximité", key: "appartement" },
+              { label: "Maison avec piscine", key: "piscine" },
+              { label: "Villa avec terrasse", key: "villa" },
+            ].map(({ label, key }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => submitSearch({ filter: key })}
+                className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-white/70 bg-white/65 px-4 py-2 text-[0.70rem] font-semibold uppercase tracking-[0.13em] text-[#3d4e5c] shadow-[0_4px_12px_rgba(20,28,40,0.06)] backdrop-blur-sm transition hover:border-[#3B5998]/40 hover:text-[#3B5998]"
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </section>
       </div>
