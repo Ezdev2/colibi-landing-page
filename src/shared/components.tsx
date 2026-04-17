@@ -1372,7 +1372,7 @@ export function MascotWidget({
           <span className="absolute inset-0 animate-ping rounded-full" />
         )}
         <img
-          src="/images/mascot-colibi.png"
+          src="/images/mascot.jpg"
           alt="Mascotte Colibi"
           className="h-full w-full object-cover transition group-hover:scale-105"
         />
