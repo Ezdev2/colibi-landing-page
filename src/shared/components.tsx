@@ -225,7 +225,7 @@ export function TopNav({
         {/* ── LEFT: logo + nav desktop ── */}
         <div className="flex items-center gap-8">
           <Link to={buildPath("/", { country: countryId })}>
-            <img src="/images/Logo_blanc.png" alt="Logo" className="w-16" />
+            <img src="/images/Logo_blanc.png" alt="Logo" className="w-20" />
           </Link>
         </div>
         {/* Nav desktop uniquement */}
@@ -539,7 +539,12 @@ export function FieldShell({
 // SearchPanel
 // ---------------------------------------------------------------------------
 export function SearchPanel({
-  mode, form, setForm, onSearch, onInterest, compact = false,
+  mode,
+  form,
+  setForm,
+  onSearch,
+  onInterest,
+  compact = false,
 }: {
   mode: SearchMode;
   form: SearchFormState;
@@ -548,10 +553,13 @@ export function SearchPanel({
   onInterest: () => void;
   compact?: boolean;
 }) {
-  const content = searchModes.find((item) => item.id === mode) ?? searchModes[0];
+  const content =
+    searchModes.find((item) => item.id === mode) ?? searchModes[0];
 
   return (
-    <div className={`glass-card rounded-[30px] ${compact ? "p-4 sm:p-5" : "p-5 sm:p-6"}`}>
+    <div
+      className={`glass-card rounded-[30px] ${compact ? "p-4 sm:p-5" : "p-5 sm:p-6"}`}
+    >
       {/* Header */}
       {/* <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
@@ -573,7 +581,9 @@ export function SearchPanel({
           <FieldShell icon={<Home className="h-4 w-4" />} label="Type de bien">
             <select
               value={form.propertyType}
-              onChange={(e) => setForm((c) => ({ ...c, propertyType: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, propertyType: e.target.value }))
+              }
               className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>Maison</option>
@@ -587,7 +597,9 @@ export function SearchPanel({
           <FieldShell icon={<MapPin className="h-4 w-4" />} label="Adresse">
             <input
               value={form.location}
-              onChange={(e) => setForm((c) => ({ ...c, location: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, location: e.target.value }))
+              }
               className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
               placeholder="Quartier, commune, zone"
             />
@@ -596,7 +608,9 @@ export function SearchPanel({
           <FieldShell icon={<Landmark className="h-4 w-4" />} label="Budget">
             <select
               value={form.budget}
-              onChange={(e) => setForm((c) => ({ ...c, budget: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, budget: e.target.value }))
+              }
               className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>1 M€ – 3 M€</option>
@@ -609,7 +623,9 @@ export function SearchPanel({
           <FieldShell icon={<Building2 className="h-4 w-4" />} label="Surface">
             <select
               value={form.surface}
-              onChange={(e) => setForm((c) => ({ ...c, surface: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, surface: e.target.value }))
+              }
               className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>150 m² +</option>
@@ -631,7 +647,9 @@ export function SearchPanel({
           >
             <textarea
               value={form.aiPrompt}
-              onChange={(e) => setForm((c) => ({ ...c, aiPrompt: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, aiPrompt: e.target.value }))
+              }
               className="mt-3 min-h-[80px] w-full resize-none bg-transparent text-sm font-medium leading-7 text-[#283340] outline-none placeholder:text-[#7a8795]"
               placeholder="Décrivez le bien idéal : volume, lumière, style architectural..."
             />
@@ -642,10 +660,15 @@ export function SearchPanel({
       {/* Mode offmarket */}
       {mode === "offmarket" && (
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <FieldShell icon={<Home className="h-4 w-4" />} label="Typologie visée">
+          <FieldShell
+            icon={<Home className="h-4 w-4" />}
+            label="Typologie visée"
+          >
             <select
               value={form.offmarketType}
-              onChange={(e) => setForm((c) => ({ ...c, offmarketType: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, offmarketType: e.target.value }))
+              }
               className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>Maison</option>
@@ -656,19 +679,29 @@ export function SearchPanel({
             </select>
           </FieldShell>
 
-          <FieldShell icon={<MapPin className="h-4 w-4" />} label="Zone confidentielle">
+          <FieldShell
+            icon={<MapPin className="h-4 w-4" />}
+            label="Zone confidentielle"
+          >
             <input
               value={form.offmarketArea}
-              onChange={(e) => setForm((c) => ({ ...c, offmarketArea: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, offmarketArea: e.target.value }))
+              }
               className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
               placeholder="Secteur premium ciblé"
             />
           </FieldShell>
 
-          <FieldShell icon={<ShieldCheck className="h-4 w-4" />} label="Enveloppe">
+          <FieldShell
+            icon={<ShieldCheck className="h-4 w-4" />}
+            label="Enveloppe"
+          >
             <select
               value={form.offmarketBudget}
-              onChange={(e) => setForm((c) => ({ ...c, offmarketBudget: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, offmarketBudget: e.target.value }))
+              }
               className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>Confidentiel</option>
@@ -678,10 +711,15 @@ export function SearchPanel({
             </select>
           </FieldShell>
 
-          <FieldShell icon={<Calendar className="h-4 w-4" />} label="Horizon d'acquisition">
+          <FieldShell
+            icon={<Calendar className="h-4 w-4" />}
+            label="Horizon d'acquisition"
+          >
             <select
               value={form.offmarketTiming}
-              onChange={(e) => setForm((c) => ({ ...c, offmarketTiming: e.target.value }))}
+              onChange={(e) =>
+                setForm((c) => ({ ...c, offmarketTiming: e.target.value }))
+              }
               className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
             >
               <option>Sous 6 mois</option>
@@ -808,7 +846,10 @@ export function MarketStoryCard({ market }: { market: Market }) {
         <h3 className="mt-3 text-2xl font-black uppercase tracking-[0.08em] text-[#25303a]">
           {market.subtitle}
         </h3>
-        <p className="mt-3 text-sm leading-7 text-[#526170]">Appartement meublé avec marbre clair, salon traversant et finitions de galerie résidentielle.</p>
+        <p className="mt-3 text-sm leading-7 text-[#526170]">
+          Appartement meublé avec marbre clair, salon traversant et finitions de
+          galerie résidentielle.
+        </p>
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
@@ -856,15 +897,210 @@ export function MarketStoryCard({ market }: { market: Market }) {
 // ---------------------------------------------------------------------------
 // ListingsSection — section de listings partagée entre tous les proposals
 // ---------------------------------------------------------------------------
+// export function ListingsSection({
+//   activeMarket,
+// }: {
+//   activeMarket: Market;
+//   onNavigate: (path: string) => void;
+// }) {
+//   const displayedListings = listings.filter(
+//     (l) => l.country === activeMarket.id,
+//   );
+//   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+//   return (
+//     <section
+//       id="listing"
+//       className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
+//     >
+//       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
+//         {/* Header */}
+//         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+//           <div>
+//             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#677484]">
+//               {activeMarket.country}
+//             </p>
+//             <h2 className="mt-3 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
+//               Derniers biens disponibles
+//             </h2>
+//           </div>
+//           {/* Category filters */}
+//           <div className="flex flex-wrap gap-2">
+//             {["Tous", "Maison", "Appartement", "Villa", "Bungallow", "Autre"].map((cat) => (
+//               <button
+//                 key={cat}
+//                 type="button"
+//                 onClick={() => {
+//                   document
+//                     .getElementById("listings")
+//                     ?.scrollIntoView({ behavior: "smooth" });
+//                 }}
+//                 className="inline-flex items-center gap-1.5 rounded-full border border-[#d6dce6] bg-white px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#3d4e5c] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+//               >
+//                 {cat}
+//               </button>
+//             ))}
+//           </div>
+//         </div>
+
+//         {/* Cards grid */}
+//         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+//           {displayedListings.map((listing, index) => (
+//             <motion.article
+//               key={listing.id}
+//               initial={{ opacity: 0, y: 18 }}
+//               whileInView={{ opacity: 1, y: 0 }}
+//               viewport={{ once: true, amount: 0.2 }}
+//               transition={{ duration: 0.45, delay: index * 0.07 }}
+//               className="overflow-hidden rounded-[16px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
+//             >
+//               {/* Image */}
+//               <div className="relative h-52 overflow-hidden">
+//                 <img
+//                   src={getMarket(listing.country).image}
+//                   alt={listing.title}
+//                   className="h-full w-full object-cover transition duration-500 hover:scale-105"
+//                   style={{ objectPosition: listing.focus }}
+//                 />
+//                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+
+//                 {/* Badge */}
+//                 <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+//                   {listing.offmarket ? (
+//                     <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+//                       Off-market
+//                     </span>
+//                   ) : index === 0 ? (
+//                     <span className="rounded-full bg-[#e85d30]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+//                       Nouveau
+//                     </span>
+//                   ) : index === 1 ? (
+//                     <span className="rounded-full bg-[#2da05b]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+//                       Bonne affaire
+//                     </span>
+//                   ) : index === 2 ? (
+//                     <span className="rounded-full bg-[#e8a020]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+//                       Très consulté
+//                     </span>
+//                   ) : null}
+//                 </div>
+
+//                 {/* Title overlay */}
+//                 <div className="absolute bottom-3 left-4 right-4">
+//                   <p className="text-[0.63rem] font-semibold uppercase tracking-[0.18em] text-white/75">
+//                     {listing.district}
+//                   </p>
+//                   <h3 className="mt-1 text-lg font-black uppercase leading-tight tracking-[0.06em] text-white">
+//                     {listing.title}
+//                   </h3>
+//                 </div>
+//               </div>
+
+//               {/* Body */}
+//               <div className="p-4">
+//                 <div className="flex items-baseline justify-between">
+//                   <p className="text-lg font-black tracking-tight text-[#22303a]">
+//                     {listing.price}
+//                   </p>
+//                   <button
+//                     type="button"
+//                     className="rounded-full border border-[#d6dce4] p-1.5 text-[#8a97a4] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+//                   >
+//                     <Heart className="h-3.5 w-3.5" />
+//                   </button>
+//                 </div>
+
+//                 <div className="mt-2 flex flex-wrap items-center gap-3 text-[0.68rem] text-[#667484]">
+//                   <span className="flex items-center gap-1">
+//                     <Building2 className="h-3 w-3" />
+//                     {listing.surface}
+//                   </span>
+//                   <span className="flex items-center gap-1">
+//                     <BedDouble className="h-3 w-3" />
+//                     {listing.suites}
+//                   </span>
+//                   <span className="flex items-center gap-1">
+//                     <MapPin className="h-3 w-3" />
+//                     {listing.district}
+//                   </span>
+//                 </div>
+
+//                 <p className="mt-2 text-[0.68rem] text-[#8a97a4]">
+//                   Publié il y à {index + 1} jour{index > 0 ? "s" : ""}
+//                   {index === 2 && (
+//                     <span className="ml-2 inline-flex items-center gap-1 text-[#e8a020]">
+//                       · Très consulté
+//                     </span>
+//                   )}
+//                 </p>
+//               </div>
+//             </motion.article>
+//           ))}
+//         </div>
+
+//         {/* CTA */}
+//         <div className="mt-10 flex justify-center">
+//           <button
+//             type="button"
+//             onClick={scrollToTop}
+//             className="inline-flex items-center gap-2 rounded-full bg-[#3B5998] px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(59,89,152,0.32)] transition hover:brightness-105"
+//           >
+//             Voir tous les biens
+//             <ArrowUpRight className="h-4 w-4" />
+//           </button>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+// Supposons que vos marchés soient définis ainsi
+const MARKETS: Market[] = [
+  {
+    id: "fr",
+    country: "France",
+    city: "Paris",
+    title: "Propriétés en France",
+    subtitle: "Découvrez notre sélection française",
+    strapline: "Élégance & Prestige",
+    note: "Focus Sud-Est",
+    image: "/images/france.jpg",
+    defaultType: "Maison",
+    defaultLocation: "Côte d'Azur",
+  },
+  {
+    id: "be",
+    country: "Belgique",
+    city: "Bruxelles",
+    title: "Propriétés en Belgique",
+    subtitle: "Le charme de l'Europe",
+    strapline: "Authenticité & Confort",
+    note: "Focus Bruxelles",
+    image: "/images/belgique.jpg",
+    defaultType: "Appartement",
+    defaultLocation: "Ixelles",
+  },
+];
+
 export function ListingsSection({
   activeMarket,
+  onMarketChange,
+  onNavigate,
 }: {
   activeMarket: Market;
+  onMarketChange: (marketId: string) => void;
   onNavigate: (path: string) => void;
 }) {
-  const displayedListings = listings.filter(
-    (l) => l.country === activeMarket.id,
-  );
+  const [activeCategory, setActiveCategory] = useState("Tous");
+
+  // On filtre par pays ET par catégorie
+  const displayedListings = listings.filter((l) => {
+    const matchCountry = l.country === activeMarket.id;
+    const matchCategory =
+      activeCategory === "Tous" || l.type === activeCategory;
+    return matchCountry && matchCategory;
+  });
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
@@ -873,28 +1109,88 @@ export function ListingsSection({
       className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
     >
       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
-        {/* Header */}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        {/* --- Onglets Pays (Utilise onMarketChange) --- */}
+        {/* <div className="mb-12 flex justify-center">
+          <div className="inline-flex p-1.5 bg-[#f1f3f7] rounded-2xl border border-[#e2e8f0] shadow-inner">
+            {MARKETS.map(
+              (
+                m, // MARKETS doit être accessible (soit importé, soit défini hors du composant)
+              ) => (
+                <button
+                  key={m.id}
+                  onClick={() => onMarketChange(m.id)}
+                  className={`relative px-10 py-3 rounded-xl text-[0.75rem] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
+                    activeMarket.id === m.id
+                      ? "bg-white text-[#3B5998] shadow-md shadow-black/5"
+                      : "text-[#8a97a4] hover:text-[#3d4e5c]"
+                  }`}
+                >
+                  {m.country}
+                  {activeMarket.id === m.id && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 border-2 border-[#3B5998]/10 rounded-xl"
+                    />
+                  )}
+                </button>
+              ),
+            )}
+          </div>
+        </div> */}
+
+        {/* Header avec Titre dynamique */}
+        <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#677484]">
-              {activeMarket.country}
-            </p>
-            <h2 className="mt-3 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
-              Derniers biens disponibles
+            <div className="">
+              <div className="inline-flex p-1 bg-[#f1f3f7] rounded-xs border border-[#e2e8f0] shadow-inner">
+                {MARKETS.map(
+                  (
+                    m, // MARKETS doit être accessible (soit importé, soit défini hors du composant)
+                  ) => (
+                    <button
+                      key={m.id}
+                      onClick={() => onMarketChange(m.id)}
+                      className={`relative px-10 py-1 rounded-xl text-[0.75rem] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
+                        activeMarket.id === m.id
+                          ? "bg-white text-[#3B5998]"
+                          : "text-[#8a97a4] hover:text-[#3d4e5c]"
+                      }`}
+                    >
+                      {m.country}
+                      {activeMarket.id === m.id && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute inset-0 border-2 border-[#3B5998]/10 rounded-xl"
+                        />
+                      )}
+                    </button>
+                  ),
+                )}
+              </div>
+            </div>
+            <h2 className="mt-4 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
+              Derniers biens disponible
             </h2>
           </div>
-          {/* Category filters */}
+
+          {/* Filtres de catégories */}
           <div className="flex flex-wrap gap-2">
-            {["Tous", "Maison", "Appartement", "Villa", "Bungallow", "Autre"].map((cat) => (
+            {[
+              "Tous",
+              "Maison",
+              "Appartement",
+              "Villa",
+              "Bungallow",
+              "Autre",
+            ].map((cat) => (
               <button
                 key={cat}
-                type="button"
-                onClick={() => {
-                  document
-                    .getElementById("listings")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-[#d6dce6] bg-white px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#3d4e5c] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                onClick={() => setActiveCategory(cat)}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-5 py-2.5 text-[0.7rem] font-bold uppercase tracking-[0.12em] transition-all ${
+                  activeCategory === cat
+                    ? "border-[#3B5998] bg-[#3B5998] text-white"
+                    : "border-[#d6dce6] bg-white text-[#677484] hover:border-[#3B5998] hover:text-[#3B5998]"
+                }`}
               >
                 {cat}
               </button>
@@ -902,7 +1198,7 @@ export function ListingsSection({
           </div>
         </div>
 
-        {/* Cards grid */}
+        {/* Grille de cartes */}
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {displayedListings.map((listing, index) => (
             <motion.article
@@ -997,15 +1293,18 @@ export function ListingsSection({
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="mt-10 flex justify-center">
+        {/* Footer de section dynamique */}
+        <div className="mt-12 flex flex-col items-center gap-4">
+          {/* <p className="text-[0.75rem] text-[#8a97a4] font-medium italic">
+            {activeMarket.note}
+          </p> */}
           <button
             type="button"
             onClick={scrollToTop}
-            className="inline-flex items-center gap-2 rounded-full bg-[#3B5998] px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(59,89,152,0.32)] transition hover:brightness-105"
+            className="group inline-flex items-center gap-3 rounded-full bg-[#22303a] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#3B5998]"
           >
-            Voir tous les biens
-            <ArrowUpRight className="h-4 w-4" />
+            Explorer tout les biens
+            <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         </div>
       </div>
@@ -1015,13 +1314,23 @@ export function ListingsSection({
 
 export function MostViewSection({
   activeMarket,
+  onMarketChange,
+  onNavigate,
 }: {
   activeMarket: Market;
+  onMarketChange: (marketId: string) => void;
   onNavigate: (path: string) => void;
 }) {
-  const displayedListings = listings.filter(
-    (l) => l.country === activeMarket.id,
-  );
+  const [activeCategory, setActiveCategory] = useState("Tous");
+
+  // On filtre par pays ET par catégorie
+  const displayedListings = listings.filter((l) => {
+    const matchCountry = l.country === activeMarket.id;
+    const matchCategory =
+      activeCategory === "Tous" || l.type === activeCategory;
+    return matchCountry && matchCategory;
+  });
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
@@ -1030,28 +1339,88 @@ export function MostViewSection({
       className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
     >
       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
-        {/* Header */}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        {/* --- Onglets Pays (Utilise onMarketChange) --- */}
+        {/* <div className="mb-12 flex justify-center">
+          <div className="inline-flex p-1.5 bg-[#f1f3f7] rounded-2xl border border-[#e2e8f0] shadow-inner">
+            {MARKETS.map(
+              (
+                m, // MARKETS doit être accessible (soit importé, soit défini hors du composant)
+              ) => (
+                <button
+                  key={m.id}
+                  onClick={() => onMarketChange(m.id)}
+                  className={`relative px-10 py-3 rounded-xl text-[0.75rem] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
+                    activeMarket.id === m.id
+                      ? "bg-white text-[#3B5998] shadow-md shadow-black/5"
+                      : "text-[#8a97a4] hover:text-[#3d4e5c]"
+                  }`}
+                >
+                  {m.country}
+                  {activeMarket.id === m.id && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 border-2 border-[#3B5998]/10 rounded-xl"
+                    />
+                  )}
+                </button>
+              ),
+            )}
+          </div>
+        </div> */}
+
+        {/* Header avec Titre dynamique */}
+        <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#677484]">
-              {activeMarket.country}
-            </p>
-            <h2 className="mt-3 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
-              Plus populaires
+            <div className="">
+              <div className="inline-flex p-1 bg-[#f1f3f7] rounded-xs border border-[#e2e8f0] shadow-inner">
+                {MARKETS.map(
+                  (
+                    m, // MARKETS doit être accessible (soit importé, soit défini hors du composant)
+                  ) => (
+                    <button
+                      key={m.id}
+                      onClick={() => onMarketChange(m.id)}
+                      className={`relative px-10 py-1 rounded-xl text-[0.75rem] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
+                        activeMarket.id === m.id
+                          ? "bg-white text-[#3B5998]"
+                          : "text-[#8a97a4] hover:text-[#3d4e5c]"
+                      }`}
+                    >
+                      {m.country}
+                      {activeMarket.id === m.id && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute inset-0 border-2 border-[#3B5998]/10 rounded-xl"
+                        />
+                      )}
+                    </button>
+                  ),
+                )}
+              </div>
+            </div>
+            <h2 className="mt-4 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
+              Les plus populaires
             </h2>
           </div>
-          {/* Category filters */}
+
+          {/* Filtres de catégories */}
           <div className="flex flex-wrap gap-2">
-            {["Tous", "Maison", "Appartement", "Villa", "Bungallow", "Autre"].map((cat) => (
+            {[
+              "Tous",
+              "Maison",
+              "Appartement",
+              "Villa",
+              "Bungallow",
+              "Autre",
+            ].map((cat) => (
               <button
                 key={cat}
-                type="button"
-                onClick={() => {
-                  document
-                    .getElementById("listings")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-[#d6dce6] bg-white px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#3d4e5c] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                onClick={() => setActiveCategory(cat)}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-5 py-2.5 text-[0.7rem] font-bold uppercase tracking-[0.12em] transition-all ${
+                  activeCategory === cat
+                    ? "border-[#3B5998] bg-[#3B5998] text-white"
+                    : "border-[#d6dce6] bg-white text-[#677484] hover:border-[#3B5998] hover:text-[#3B5998]"
+                }`}
               >
                 {cat}
               </button>
@@ -1059,7 +1428,7 @@ export function MostViewSection({
           </div>
         </div>
 
-        {/* Cards grid */}
+        {/* Grille de cartes */}
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {displayedListings.map((listing, index) => (
             <motion.article
@@ -1154,15 +1523,18 @@ export function MostViewSection({
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="mt-10 flex justify-center">
+        {/* Footer de section dynamique */}
+        <div className="mt-12 flex flex-col items-center gap-4">
+          {/* <p className="text-[0.75rem] text-[#8a97a4] font-medium italic">
+            {activeMarket.note}
+          </p> */}
           <button
             type="button"
             onClick={scrollToTop}
-            className="inline-flex items-center gap-2 rounded-full bg-[#3B5998] px-8 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(59,89,152,0.32)] transition hover:brightness-105"
+            className="group inline-flex items-center gap-3 rounded-full bg-[#22303a] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#3B5998]"
           >
-            Voir tous les biens
-            <ArrowUpRight className="h-4 w-4" />
+            Explorer tout les biens
+            <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         </div>
       </div>
@@ -1180,13 +1552,12 @@ export function ListingsSection3({
   const displayedListings = listings.filter(
     (l) => l.country === activeMarket.id,
   );
-  
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
     <section id="listing" className="bg-[#fcfcfb] py-20 border-t border-[#eee]">
       <div className="mx-auto max-w-[1500px] px-6 lg:px-16">
-        
         {/* Header avec Navigation "Pill" */}
         <div className="mb-12 flex flex-col items-center text-center">
           <p className="text-[0.7rem] font-bold uppercase tracking-[0.25em] text-[#3B5998]">
@@ -1195,9 +1566,16 @@ export function ListingsSection3({
           <h2 className="mt-3 text-4xl font-black uppercase tracking-tight text-[#22303a]">
             Derniers biens disponibles
           </h2>
-          
+
           <div className="mt-8 flex flex-wrap justify-center gap-2">
-            {["Tous", "Maison", "Appartement", "Villa", "Bungallow", "Autre"].map((cat) => (
+            {[
+              "Tous",
+              "Maison",
+              "Appartement",
+              "Villa",
+              "Bungallow",
+              "Autre",
+            ].map((cat) => (
               <button
                 key={cat}
                 type="button"
@@ -1229,12 +1607,12 @@ export function ListingsSection3({
                   style={{ objectPosition: listing.focus }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
-                
+
                 {/* Floating Badge */}
                 <div className="absolute top-4 left-4">
-                   <span className="backdrop-blur-md bg-white/20 border border-white/30 px-3 py-1.5 rounded-full text-[0.6rem] font-bold uppercase tracking-widest text-white">
-                     {listing.offmarket ? "Off-Market" : "Nouveauté"}
-                   </span>
+                  <span className="backdrop-blur-md bg-white/20 border border-white/30 px-3 py-1.5 rounded-full text-[0.6rem] font-bold uppercase tracking-widest text-white">
+                    {listing.offmarket ? "Off-Market" : "Nouveauté"}
+                  </span>
                 </div>
 
                 {/* Content Overlay */}
@@ -1248,9 +1626,9 @@ export function ListingsSection3({
                   <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
                     <span className="text-lg font-black">{listing.price}</span>
                     <div className="flex gap-3 text-[0.65rem] font-semibold text-white/90">
-                       <span className="flex items-center gap-1">
-                         <Building2 className="h-3.5 w-3.5"/> {listing.surface}
-                       </span>
+                      <span className="flex items-center gap-1">
+                        <Building2 className="h-3.5 w-3.5" /> {listing.surface}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -1261,7 +1639,7 @@ export function ListingsSection3({
 
         {/* CTA */}
         <div className="mt-16 flex justify-center">
-          <button 
+          <button
             type="button"
             onClick={scrollToTop}
             className="group relative flex items-center gap-4 overflow-hidden rounded-full bg-[#3B5998] px-10 py-5 text-sm font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
@@ -1306,7 +1684,6 @@ export function WhyIASection() {
     <section className="bg-white py-24 border-t border-[#eee]">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-16">
         <div className="grid gap-16 lg:grid-cols-12 items-center">
-          
           {/* Left Side: Content */}
           <div className="lg:col-span-5">
             <span className="inline-block rounded-full border border-[#3B5998]/20 bg-[#3B5998]/5 px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[#3B5998]">
@@ -1316,7 +1693,8 @@ export function WhyIASection() {
               Pourquoi utiliser <br /> notre IA.
             </h2>
             <p className="mt-6 text-lg text-[#667484] leading-relaxed max-w-md">
-              Notre moteur IA comprend vos besoins en langage naturel. Plus de filtres complexes, juste une conversation.
+              Notre moteur IA comprend vos besoins en langage naturel. Plus de
+              filtres complexes, juste une conversation.
             </p>
           </div>
 
@@ -1364,7 +1742,7 @@ export function MascotWidget({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="group relative transition h-20 w-20 sm:h-40 sm:w-40"
+        className="group relative transition h-20 w-20 sm:h-50 sm:w-50"
         aria-label="Assistant Colibi"
       >
         {/* Glow ring when popup closed */}
@@ -1396,7 +1774,7 @@ export function MascotWidget({
               <X className="h-3 w-3" />
             </button>
 
-            <p className="text-[0.78rem] font-medium leading-5 text-[#2e3a45]">
+            <p className="text-[0.8rem] font-medium leading-5 text-[#2e3a45]">
               {message}
             </p>
             {/* AI CTA bubble */}
@@ -1412,7 +1790,7 @@ export function MascotWidget({
                   setMode("ai");
                   submitSearch();
                 }}
-                className="inline-flex items-center gap-2 rounded-full border border-[#3B5998]/20 bg-white/80 px-5 py-2.5 text-[0.72rem] font-semibold text-[#3B5998] shadow-[0_8px_20px_rgba(59,89,152,0.12)] backdrop-blur-sm transition hover:bg-white"
+                className="inline-flex items-center gap-2 rounded-full border border-[#3B5998]/20 bg-white/80 px-5 py-2.5 text-[0.8rem] font-semibold text-[#3B5998] shadow-[0_8px_20px_rgba(59,89,152,0.12)] backdrop-blur-sm transition hover:bg-white"
               >
                 <Sparkles className="h-4 w-4" />
                 En savoir plus sur nous →
@@ -1445,11 +1823,7 @@ export function Footer({ market }: { market: Market }) {
     },
     {
       title: "Explorer",
-      links: [
-        "Appartements",
-        "Maison",
-        "Villa",
-      ],
+      links: ["Appartements", "Maison", "Villa"],
     },
   ];
 
@@ -1486,10 +1860,11 @@ export function Footer({ market }: { market: Market }) {
   ];
 
   return (
-    <footer id="footer" className="bg-[#121212] text-white"> {/* Changé en #121212 pour matcher le thème Dark de Proposal 3 */}
+    <footer id="footer" className="bg-[#121212] text-white">
+      {" "}
+      {/* Changé en #121212 pour matcher le thème Dark de Proposal 3 */}
       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1.4fr]">
-          
           {columns.map((col) => (
             <div key={col.title}>
               <p className="mb-5 text-[0.72rem] font-bold uppercase tracking-[0.22em] text-white/90">
@@ -1518,7 +1893,7 @@ export function Footer({ market }: { market: Market }) {
             <p className="mb-5 text-[0.78rem] text-white/50">
               Soyez le premier informé des nouveaux biens.
             </p>
-            
+
             <div className="group flex overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1 focus-within:border-[#3B5998]/50 transition-all">
               <input
                 type="email"
@@ -1552,17 +1927,24 @@ export function Footer({ market }: { market: Market }) {
           </div>
         </div>
       </div>
-
       {/* Bottom bar */}
       <div className="border-t border-white/5">
         <div className="mx-auto flex max-w-[1500px] flex-col gap-3 px-6 py-6 text-[0.68rem] text-white/30 md:flex-row md:items-center md:justify-between lg:px-16">
           <p className="tracking-wide">
-            © {new Date().getFullYear()} <span className="font-bold text-white/60">COLIBI</span> · Excellence Immobilière en {market.country}
+            © {new Date().getFullYear()}{" "}
+            <span className="font-bold text-white/60">COLIBI</span> · Excellence
+            Immobilière en {market.country}
           </p>
           <nav className="flex flex-wrap gap-6">
-            <a href="#" className="transition hover:text-white">Confidentialité</a>
-            <a href="#" className="transition hover:text-white">Conditions</a>
-            <a href="#" className="transition hover:text-white">Cookies</a>
+            <a href="#" className="transition hover:text-white">
+              Confidentialité
+            </a>
+            <a href="#" className="transition hover:text-white">
+              Conditions
+            </a>
+            <a href="#" className="transition hover:text-white">
+              Cookies
+            </a>
           </nav>
         </div>
       </div>
