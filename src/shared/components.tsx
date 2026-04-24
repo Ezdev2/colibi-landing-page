@@ -225,7 +225,7 @@ export function TopNav({
         {/* ── LEFT: logo + nav desktop ── */}
         <div className="flex items-center gap-8">
           <Link to={buildPath("/", { country: countryId })}>
-            <img src="/images/Logo_blanc.png" alt="Logo" className="w-20" />
+            <img width={115} src="/images/Logo_blanc.png" alt="Logo Colibi" />
           </Link>
         </div>
         {/* Nav desktop uniquement */}
