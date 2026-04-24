@@ -34,7 +34,6 @@ import {
   BellRing,
   List,
 } from "lucide-react";
-
 import type { Market, ProposalKey, SearchFormState, SearchMode } from "./types";
 import { markets, quickFilters, searchModes } from "./data";
 import { buildPath, createFormState, getMarket } from "./utils";
@@ -1082,6 +1081,59 @@ const MARKETS: Market[] = [
   },
 ];
 
+export function CountrySwitch({
+  activeMarket,
+  onMarketChange,
+  layoutId = "countryPill",
+}: {
+  activeMarket: { id: string };
+  onMarketChange: (id: string) => void;
+  layoutId?: string;
+}) {
+  // Seulement France et Belgique
+  const SWITCH_MARKETS = markets.filter((m) => ["france", "belgium"].includes(m.id));
+  
+  const activeIndex = SWITCH_MARKETS.findIndex((m) => m.id === activeMarket.id);
+  const BTN_WIDTH = 110;
+
+  return (
+    <div className="relative inline-flex items-center p-[5px] bg-white border border-[#E2E8F0] rounded-full">
+      <motion.div
+        className="absolute top-[5px] h-[calc(100%-10px)] rounded-full bg-[#3B5998] pointer-events-none"
+        animate={{
+          x: activeIndex >= 0 ? activeIndex * BTN_WIDTH : 0,
+          opacity: activeIndex >= 0 ? 1 : 0,
+        }}
+        initial={false}
+        transition={{ type: "spring", stiffness: 420, damping: 28 }}
+        style={{
+          left: 5,
+          width: BTN_WIDTH,
+          boxShadow: "0 4px 14px rgba(59,89,152,0.35), 0 1px 3px rgba(0,0,0,0.08)",
+        }}
+      />
+
+      {SWITCH_MARKETS.map((m) => {
+        const isActive = activeMarket.id === m.id;
+        return (
+          <button
+            key={m.id}
+            onClick={() => onMarketChange(m.id)}
+            style={{ width: BTN_WIDTH }}
+            className="relative z-10 flex items-center justify-center py-[10px] rounded-full border-none bg-transparent cursor-pointer outline-none"
+          >
+            <span className={`text-[13px] font-bold uppercase tracking-[0.10em] transition-colors duration-200 select-none ${
+              isActive ? "text-white" : "text-[#8A9BB0] hover:text-[#3B5998]"
+            }`}>
+              {m.country}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export function ListingsSection({
   activeMarket,
   onMarketChange,
@@ -1140,34 +1192,11 @@ export function ListingsSection({
 
         {/* Header avec Titre dynamique */}
         <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <div className="">
-              <div className="inline-flex p-1 bg-[#f1f3f7] rounded-xs border border-[#e2e8f0] shadow-inner">
-                {MARKETS.map(
-                  (
-                    m, // MARKETS doit être accessible (soit importé, soit défini hors du composant)
-                  ) => (
-                    <button
-                      key={m.id}
-                      onClick={() => onMarketChange(m.id)}
-                      className={`relative px-10 py-1 rounded-xl text-[0.75rem] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
-                        activeMarket.id === m.id
-                          ? "bg-white text-[#3B5998]"
-                          : "text-[#8a97a4] hover:text-[#3d4e5c]"
-                      }`}
-                    >
-                      {m.country}
-                      {activeMarket.id === m.id && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute inset-0 border-2 border-[#3B5998]/10 rounded-xl"
-                        />
-                      )}
-                    </button>
-                  ),
-                )}
-              </div>
-            </div>
+          <div className="">
+            <CountrySwitch
+              activeMarket={activeMarket}
+              onMarketChange={onMarketChange}
+            />
             <h2 className="mt-4 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
               Derniers biens disponible
             </h2>
@@ -1331,65 +1360,15 @@ export function MostViewSection({
       className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
     >
       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
-        {/* --- Onglets Pays (Utilise onMarketChange) --- */}
-        {/* <div className="mb-12 flex justify-center">
-          <div className="inline-flex p-1.5 bg-[#f1f3f7] rounded-2xl border border-[#e2e8f0] shadow-inner">
-            {MARKETS.map(
-              (
-                m, // MARKETS doit être accessible (soit importé, soit défini hors du composant)
-              ) => (
-                <button
-                  key={m.id}
-                  onClick={() => onMarketChange(m.id)}
-                  className={`relative px-10 py-3 rounded-xl text-[0.75rem] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
-                    activeMarket.id === m.id
-                      ? "bg-white text-[#3B5998] shadow-md shadow-black/5"
-                      : "text-[#8a97a4] hover:text-[#3d4e5c]"
-                  }`}
-                >
-                  {m.country}
-                  {activeMarket.id === m.id && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 border-2 border-[#3B5998]/10 rounded-xl"
-                    />
-                  )}
-                </button>
-              ),
-            )}
-          </div>
-        </div> */}
 
         {/* Header avec Titre dynamique */}
         <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="">
-              <div className="inline-flex p-1 bg-[#f1f3f7] rounded-xs border border-[#e2e8f0] shadow-inner">
-                {MARKETS.map(
-                  (
-                    m, // MARKETS doit être accessible (soit importé, soit défini hors du composant)
-                  ) => (
-                    <button
-                      key={m.id}
-                      onClick={() => onMarketChange(m.id)}
-                      className={`relative px-10 py-1 rounded-xl text-[0.75rem] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
-                        activeMarket.id === m.id
-                          ? "bg-white text-[#3B5998]"
-                          : "text-[#8a97a4] hover:text-[#3d4e5c]"
-                      }`}
-                    >
-                      {m.country}
-                      {activeMarket.id === m.id && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute inset-0 border-2 border-[#3B5998]/10 rounded-xl"
-                        />
-                      )}
-                    </button>
-                  ),
-                )}
-              </div>
-            </div>
+            <CountrySwitch
+              activeMarket={activeMarket}
+              onMarketChange={onMarketChange}
+            />
+
             <h2 className="mt-4 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
               Les plus populaires
             </h2>
