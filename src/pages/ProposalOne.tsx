@@ -60,7 +60,7 @@ export default function ProposalOnePage() {
               className="hero-zoom absolute inset-0 h-full w-full object-cover object-center"
             />
             {/* Overlay centré doux */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white/75 via-white/55 to-white/25" />
+            <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/50 to-white/25" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_28%,rgba(255,255,255,0.65),transparent)]" />
           </motion.div>
         </AnimatePresence>
@@ -73,7 +73,7 @@ export default function ProposalOnePage() {
 
         {/* Contenu centré */}
         <section className="relative z-20 flex min-h-[calc(100vh-126px)] flex-col items-center justify-center px-6 pb-16 pt-4">
-          <div className="w-full max-w-3xl text-center">
+          <div className="w-full max-w-3xl text-center relative">
             {/* Headline */}
             <motion.h1
               key={activeMarket.id + "-h1"}
@@ -217,122 +217,148 @@ export default function ProposalOnePage() {
 
             {/* Mode classic */}
             {mode === "classic" && (
-              <div className="glass-card flex rounded-[20px] py-5 pr-5 sm:py-6 sm:pr-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
-                <div className="h-40 w-40">
-                  <img
-                    src="/images/mascot.jpg"
-                    alt="Mascotte Colibi"
-                    className="h-full w-full object-cover transition group-hover:scale-105"
-                  />
+              <div>
+                <div className="glass-card flex rounded-[20px] py-5 pr-5 sm:py-6 sm:pr-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
+                  <div className="sm:block absolute left-[-156px] bottom-[-22px] hidden">
+                    <img
+                      src="/images/mascot.jpg"
+                      alt="Mascotte Colibi"
+                      className="transition group-hover:scale-105"
+                      width={350}
+                    />
+                  </div>
+                  <div className="w-40 hidden sm:block"></div>
+                  <div className="w-full ">
+                    <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <FieldShell
+                        icon={<Home className="h-4 w-4" />}
+                        label="Type de bien"
+                      >
+                        <select
+                          value={form.propertyType}
+                          onChange={(e) =>
+                            setForm((c) => ({
+                              ...c,
+                              propertyType: e.target.value,
+                            }))
+                          }
+                          className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                        >
+                          <option>Maison</option>
+                          <option>Appartement</option>
+                          <option>Penthouse</option>
+                          <option>Terrain</option>
+                          <option>Villa</option>
+                        </select>
+                      </FieldShell>
+
+                      <FieldShell
+                        icon={<MapPin className="h-4 w-4" />}
+                        label="Adresse"
+                      >
+                        <input
+                          value={form.location}
+                          onChange={(e) =>
+                            setForm((c) => ({ ...c, location: e.target.value }))
+                          }
+                          className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
+                          placeholder="Quartier, commune, zone"
+                        />
+                      </FieldShell>
+
+                      <FieldShell
+                        icon={<Landmark className="h-4 w-4" />}
+                        label="Budget"
+                      >
+                        <select
+                          value={form.budget}
+                          onChange={(e) =>
+                            setForm((c) => ({ ...c, budget: e.target.value }))
+                          }
+                          className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                        >
+                          <option>1 M€ – 3 M€</option>
+                          <option>3 M€ – 8 M€</option>
+                          <option>8 M€ – 15 M€</option>
+                          <option>15 M€ +</option>
+                        </select>
+                      </FieldShell>
+
+                      <FieldShell
+                        icon={<Building2 className="h-4 w-4" />}
+                        label="Surface"
+                      >
+                        <select
+                          value={form.surface}
+                          onChange={(e) =>
+                            setForm((c) => ({ ...c, surface: e.target.value }))
+                          }
+                          className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
+                        >
+                          <option>150 m² +</option>
+                          <option>250 m² +</option>
+                          <option>400 m² +</option>
+                          <option>800 m² +</option>
+                        </select>
+                      </FieldShell>
+                    </div>
+                    {/* CTA buttons */}
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center w-full">
+                      <button
+                        type="button"
+                        onClick={() => submitSearch()}
+                        className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-xs font-semibold tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
+                      >
+                        <List className="h-4 w-4" />
+                        Rechercher dans la liste
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleMapSearch}
+                        className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-xs font-semibold tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                      >
+                        <MapPin className="h-4 w-4" />
+                        Rechercher sur la carte
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full ">
-                  <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <FieldShell
-                      icon={<Home className="h-4 w-4" />}
-                      label="Type de bien"
-                    >
-                      <select
-                        value={form.propertyType}
-                        onChange={(e) =>
-                          setForm((c) => ({
-                            ...c,
-                            propertyType: e.target.value,
-                          }))
-                        }
-                        className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
-                      >
-                        <option>Maison</option>
-                        <option>Appartement</option>
-                        <option>Penthouse</option>
-                        <option>Terrain</option>
-                        <option>Villa</option>
-                      </select>
-                    </FieldShell>
-
-                    <FieldShell
-                      icon={<MapPin className="h-4 w-4" />}
-                      label="Adresse"
-                    >
-                      <input
-                        value={form.location}
-                        onChange={(e) =>
-                          setForm((c) => ({ ...c, location: e.target.value }))
-                        }
-                        className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
-                        placeholder="Quartier, commune, zone"
-                      />
-                    </FieldShell>
-
-                    <FieldShell
-                      icon={<Landmark className="h-4 w-4" />}
-                      label="Budget"
-                    >
-                      <select
-                        value={form.budget}
-                        onChange={(e) =>
-                          setForm((c) => ({ ...c, budget: e.target.value }))
-                        }
-                        className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
-                      >
-                        <option>1 M€ – 3 M€</option>
-                        <option>3 M€ – 8 M€</option>
-                        <option>8 M€ – 15 M€</option>
-                        <option>15 M€ +</option>
-                      </select>
-                    </FieldShell>
-
-                    <FieldShell
-                      icon={<Building2 className="h-4 w-4" />}
-                      label="Surface"
-                    >
-                      <select
-                        value={form.surface}
-                        onChange={(e) =>
-                          setForm((c) => ({ ...c, surface: e.target.value }))
-                        }
-                        className="w-full bg-transparent text-sm font-semibold text-[#283340] outline-none"
-                      >
-                        <option>150 m² +</option>
-                        <option>250 m² +</option>
-                        <option>400 m² +</option>
-                        <option>800 m² +</option>
-                      </select>
-                    </FieldShell>
-                  </div>
-                  {/* CTA buttons */}
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center w-full">
+                {/* Quick filters — scrollable sur mobile */}
+                <div className="mt-4 flex flex-nowrap overflow-x-auto gap-2 pb-1 scrollbar-hide sm:flex-wrap sm:justify-center sm:overflow-visible sm:pb-0">
+                  {[
+                    {
+                      label: "Appartement à votre proximité",
+                      key: "appartement",
+                    },
+                    { label: "Maison avec piscine", key: "piscine" },
+                    { label: "Villa avec terrasse", key: "villa" },
+                  ].map(({ label, key }) => (
                     <button
+                      key={key}
                       type="button"
-                      onClick={() => submitSearch()}
-                      className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-xs font-semibold tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
+                      onClick={() => submitSearch({ filter: key })}
+                      className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-white/70 bg-white/65 px-4 py-2 text-[0.70rem] font-semibold uppercase tracking-[0.13em] text-[#3d4e5c] shadow-[0_4px_12px_rgba(20,28,40,0.06)] backdrop-blur-sm transition hover:border-[#3B5998]/40 hover:text-[#3B5998]"
                     >
-                      <List className="h-4 w-4" />
-                      Rechercher dans la liste
+                      {label}
                     </button>
-
-                    <button
-                      type="button"
-                      onClick={handleMapSearch}
-                      className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-xs font-semibold tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
-                    >
-                      <MapPin className="h-4 w-4" />
-                      Rechercher sur la carte
-                    </button>
-                  </div>
+                  ))}
                 </div>
               </div>
             )}
 
             {/* Mode AI */}
             {mode === "ai" && (
-              <div className="glass-card flex rounded-[20px] py-5 pr-5 sm:py-6 sm:pr-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
-                <div className="h-40 w-40">
+              <div className="flex rounded-[20px] py-5 pr-5 sm:py-6 sm:p-6 mt-5">
+                <div className="sm:block absolute left-[-50px] bottom-[-22px] hidden">
                   <img
                     src="/images/mascot.jpg"
                     alt="Mascotte Colibi"
-                    className="h-full w-full object-cover transition group-hover:scale-105"
+                    className="transition group-hover:scale-105"
+                    width={250}
                   />
                 </div>
+                <div className="w-44 hidden sm:block"></div>
                 <div className="w-full">
                   <FieldShell
                     icon={
@@ -360,47 +386,36 @@ export default function ProposalOnePage() {
 
             {/* Mode offmarket */}
             {mode === "offmarket" && (
-              <div className="glass-card rounded-[20px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
-                {/* CTA buttons */}
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-center w-full">
-                  <button
-                    type="button"
-                    onClick={() => submitSearch()}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
-                  >
-                    <MapPin className="h-4 w-4" />
-                    Rechercher sur la carte
-                  </button>
-
+              <div className="flex rounded-[20px] p-5 sm:p-6 mt-5">
+                <div className="sm:block absolute left-[-50px] bottom-[-22px] hidden">
+                  <img
+                    src="/images/mascot.jpg"
+                    alt="Mascotte Colibi"
+                    className="transition group-hover:scale-105"
+                    width={250}
+                  />
+                </div>
+                <div className="w-44 hidden sm:block"></div>
+                <div className="flex flex-col gap-3 w-full">
                   <button
                     type="button"
                     onClick={handleMapSearch}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-[#cad2de] bg-white/72 px-6 py-6 text-xs font-semibold uppercase tracking-[0.14em] text-[#2e3a46] transition hover:border-[#3B5998] hover:text-[#3B5998]"
                   >
                     <Sparkles className="h-4 w-4" />
                     Rechercher via l'IA
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => submitSearch()}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#3B5998] px-6 py-6 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_rgba(30,86,255,0.28)] transition hover:brightness-105"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    Rechercher sur la carte
+                  </button>
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Quick filters — scrollable sur mobile */}
-          <div className="mt-4 flex flex-nowrap overflow-x-auto gap-2 pb-1 scrollbar-hide sm:flex-wrap sm:justify-center sm:overflow-visible sm:pb-0">
-            {[
-              { label: "Appartement à votre proximité", key: "appartement" },
-              { label: "Maison avec piscine", key: "piscine" },
-              { label: "Villa avec terrasse", key: "villa" },
-            ].map(({ label, key }) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => submitSearch({ filter: key })}
-                className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-white/70 bg-white/65 px-4 py-2 text-[0.70rem] font-semibold uppercase tracking-[0.13em] text-[#3d4e5c] shadow-[0_4px_12px_rgba(20,28,40,0.06)] backdrop-blur-sm transition hover:border-[#3B5998]/40 hover:text-[#3B5998]"
-              >
-                {label}
-              </button>
-            ))}
           </div>
         </section>
       </div>
@@ -425,7 +440,7 @@ export default function ProposalOnePage() {
       <Footer market={activeMarket} />
 
       {/* <ProposalSideRail countryId={activeMarket.id} current="one" /> */}
-      <MascotWidget />
+      {/* <MascotWidget /> */}
     </main>
   );
 }

@@ -1225,19 +1225,11 @@ export function ListingsSection({
                     <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
                       Off-market
                     </span>
-                  ) : index === 0 ? (
-                    <span className="rounded-full bg-[#e85d30]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+                  ) : (
+                    <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
                       Nouveau
                     </span>
-                  ) : index === 1 ? (
-                    <span className="rounded-full bg-[#2da05b]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
-                      Bonne affaire
-                    </span>
-                  ) : index === 2 ? (
-                    <span className="rounded-full bg-[#e8a020]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
-                      Très consulté
-                    </span>
-                  ) : null}
+                  )}
                 </div>
 
                 {/* Title overlay */}
@@ -1301,7 +1293,7 @@ export function ListingsSection({
           <button
             type="button"
             onClick={scrollToTop}
-            className="group inline-flex items-center gap-3 rounded-full bg-[#22303a] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#3B5998]"
+            className="group inline-flex items-center gap-3 rounded-full bg-[#3B5998] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#22303a]"
           >
             Explorer tout les biens
             <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -1455,19 +1447,11 @@ export function MostViewSection({
                     <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
                       Off-market
                     </span>
-                  ) : index === 0 ? (
-                    <span className="rounded-full bg-[#e85d30]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
-                      Nouveau
+                  ) : (
+                    <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+                      Populaire
                     </span>
-                  ) : index === 1 ? (
-                    <span className="rounded-full bg-[#2da05b]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
-                      Bonne affaire
-                    </span>
-                  ) : index === 2 ? (
-                    <span className="rounded-full bg-[#e8a020]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
-                      Très consulté
-                    </span>
-                  ) : null}
+                  )}
                 </div>
 
                 {/* Title overlay */}
@@ -1531,7 +1515,7 @@ export function MostViewSection({
           <button
             type="button"
             onClick={scrollToTop}
-            className="group inline-flex items-center gap-3 rounded-full bg-[#22303a] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#3B5998]"
+            className="group inline-flex items-center gap-3 rounded-full bg-[#3B5998] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#22303a]"
           >
             Explorer tout les biens
             <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
