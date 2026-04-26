@@ -123,11 +123,10 @@ export default function ProposalOnePage() {
                     key={id}
                     type="button"
                     onClick={() => setMode(id)}
-                    className={`inline-flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-[0.70rem] font-semibold uppercase tracking-[0.14em] transition sm:px-5 ${
-                      mode === id
+                    className={`inline-flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-[0.70rem] font-semibold uppercase tracking-[0.14em] transition sm:px-5 ${mode === id
                         ? "bg-[#3B5998] text-white shadow-[0_6px_18px_rgba(59,89,152,0.3)]"
                         : "text-[#344150] hover:bg-white/80"
-                    }`}
+                      }`}
                   >
                     <Icon className="h-3.5 w-3.5 flex-shrink-0" />
                     {/* Label caché sur très petit écran, visible à partir de sm */}
@@ -140,18 +139,29 @@ export default function ProposalOnePage() {
             {/* Mode classic */}
             {mode === "classic" && (
               <div>
-                <div className="glass-card flex rounded-[20px] py-5 pr-5 sm:py-6 sm:pr-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
-                  <div className="sm:block absolute left-[-156px] bottom-[-22px] hidden">
+                <div className="flex items-center gap-2">
+                  {/* <div className="sm:block absolute left-[-156px] bottom-[-22px] hidden">
                     <img
                       src="/images/mascot.jpg"
                       alt="Mascotte Colibi"
                       className="transition group-hover:scale-105"
                       width={350}
                     />
+                  </div> */}
+                  <div className="sm:block hidden">
+                    <video
+                      src="/images/mascot.webm"
+                      className="transition group-hover:scale-105 z-10"
+                      width={200}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                    />
                   </div>
-                  <div className="w-40 hidden sm:block"></div>
-                  <div className="w-full ">
-                    <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="w-full glass-card rounded-[20px] p-5 sm:p-6 mt-5 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
+                    <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-4">
                       <FieldShell
                         icon={<Home className="h-4 w-4" />}
                         label="Type de bien"
@@ -271,30 +281,28 @@ export default function ProposalOnePage() {
 
             {/* Mode AI */}
             {mode === "ai" && (
-              <div className="flex rounded-[20px] py-5 pr-5 sm:py-6 sm:p-6 mt-5">
-                <div className="sm:block absolute left-[-50px] bottom-[-22px] hidden">
-                  <img
-                    src="/images/mascot.jpg"
-                    alt="Mascotte Colibi"
-                    className="transition group-hover:scale-105"
-                    width={250}
-                  />
-                </div>
-                <div className="w-44 hidden sm:block"></div>
-                <div className="w-full">
+              <div className="flex items-start gap-2">
+                <div className="sm:block hidden">
+                    <video
+                      src="/images/mascot.webm"
+                      className="transition group-hover:scale-105 z-10"
+                      width={200}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                    />
+                  </div>
+                <div className="w-full mt-5">
                   <FieldShell
                     icon={
-                      <img
-                        src="/images/avatar-mascot.jpg"
-                        alt="IA Mascot"
-                        className="h-10 w-10  border-1 border-[#3B5998]/50 p-0.5 rounded-full object-cover"
-                      />
+                       <Sparkles className="border-1 border-[#3B5998]/50 p-1 rounded-full object-cover" />
                     }
                     label="Décrivez le bien idéal"
-                    className="min-h-[160px]"
+                    className="min-h-[100px]"
                   >
                     <textarea
-                      value={form.aiPrompt}
                       onChange={(e) =>
                         setForm((c) => ({ ...c, aiPrompt: e.target.value }))
                       }
@@ -308,17 +316,20 @@ export default function ProposalOnePage() {
 
             {/* Mode offmarket */}
             {mode === "offmarket" && (
-              <div className="flex rounded-[20px] p-5 sm:p-6 mt-5">
-                <div className="sm:block absolute left-[-50px] bottom-[-22px] hidden">
-                  <img
-                    src="/images/mascot.jpg"
-                    alt="Mascotte Colibi"
-                    className="transition group-hover:scale-105"
-                    width={250}
-                  />
-                </div>
-                <div className="w-44 hidden sm:block"></div>
-                <div className="flex flex-col gap-3 w-full">
+              <div className="flex items-start gap-2">
+                <div className="sm:block hidden">
+                    <video
+                      src="/images/mascot.webm"
+                      className="transition group-hover:scale-105 z-10"
+                      width={200}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                    />
+                  </div>
+                <div className="flex flex-col gap-3 w-full mt-5 glass-card rounded-[20px] p-5 sm:p-6 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
                   <button
                     type="button"
                     onClick={handleMapSearch}
@@ -342,7 +353,6 @@ export default function ProposalOnePage() {
         </section>
       </div>
 
-      {/* ── LISTINGS SECTION ─────────────────────────────────────── */}
       {/* ── LISTINGS SECTION ─────────────────────────────────────── */}
       <ListingsSection
         activeMarket={activeMarket}
