@@ -150,7 +150,7 @@ export default function ProposalOnePage() {
                   </div> */}
                   <div className="sm:block hidden">
                     <video
-                      src="/images/mascot.webm"
+                      src="/images/mascot-loop.webm"
                       className="transition group-hover:scale-105 z-10"
                       width={200}
                       autoPlay
