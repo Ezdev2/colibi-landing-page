@@ -36,7 +36,7 @@ export const markets: Market[] = [
     subtitle: "",
     strapline: "Collection confidentielle",
     note: "Avec recherche classique ou IA Intelligence",
-    image: "/images/belgium-hero-luxe.png",
+    image: "/images/belgium-hero-luxe.jpeg",
     defaultType: "Appartement",
     defaultLocation: "Bruxelles / Uccle / Louise",
     stats: { size: "640 M²", beds: "5 SUITES", pool: "LAP POOL" },

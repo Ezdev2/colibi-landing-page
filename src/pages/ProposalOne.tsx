@@ -12,6 +12,7 @@ import {
   FieldShell,
   MostViewSection,
 } from "../shared/components";
+import { Camera, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -123,10 +124,11 @@ export default function ProposalOnePage() {
                     key={id}
                     type="button"
                     onClick={() => setMode(id)}
-                    className={`inline-flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-[0.70rem] font-semibold uppercase tracking-[0.14em] transition sm:px-5 ${mode === id
+                    className={`inline-flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-[0.70rem] font-semibold uppercase tracking-[0.14em] transition sm:px-5 ${
+                      mode === id
                         ? "bg-[#3B5998] text-white shadow-[0_6px_18px_rgba(59,89,152,0.3)]"
                         : "text-[#344150] hover:bg-white/80"
-                      }`}
+                    }`}
                   >
                     <Icon className="h-3.5 w-3.5 flex-shrink-0" />
                     {/* Label caché sur très petit écran, visible à partir de sm */}
@@ -283,21 +285,21 @@ export default function ProposalOnePage() {
             {mode === "ai" && (
               <div className="flex items-start gap-2">
                 <div className="sm:block hidden">
-                    <video
-                      src="/images/mascot.webm"
-                      className="transition group-hover:scale-105 z-10"
-                      width={200}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      disablePictureInPicture
-                    />
-                  </div>
+                  <video
+                    src="/images/mascot.webm"
+                    className="transition group-hover:scale-105 z-10"
+                    width={200}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    disablePictureInPicture
+                  />
+                </div>
                 <div className="w-full mt-5">
                   <FieldShell
                     icon={
-                       <Sparkles className="border-1 border-[#3B5998]/50 p-1 rounded-full object-cover" />
+                      <Sparkles className="border-1 border-[#3B5998]/50 p-1 rounded-full object-cover" />
                     }
                     label="Décrivez le bien idéal"
                     className="min-h-[100px]"
@@ -318,17 +320,17 @@ export default function ProposalOnePage() {
             {mode === "offmarket" && (
               <div className="flex items-start gap-2">
                 <div className="sm:block hidden">
-                    <video
-                      src="/images/mascot.webm"
-                      className="transition group-hover:scale-105 z-10"
-                      width={200}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      disablePictureInPicture
-                    />
-                  </div>
+                  <video
+                    src="/images/mascot.webm"
+                    className="transition group-hover:scale-105 z-10"
+                    width={200}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    disablePictureInPicture
+                  />
+                </div>
                 <div className="flex flex-col gap-3 w-full mt-5 glass-card rounded-[20px] p-5 sm:p-6 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
                   <button
                     type="button"
@@ -352,6 +354,84 @@ export default function ProposalOnePage() {
           </div>
         </section>
       </div>
+
+      {/* ── COLAR APP SECTION (REDESIGN LIGHT) ─────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <div className="relative overflow-hidden rounded-[20px] border border-gray-100 shadow-2xl shadow-gray-200/50">
+          {/* ROW 1: Headline + Phone Mockup */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-10 lg:p-20 items-center">
+            {/* Left: Text Content */}
+            <div className="relative z-10">
+              <h2 className="text-6xl font-black leading-[1.1] tracking-tight text-gray-900 mb-6">
+                Pointez.
+                <br />
+                <span className="text-[#3B5998]">Découvrez.</span>
+                <br />
+                Achetez.
+              </h2>
+              <p className="text-lg text-gray-500 mb-8 max-w-md leading-relaxed">
+                Tenez votre téléphone, allumez l'appareil photo et voyez
+                instantanément les biens à vendre dans votre direction en
+                temps réel.
+              </p>
+              {/* <button className="inline-flex items-center gap-2 rounded-full bg-[#3B5998] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-[#3B5998]/30 transition hover:scale-105 hover:shadow-xl hover:shadow-[#3B5998]/40">
+                Ouvrir l'application
+              </button> */}
+              {/* Store buttons */}
+              <div className="mt-8 flex flex-wrap gap-3">
+                <button className="inline-flex items-center gap-3 rounded-2xl bg-[#3B5998] px-5 py-3 text-white transition hover:bg-[#0f1822]">
+                  <svg
+                    className="h-7 w-7"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M17.05 12.04c-.03-2.93 2.4-4.34 2.5-4.41-1.36-2-3.49-2.27-4.25-2.3-1.81-.18-3.53 1.07-4.45 1.07-.93 0-2.34-1.04-3.84-1.01-1.98.03-3.8 1.15-4.82 2.92-2.05 3.56-.52 8.83 1.48 11.72.97 1.41 2.13 3 3.65 2.94 1.46-.06 2.02-.95 3.79-.95 1.77 0 2.27.95 3.82.92 1.58-.03 2.58-1.44 3.55-2.86 1.12-1.64 1.58-3.23 1.6-3.32-.04-.02-3.06-1.18-3.09-4.66zM14.13 3.6c.81-.98 1.35-2.34 1.2-3.69-1.16.05-2.57.77-3.4 1.75-.75.86-1.4 2.25-1.22 3.57 1.29.1 2.61-.66 3.42-1.63z" />
+                  </svg>
+                  <div className="flex flex-col items-start leading-tight">
+                    <span className="text-[10px] opacity-80">
+                      Disponible sur
+                    </span>
+                    <span className="text-sm font-semibold">App Store</span>
+                  </div>
+                </button>
+
+                <button className="inline-flex items-center gap-3 rounded-2xl bg-[#3B5998] px-5 py-3 text-white transition hover:bg-[#0f1822]">
+                  <svg
+                    className="h-7 w-7"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.213-3.211l2.387 1.382c.815.474.815 1.651 0 2.125l-2.388 1.383-2.6-2.595 2.601-2.295zM5.864 2.658L16.802 8.99l-2.303 2.303-8.635-8.635z" />
+                  </svg>
+                  <div className="flex flex-col items-start leading-tight">
+                    <span className="text-[10px] opacity-80">
+                      Disponible sur
+                    </span>
+                    <span className="text-sm font-semibold">Google Play</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Right: Phone Mockup */}
+            <div className="relative flex justify-center lg:justify-end">
+              {/* Ambient Blob behind phone */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#3B5998]/10 rounded-full blur-3xl" />
+
+              {/* Phone Frame (Simulé en CSS pour faire joli avec ton screenshot fond blanc) */}
+              <div className="relative z-10 w-[280px] lg:w-[320px] bg-gray-900 rounded-[3rem] border-[8px] border-gray-900 shadow-2xl rotate-[-6deg] hover:rotate-0 transition duration-500 ease-out overflow-hidden">
+                {/* Notch simulation */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-2xl z-20"></div>
+                <img
+                  src="/images/colar-screenshot.jpeg"
+                  alt="Aperçu de l'app Colar"
+                  className="w-full h-auto object-cover bg-white"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── LISTINGS SECTION ─────────────────────────────────────── */}
       <ListingsSection
