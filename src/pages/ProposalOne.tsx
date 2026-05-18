@@ -95,7 +95,7 @@ export default function ProposalOnePage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-4 text-base text-[#617182] sm:text-lg"
             >
-              Votre bien idéal avec l'IA ou la recherche classique · Opérant sur
+              Votre bien idéal à portée de main avec l’IA ou la recherche classique. · Opérant sur
               toute la France et la Belgique
               {/* {activeMarket.country} */}
             </motion.p>
@@ -286,7 +286,7 @@ export default function ProposalOnePage() {
               <div className="flex items-start gap-2">
                 <div className="sm:block hidden">
                   <video
-                    src="/images/mascot.webm"
+                    src="/images/mascot-loop.webm"
                     className="transition group-hover:scale-105 z-10"
                     width={200}
                     autoPlay
@@ -320,8 +320,8 @@ export default function ProposalOnePage() {
             {mode === "offmarket" && (
               <div className="flex items-start gap-2">
                 <div className="sm:block hidden">
-                  <video
-                    src="/images/mascot.webm"
+                  {/* <video
+                    src="/images/mascot-loop.gif"
                     className="transition group-hover:scale-105 z-10"
                     width={200}
                     autoPlay
@@ -329,7 +329,14 @@ export default function ProposalOnePage() {
                     muted
                     playsInline
                     disablePictureInPicture
-                  />
+                  /> */}
+                  <img
+  src="/images/mascot-loop.gif"
+  alt="Mascot animation"
+  width={200}
+  height={200}
+  className="transition group-hover:scale-105 z-10"
+/>
                 </div>
                 <div className="flex flex-col gap-3 w-full mt-5 glass-card rounded-[20px] p-5 sm:p-6 shadow-[0_16px_40px_rgba(20,28,40,0.10)] backdrop-blur-xl border border-white/75">
                   <button
@@ -356,10 +363,10 @@ export default function ProposalOnePage() {
       </div>
 
       {/* ── COLAR APP SECTION (REDESIGN LIGHT) ─────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
+      <section className="mx-auto max-w-6xl px-6">
         <div className="relative overflow-hidden rounded-[20px] border border-gray-100 shadow-2xl shadow-gray-200/50">
           {/* ROW 1: Headline + Phone Mockup */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-10 lg:p-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-10 lg:py-20 items-center">
             {/* Left: Text Content */}
             <div className="relative z-10">
               <h2 className="text-6xl font-black leading-[1.1] tracking-tight text-gray-900 mb-6">
@@ -367,12 +374,10 @@ export default function ProposalOnePage() {
                 <br />
                 <span className="text-[#3B5998]">Découvrez.</span>
                 <br />
-                Achetez.
+                Achetez ou Louer.
               </h2>
               <p className="text-lg text-gray-500 mb-8 max-w-md leading-relaxed">
-                Tenez votre téléphone, allumez l'appareil photo et voyez
-                instantanément les biens à vendre dans votre direction en
-                temps réel.
+                Ouvrez l’application, scannez votre environnement avec votre caméra et voyez apparaître instantanément les biens à vendre dans votre direction.
               </p>
               {/* <button className="inline-flex items-center gap-2 rounded-full bg-[#3B5998] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-[#3B5998]/30 transition hover:scale-105 hover:shadow-xl hover:shadow-[#3B5998]/40">
                 Ouvrir l'application
@@ -419,11 +424,11 @@ export default function ProposalOnePage() {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#3B5998]/10 rounded-full blur-3xl" />
 
               {/* Phone Frame (Simulé en CSS pour faire joli avec ton screenshot fond blanc) */}
-              <div className="relative z-10 w-[280px] lg:w-[320px] bg-gray-900 rounded-[3rem] border-[8px] border-gray-900 shadow-2xl rotate-[-6deg] hover:rotate-0 transition duration-500 ease-out overflow-hidden">
+              <div className="relative z-10 w-[280px] bg-gray-900 rounded-[3rem] border-[8px] border-gray-900 shadow-2xl rotate-[-6deg] hover:rotate-0 transition duration-500 ease-out overflow-hidden">
                 {/* Notch simulation */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-2xl z-20"></div>
                 <img
-                  src="/images/colar-screenshot.jpeg"
+                  src="/images/colar-screenshot.png"
                   alt="Aperçu de l'app Colar"
                   className="w-full h-auto object-cover bg-white"
                 />
