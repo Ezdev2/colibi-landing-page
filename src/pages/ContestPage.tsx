@@ -69,7 +69,7 @@ function GameSection({ game, reverse = false }: { game: GameItem; reverse?: bool
         <div className={`relative z-10 w-full max-w-[420px] ${reverse ? "[direction:ltr]" : ""}`}>
           {/* Floating reward badge */}
           <div
-            className="absolute -top-2 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#78350F] shadow-lg"
+            className="absolute rounded-lg -top-2 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#78350F] shadow-lg"
             style={{ backgroundColor: "#FBBF24" }}
           >
             <Trophy className="h-3 w-3" />
@@ -305,9 +305,6 @@ export default function ContestPage() {
             <div className="max-w-4xl">
               <div className="flex flex-wrap items-center gap-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#677484]">
                 <span className="border border-[#d6d0c6] bg-white/50 px-3 py-1">
-                  {activeMarket.country}
-                </span>
-                <span className="border border-[#d6d0c6] bg-white/50 px-3 py-1">
                   Concours
                 </span>
                 <span className="border border-[#FBBF24]/40 bg-[#FBBF24]/15 px-3 py-1 text-[#8a5b00]">
@@ -315,7 +312,7 @@ export default function ContestPage() {
                 </span>
               </div>
 
-              <h1 className="mt-6 text-4xl font-black uppercase leading-tight tracking-[0.08em] text-[#222c35] sm:text-5xl lg:text-6xl">
+              <h1 className="mt-6 text-4xl font-black leading-tight tracking-[0.08em] text-[#222c35] sm:text-5xl lg:text-6xl">
                 Comment participer ?
               </h1>
 
