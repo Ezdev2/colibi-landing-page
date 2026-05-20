@@ -217,19 +217,14 @@ export default function AuthPage() {
           {/* ═══════════════════════════════════════
               RIGHT PANEL — Form
               ═══════════════════════════════════════ */}
-          <div className="flex flex-1 flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:px-12 lg:py-16">
+          <div className="flex flex-1 flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:px-12 lg:py-16 items-center md:items-stretch">
             {/* Mobile logo */}
             <div className="mb-8 flex items-center gap-3 lg:hidden">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#3B5998]">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl font-black tracking-tight text-[#1a2535]">
-                COLAR
-              </span>
+              <img src="/images/logo-blue.png" alt="logo colibi" className="w-30" />
             </div>
 
             {/* Header text */}
-            <div className="mb-8">
+            <div className="mb-8 flex flex-col items-center md:items-start">
               <AnimatePresence mode="wait">
                 <motion.h1
                   key={mode + "-title"}
@@ -249,7 +244,7 @@ export default function AuthPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3, delay: 0.05 }}
-                  className="mt-2 text-sm text-[#617182]"
+                  className="mt-2 text-sm text-[#617182] text-center md:text-start"
                 >
                   {mode === "login"
                     ? "Connectez-vous pour accéder à vos favoris et recherches."
@@ -287,7 +282,7 @@ export default function AuthPage() {
             </div> */}
 
             {/* ── SOCIAL LOGIN ── */}
-            <div className="mb-7 flex gap-3">
+            <div className="mb-7 flex gap-3 w-full">
               {socialProviders.map((provider) => (
                 <button
                   key={provider.name}
