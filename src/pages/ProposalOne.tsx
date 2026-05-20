@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Search, Sparkles, Heart, MapPin } from "lucide-react";
+import { Search, Sparkles, Heart, MapPin, Gift, Users, ArrowRight } from "lucide-react";
 import {
   TopNav,
   CountryRail,
@@ -13,7 +13,7 @@ import {
   MostViewSection,
 } from "../shared/components";
 import { Camera, Zap } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import {
   Building2,
@@ -24,6 +24,8 @@ import {
   ShieldCheck,
   List,
 } from "lucide-react";
+import { ContestPromo } from "@/shared/ContestPromo";
+import { ContestBanner } from "@/shared/ContestBanner";
 
 export default function ProposalOnePage() {
   const {
@@ -43,6 +45,7 @@ export default function ProposalOnePage() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#f6f3ed] text-[#1f2933]">
+      <ContestPromo />
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <div className="relative isolate overflow-hidden min-h-screen">
         {/* Background dynamique */}
@@ -452,6 +455,8 @@ export default function ProposalOnePage() {
       />
 
       <WhyIASection />
+
+      <ContestBanner />
 
       {/* ── FOOTER ───────────────────────────────────────────────── */}
       <Footer market={activeMarket} />
