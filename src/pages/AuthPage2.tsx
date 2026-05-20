@@ -12,7 +12,6 @@ import {
   ShieldCheck,
   MapPin,
   ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
@@ -48,11 +47,7 @@ const socialProviders = [
   {
     name: "Facebook",
     icon: (
-      <svg
-        className="h-5 w-5 text-[#1877F2]"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
+      <svg className="h-5 w-5 text-[#1877F2]" viewBox="0 0 24 24" fill="currentColor">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
       </svg>
     ),
@@ -80,7 +75,7 @@ const buttonVariants = {
   },
 };
 
-export default function AuthPage() {
+export default function AuthPage2() {
   const [mode, setMode] = useState<FormMode>("login");
   const [showPassword, setShowPassword] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -123,7 +118,7 @@ export default function AuthPage() {
     <div
       ref={containerRef}
       tabIndex={-1}
-      className="relative min-h-screen w-full overflow-hidden bg-[#f6f3ed]"
+      className="relative min-h-screen overflow-hidden bg-[#f6f3ed]"
     >
       {/* ── AMBIENT BACKGROUND ── */}
       <div className="pointer-events-none absolute inset-0">
@@ -137,98 +132,95 @@ export default function AuthPage() {
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4 }}
-        className="absolute right-6 top-6 z-30"
+        className="absolute left-6 top-6 z-30"
       >
         <Link
           to="/"
           className="group inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#3d4e5c] backdrop-blur-xl transition hover:border-[#3B5998]/40 hover:text-[#3B5998]"
         >
-          Retourner à l'Accueil
-          <ChevronRight className="h-3.5 w-3.5 transition group-hover:-translate-x-0.5" />
+          <ChevronLeft className="h-3.5 w-3.5 transition group-hover:-translate-x-0.5" />
+          Accueil
         </Link>
       </motion.div>
 
-      {/* ── FULL-SCREEN SPLIT LAYOUT ── */}
-      <div className="relative z-10 flex min-h-screen w-full">
-        {/* ═══════════════════════════════════════
-            LEFT PANEL — Branding / Mascot (hidden on mobile)
-            ═══════════════════════════════════════ */}
-        <div className="relative hidden lg:flex lg:w-[480px] xl:w-[560px] lg:flex-col lg:justify-between lg:overflow-hidden lg:px-12 lg:py-16">
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#3B5998] to-[#1e3a6e]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_60%_30%,rgba(255,255,255,0.12),transparent)]" />
+      {/* ── MAIN GRID ── */}
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="flex w-full max-w-5xl flex-col overflow-hidden rounded-[28px] border border-white/70 bg-white/40 shadow-[0_24px_64px_rgba(20,28,40,0.10)] backdrop-blur-2xl lg:flex-row lg:min-h-[640px]">
 
-          {/* Decorative dots */}
-          {/* <div className="absolute right-10 top-20 grid grid-cols-3 gap-3 opacity-20">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className="h-1.5 w-1.5 rounded-full bg-white" />
-            ))}
-          </div> */}
+          {/* ═══════════════════════════════════════
+              LEFT PANEL — Branding / Mascot
+              ═══════════════════════════════════════ */}
+          <div className="relative hidden lg:flex lg:w-[440px] lg:flex-col lg:justify-between lg:overflow-hidden lg:rounded-l-[28px] lg:px-10 lg:py-12">
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#3B5998] to-[#1e3a6e]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_60%_30%,rgba(255,255,255,0.12),transparent)]" />
 
-          {/* Content */}
-          <div className="relative z-10">
-            {/* Logo area */}
-            <div className="mb-12 flex items-center gap-3">
-              <img
-                src="/images/logo-white.png"
-                alt="Logo colibi"
-                className="w-35"
-              />
-            </div>
-
-            <h2 className="text-4xl font-black leading-tight tracking-tight text-white">
-              Votre prochaine
-              <br />
-              <span className="text-blue-200">adresse commence</span>
-              <br />
-              ici.
-            </h2>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-blue-100/70">
-              Accédez à des milliers de biens d’exception en France et en
-              Belgique. Recherche classique, IA ou off-market — tout est à
-              portée de main.
-            </p>
-          </div>
-
-          {/* Mascot + trust badges */}
-          <div className="relative z-10">
-            <div className="mb-10 flex justify-center">
-              <div className="relative">
-                <img
-                  src="/images/mascot-loop.gif"
-                  alt="Mascotte Colibi"
-                  className="relative w-48"
-                  loading="lazy"
+            {/* Decorative dots */}
+            <div className="absolute right-8 top-16 grid grid-cols-3 gap-3 opacity-20">
+              {Array.from({ length: 9 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-1.5 w-1.5 rounded-full bg-white"
                 />
-              </div>
+              ))}
             </div>
 
-            <div className="flex items-center gap-4 text-xs text-blue-100/50">
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                Données sécurisées
+            {/* Content */}
+            <div className="relative z-10">
+              {/* Logo area */}
+              <div className="mb-10 flex items-center gap-3">
+                <img src="/images/logo-white.png" alt="Logo colibi" className="w-40" />
               </div>
-              <div className="h-3 w-px bg-blue-100/20" />
-              <div className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" />
-                FR & BE
+
+              <h2 className="text-3xl font-black leading-tight tracking-tight text-white">
+                Votre prochaine
+                <br />
+                <span className="text-blue-200">adresse commence</span>
+                <br />
+                ici.
+              </h2>
+              <p className="mt-5 text-sm leading-relaxed text-blue-100/70">
+                Accédez à des milliers de biens d'exception en France et en
+                Belgique. Recherche classique, IA ou off-market; tout est à
+                portée de main.
+              </p>
+            </div>
+
+            {/* Mascot + trust badges */}
+            <div className="relative z-10">
+              <div className="mb-8 flex justify-center">
+                <div className="relative">
+                  <div className="absolute" />
+                  <img
+                    src="/images/mascot-loop.gif"
+                    alt="Mascotte Colibi"
+                    className="relative w-44"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 text-xs text-blue-100/50">
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  Données sécurisées
+                </div>
+                <div className="h-3 w-px bg-blue-100/20" />
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5" />
+                  FR & BE
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ═══════════════════════════════════════
-            RIGHT PANEL — Form (full width on mobile)
-            ═══════════════════════════════════════ */}
-        <div className="w-full bg-white/40 backdrop-blur-2xl px-6 py-10 sm:px-10 sm:py-14 lg:px-16 lg:py-20 flex justify-center items-center">
-          <div className="flex flex-1 flex-col justify-center items-center w-full">
+          {/* ═══════════════════════════════════════
+              RIGHT PANEL — Form
+              ═══════════════════════════════════════ */}
+          <div className="flex flex-1 flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:px-12 lg:py-16 items-center md:items-stretch">
             {/* Mobile logo */}
             <div className="mb-8 flex items-center gap-3 lg:hidden">
-              <img
-                src="/images/logo-blue.png"
-                alt="logo colibi"
-                className="w-32"
-              />
+              <img src="/images/logo-blue.png" alt="logo colibi" className="w-30" />
             </div>
 
             {/* Header text */}
@@ -242,9 +234,7 @@ export default function AuthPage() {
                   transition={{ duration: 0.25 }}
                   className="text-2xl font-black tracking-tight text-[#1a2535] sm:text-3xl"
                 >
-                  {mode === "login"
-                    ? "Bon retour parmi nous"
-                    : "Rejoignez la communauté"}
+                  {mode === "login" ? "Bon retour parmi nous" : "Rejoignez la communauté"}
                 </motion.h1>
               </AnimatePresence>
               <AnimatePresence mode="wait">
@@ -264,16 +254,14 @@ export default function AuthPage() {
             </div>
 
             {/* ── TAB SWITCHER ── */}
-            {/* <div className="mb-7 inline-flex self-center md:self-start rounded-full border border-white/60 bg-white/50 p-1 shadow-sm backdrop-blur-sm">
+            {/* <div className="mb-7 inline-flex rounded-full border border-white/60 bg-white/50 p-1 shadow-sm backdrop-blur-sm">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
                   onClick={() => setMode(tab.id)}
                   className={`relative rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-colors ${
-                    mode === tab.id
-                      ? "text-white"
-                      : "text-[#617182] hover:text-[#3d4e5c]"
+                    mode === tab.id ? "text-white" : "text-[#617182] hover:text-[#3d4e5c]"
                   }`}
                 >
                   <AnimatePresence>
@@ -294,7 +282,7 @@ export default function AuthPage() {
             </div> */}
 
             {/* ── SOCIAL LOGIN ── */}
-            <div className="mb-7 flex gap-3 w-full max-w-xl">
+            <div className="mb-7 flex gap-3 w-full">
               {socialProviders.map((provider) => (
                 <button
                   key={provider.name}
@@ -308,7 +296,7 @@ export default function AuthPage() {
             </div>
 
             {/* Divider */}
-            <div className="mb-7 flex items-center gap-4 w-full max-w-xl">
+            <div className="mb-7 flex items-center gap-4">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#cad2de] to-transparent" />
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7a8795]">
                 ou par e-mail
@@ -317,15 +305,12 @@ export default function AuthPage() {
             </div>
 
             {/* ── FORM ── */}
-            <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-xl">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <AnimatePresence mode="wait">
                 {mode === "register" && (
                   <motion.div
                     key="register-fields"
-                    variants={{
-                      hidden: { opacity: 0 },
-                      visible: { opacity: 1 },
-                    }}
+                    variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
                     initial="hidden"
                     animate="visible"
                     exit="hidden"
@@ -338,9 +323,7 @@ export default function AuthPage() {
                         icon={User}
                         placeholder="Prénom"
                         value={form.firstName}
-                        onChange={(v) =>
-                          setForm((c) => ({ ...c, firstName: v }))
-                        }
+                        onChange={(v) => setForm((c) => ({ ...c, firstName: v }))}
                         onFocus={() => setFocusedField("firstName")}
                         onBlur={() => setFocusedField(null)}
                         type="text"
@@ -350,9 +333,7 @@ export default function AuthPage() {
                         icon={User}
                         placeholder="Nom"
                         value={form.lastName}
-                        onChange={(v) =>
-                          setForm((c) => ({ ...c, lastName: v }))
-                        }
+                        onChange={(v) => setForm((c) => ({ ...c, lastName: v }))}
                         onFocus={() => setFocusedField("lastName")}
                         onBlur={() => setFocusedField(null)}
                         type="text"
@@ -422,9 +403,7 @@ export default function AuthPage() {
                       icon={Lock}
                       placeholder="Confirmer le mot de passe"
                       value={form.confirmPassword}
-                      onChange={(v) =>
-                        setForm((c) => ({ ...c, confirmPassword: v }))
-                      }
+                      onChange={(v) => setForm((c) => ({ ...c, confirmPassword: v }))}
                       onFocus={() => setFocusedField("confirmPassword")}
                       onBlur={() => setFocusedField(null)}
                       type={showPassword ? "text" : "password"}
@@ -458,17 +437,11 @@ export default function AuthPage() {
               {mode === "register" && (
                 <p className="text-[10px] leading-relaxed text-[#7a8795]">
                   En créant un compte, vous acceptez nos{" "}
-                  <button
-                    type="button"
-                    className="font-semibold text-[#3B5998] underline underline-offset-2"
-                  >
+                  <button type="button" className="font-semibold text-[#3B5998] underline underline-offset-2">
                     Conditions d'utilisation
                   </button>{" "}
                   et notre{" "}
-                  <button
-                    type="button"
-                    className="font-semibold text-[#3B5998] underline underline-offset-2"
-                  >
+                  <button type="button" className="font-semibold text-[#3B5998] underline underline-offset-2">
                     Politique de confidentialité
                   </button>
                   .
@@ -491,11 +464,7 @@ export default function AuthPage() {
                   {isLoading ? (
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 1,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                       className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full"
                     />
                   ) : (
@@ -511,7 +480,7 @@ export default function AuthPage() {
             </form>
 
             {/* ── FOOTER TEXT ── */}
-            <p className="mt-8 text-center md:text-left text-xs text-[#7a8795]">
+            <p className="mt-8 text-center text-xs text-[#7a8795]">
               {mode === "login" ? (
                 <>
                   Pas encore de compte ?{" "}
@@ -582,9 +551,7 @@ function AnimatedInput({
             : "border-white/70 shadow-sm hover:border-[#cad2de]"
         }`}
       >
-        <Icon
-          className={`absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors duration-300 ${isFocused ? "text-[#3B5998]" : "text-[#7a8795]"}`}
-        />
+        <Icon className={`absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors duration-300 ${isFocused ? "text-[#3B5998]" : "text-[#7a8795]"}`} />
 
         <input
           type={type}
@@ -600,13 +567,7 @@ function AnimatedInput({
             onBlur();
           }}
           className="w-full bg-transparent pl-10 pr-10 text-sm font-semibold text-[#283340] outline-none placeholder:text-[#7a8795]"
-          autoComplete={
-            type === "email"
-              ? "email"
-              : type === "password"
-                ? "current-password"
-                : "off"
-          }
+          autoComplete={type === "email" ? "email" : type === "password" ? "current-password" : "off"}
         />
 
         {rightIcon && (

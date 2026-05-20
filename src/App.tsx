@@ -5,6 +5,7 @@ import ProposalTwoPage from "./pages/ProposalTwo";
 import ProposalThreePage from "./pages/ProposalThree";
 import SearchPage from "./pages/SearchPage";
 import AuthPage from "./pages/AuthPage";
+import AuthPage2 from "./pages/AuthPage2";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<ProposalOnePage />} />
         <Route path="/login" element={<AuthPage />} />
+        <Route path="/login-2" element={<AuthPage2 />} />
         <Route path="/proposal-2" element={<ProposalTwoPage />} />
         <Route path="/proposal-3" element={<ProposalThreePage />} />
         <Route path="/search" element={<SearchPage />} />
