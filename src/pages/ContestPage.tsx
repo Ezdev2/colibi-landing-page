@@ -232,7 +232,7 @@ export default function ContestPage() {
         "Scannez votre environnement pour repérer les biens",
         "Trouvez le bien mystère et validez votre participation",
       ],
-      cta: "Accéder à Immogo",
+      cta: "Télécharger Immogo",
       accent: "#3B5998",
       image: "/images/mockup.jpg",
       imageAlt: "Mockup Colar / Immogo",
@@ -323,15 +323,15 @@ export default function ContestPage() {
 
               {/* Reward pills */}
               <div className="mt-6 flex flex-wrap gap-3">
-                <div className="inline-flex items-center gap-2 border border-[#3B5998]/20 bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#3B5998] shadow-sm backdrop-blur-xl">
+                <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#3B5998] backdrop-blur-xl">
                   <Trophy className="h-3.5 w-3.5" />
                   2 × 500€ à gagner
                 </div>
-                <div className="inline-flex items-center gap-2 border border-[#3B5998]/20 bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#3B5998] shadow-sm backdrop-blur-xl">
+                <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#3B5998] backdrop-blur-xl">
                   <Crown className="h-3.5 w-3.5" />
                   1 mois PREMIUM offert
                 </div>
-                <div className="inline-flex items-center gap-2 border border-[#FBBF24]/30 bg-[#FBBF24]/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#8a5b00] shadow-sm backdrop-blur-xl">
+                <div className="inline-flex items-center gap-2 bg-[#FBBF24]/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#8a5b00] backdrop-blur-xl">
                   <Sparkles className="h-3.5 w-3.5" />
                   Offre de lancement
                 </div>
