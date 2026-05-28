@@ -294,7 +294,7 @@ export default function AuthPage() {
             </div> */}
 
             {/* ── SOCIAL LOGIN ── */}
-            <div className="mb-7 flex gap-3 w-full max-w-xl">
+            {/* <div className="mb-7 flex gap-3 w-full max-w-xl">
               {socialProviders.map((provider) => (
                 <button
                   key={provider.name}
@@ -305,7 +305,7 @@ export default function AuthPage() {
                   <span className="hidden sm:inline">{provider.name}</span>
                 </button>
               ))}
-            </div>
+            </div> */}
 
             {/* Divider */}
             <div className="mb-7 flex items-center gap-4 w-full max-w-xl">
