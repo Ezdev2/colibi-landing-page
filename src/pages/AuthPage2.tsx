@@ -14,6 +14,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { TopNav, useHeroSearch } from "@/shared/components";
 
 type FormMode = "login" | "register";
 
@@ -84,6 +85,10 @@ export default function AuthPage2() {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const {
+      activeMarket
+    } = useHeroSearch("/");
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -127,8 +132,12 @@ export default function AuthPage2() {
         <div className="absolute left-1/3 top-1/2 h-[300px] w-[300px] rounded-full bg-blue-100/30 blur-[80px]" />
       </div>
 
+      <div className="absolute top-0 w-full">
+        <TopNav countryId={activeMarket.id} currentProposal="one" />
+      </div>
+
       {/* ── BACK LINK ── */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4 }}
@@ -141,7 +150,7 @@ export default function AuthPage2() {
           <ChevronLeft className="h-3.5 w-3.5 transition group-hover:-translate-x-0.5" />
           Accueil
         </Link>
-      </motion.div>
+      </motion.div> */}
 
       {/* ── MAIN GRID ── */}
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
@@ -169,7 +178,7 @@ export default function AuthPage2() {
             <div className="relative z-10">
               {/* Logo area */}
               <div className="mb-10 flex items-center gap-3">
-                <img src="/images/logo-white.png" alt="Logo colibi" className="w-40" />
+                <img src="/images/logo-white.png" alt="Logo colibi" className="w-30" />
               </div>
 
               <h2 className="text-3xl font-black leading-tight tracking-tight text-white">
@@ -282,7 +291,7 @@ export default function AuthPage2() {
             </div> */}
 
             {/* ── SOCIAL LOGIN ── */}
-            <div className="mb-7 flex gap-3 w-full">
+            {/* <div className="mb-7 flex gap-3 w-full">
               {socialProviders.map((provider) => (
                 <button
                   key={provider.name}
@@ -293,7 +302,7 @@ export default function AuthPage2() {
                   <span className="hidden sm:inline">{provider.name}</span>
                 </button>
               ))}
-            </div>
+            </div> */}
 
             {/* Divider */}
             <div className="mb-7 flex items-center gap-4">
