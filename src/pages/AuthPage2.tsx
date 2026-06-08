@@ -182,17 +182,17 @@ export default function AuthPage2() {
               </div>
 
               <h2 className="text-3xl font-black leading-tight tracking-tight text-white">
-                Votre prochaine
+                Trouvez le bien idéal
                 <br />
-                <span className="text-blue-200">adresse commence</span>
-                <br />
-                ici.
+                <span className="text-blue-200">en quelques secondes.</span>
+                {/* <br /> */}
+                
               </h2>
-              <p className="mt-5 text-sm leading-relaxed text-blue-100/70">
+              {/* <p className="mt-5 text-sm leading-relaxed text-blue-100/70">
                 Accédez à des milliers de biens d'exception en France et en
                 Belgique. Recherche classique, IA ou off-market; tout est à
                 portée de main.
-              </p>
+              </p> */}
             </div>
 
             {/* Mascot + trust badges */}
@@ -203,7 +203,7 @@ export default function AuthPage2() {
                   <img
                     src="/images/mascot-loop.gif"
                     alt="Mascotte Colibi"
-                    className="relative w-44"
+                    className="relative w-64"
                     loading="lazy"
                   />
                 </div>
