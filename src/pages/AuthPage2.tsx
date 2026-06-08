@@ -132,7 +132,7 @@ export default function AuthPage2() {
         <div className="absolute left-1/3 top-1/2 h-[300px] w-[300px] rounded-full bg-blue-100/30 blur-[80px]" />
       </div>
 
-      <div className="absolute top-0 w-full">
+      <div className="top-0 w-full">
         <TopNav countryId={activeMarket.id} currentProposal="one" />
       </div>
 
@@ -153,7 +153,7 @@ export default function AuthPage2() {
       </motion.div> */}
 
       {/* ── MAIN GRID ── */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <div className="relative z-10 flex items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex w-full max-w-5xl flex-col overflow-hidden rounded-[28px] border border-white/70 bg-white/40 shadow-[0_24px_64px_rgba(20,28,40,0.10)] backdrop-blur-2xl lg:flex-row lg:min-h-[640px]">
 
           {/* ═══════════════════════════════════════
@@ -165,23 +165,23 @@ export default function AuthPage2() {
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_60%_30%,rgba(255,255,255,0.12),transparent)]" />
 
             {/* Decorative dots */}
-            <div className="absolute right-8 top-16 grid grid-cols-3 gap-3 opacity-20">
+            {/* <div className="absolute right-8 top-16 grid grid-cols-3 gap-3 opacity-20">
               {Array.from({ length: 9 }).map((_, i) => (
                 <div
                   key={i}
                   className="h-1.5 w-1.5 rounded-full bg-white"
                 />
               ))}
-            </div>
+            </div> */}
 
             {/* Content */}
             <div className="relative z-10">
               {/* Logo area */}
-              <div className="mb-10 flex items-center gap-3">
+              {/* <div className="mb-10 flex items-center gap-3">
                 <img src="/images/logo-white.png" alt="Logo colibi" className="w-30" />
-              </div>
+              </div> */}
 
-              <h2 className="text-3xl font-black leading-tight tracking-tight text-white">
+              <h2 className="text-4xl font-black leading-tight tracking-tight text-white">
                 Trouvez le bien idéal
                 <br />
                 <span className="text-blue-200">en quelques secondes.</span>
@@ -197,13 +197,13 @@ export default function AuthPage2() {
 
             {/* Mascot + trust badges */}
             <div className="relative z-10">
-              <div className="mb-8 flex justify-center">
+              <div className="mb-8 mt-12 flex justify-center">
                 <div className="relative">
                   <div className="absolute" />
                   <img
                     src="/images/mascot-loop.gif"
                     alt="Mascotte Colibi"
-                    className="relative w-64"
+                    className="relative w-68"
                     loading="lazy"
                   />
                 </div>
