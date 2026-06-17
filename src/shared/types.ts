@@ -45,4 +45,5 @@ export type Listing = {
   tags: string[];
   offmarket: boolean;
   focus: string;
+  status?:string;
 };

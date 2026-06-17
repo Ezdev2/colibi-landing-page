@@ -32,7 +32,7 @@ import {
   ArrowRight,
   Maximize,
   BellRing,
-  List,
+  List, Lock, CheckCircle2
 } from "lucide-react";
 import type { Market, ProposalKey, SearchFormState, SearchMode } from "./types";
 import { markets, quickFilters, searchModes } from "./data";
@@ -1134,6 +1134,9 @@ export function CountrySwitch({
   );
 }
 
+// type Market = { id: string; country: string };
+type StatusFilter = "Tous" | "Vente" | "Location" | "Off-market";
+
 export function ListingsSection({
   activeMarket,
   onMarketChange,
@@ -1144,13 +1147,22 @@ export function ListingsSection({
   onNavigate: (path: string) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState("Tous");
+  // 1. Nouvel état pour le statut du bien
+  const [activeStatus, setActiveStatus] = useState<StatusFilter>("Tous");
 
-  // On filtre par pays ET par catégorie
+  // 2. Filtrage cumulatif : Pays + Catégorie + Statut
   const displayedListings = listings.filter((l) => {
     const matchCountry = l.country === activeMarket.id;
-    const matchCategory =
-      activeCategory === "Tous" || l.type === activeCategory;
-    return matchCountry && matchCategory;
+    const matchCategory = activeCategory === "Tous" || l.type === activeCategory;
+    
+    // Logique de filtrage du statut (s'appuie sur les propriétés de tes objets "listing")
+    const matchStatus =
+      activeStatus === "Tous" ||
+      (activeStatus === "Off-market" && l.offmarket) ||
+      (activeStatus === "Vente" && l.status === "Vente" && !l.offmarket) ||
+      (activeStatus === "Location" && l.status === "Location" && !l.offmarket);
+
+    return matchCountry && matchCategory && matchStatus;
   });
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1161,69 +1173,63 @@ export function ListingsSection({
       className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
     >
       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
-        {/* --- Onglets Pays (Utilise onMarketChange) --- */}
-        {/* <div className="mb-12 flex justify-center">
-          <div className="inline-flex p-1.5 bg-[#f1f3f7] rounded-2xl border border-[#e2e8f0] shadow-inner">
-            {MARKETS.map(
-              (
-                m, // MARKETS doit être accessible (soit importé, soit défini hors du composant)
-              ) => (
-                <button
-                  key={m.id}
-                  onClick={() => onMarketChange(m.id)}
-                  className={`relative px-10 py-3 rounded-xl text-[0.75rem] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${
-                    activeMarket.id === m.id
-                      ? "bg-white text-[#3B5998] shadow-md shadow-black/5"
-                      : "text-[#8a97a4] hover:text-[#3d4e5c]"
-                  }`}
-                >
-                  {m.country}
-                  {activeMarket.id === m.id && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 border-2 border-[#3B5998]/10 rounded-xl"
-                    />
-                  )}
-                </button>
-              ),
-            )}
-          </div>
-        </div> */}
-
-        {/* Header avec Titre dynamique */}
-        <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <div className="">
+        
+        {/* Header avec Titre dynamique et filtres */}
+        <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
             <CountrySwitch
               activeMarket={activeMarket}
               onMarketChange={onMarketChange}
             />
             <h2 className="mt-4 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
-              Derniers biens disponible
+              Derniers biens disponibles
             </h2>
+            <div className="inline-flex p-1 bg-[#f1f3f7] rounded-xl border border-[#e2e8f0] mt-4 self-start sm:self-auto">
+              {(["Tous", "Vente", "Location", "Off-market"] as StatusFilter[]).map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setActiveStatus(status)}
+                  className={`px-4 py-2 rounded-lg text-[0.65rem] font-bold uppercase tracking-[0.1em] transition-all duration-200 ${
+                    activeStatus === status
+                      ? "bg-[#3B5998] text-white shadow-sm"
+                      : "text-[#677484] hover:text-[#22303a]"
+                  }`}
+                >
+                  {status === "Tous" ? "Tout" : status === "Vente" ? "À Vendre" : status === "Location" ? "À Louer" : "Off-Market"}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Filtres de catégories */}
-          <div className="flex flex-wrap gap-2">
-            {[
-              "Tous",
-              "Maison",
-              "Appartement",
-              "Villa",
-              "Bungallow",
-              "Autre",
-            ].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`inline-flex items-center gap-1.5 rounded-full border px-5 py-2.5 text-[0.7rem] font-bold uppercase tracking-[0.12em] transition-all ${
-                  activeCategory === cat
-                    ? "border-[#3B5998] bg-[#3B5998] text-white"
-                    : "border-[#d6dce6] bg-white text-[#677484] hover:border-[#3B5998] hover:text-[#3B5998]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* 3. BLOC DES FILTRES COUPLÉS */}
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            
+            {/* Filtre de Statut (A vendre / Louer / Off-market) */}
+            
+
+            {/* Filtres de catégories existants */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Tous",
+                "Maison",
+                "Appartement",
+                "Villa",
+                "Bungallow",
+                "Autre",
+              ].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.12em] transition-all ${
+                    activeCategory === cat
+                      ? "border-[#3B5998] bg-[#3B5998] text-white"
+                      : "border-[#d6dce6] bg-white text-[#677484] hover:border-[#3B5998] hover:text-[#3B5998]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1248,15 +1254,15 @@ export function ListingsSection({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
-                {/* Badge */}
+                {/* Badge Dynamique mis à jour selon le statut réel */}
                 <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
                   {listing.offmarket ? (
-                    <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+                    <span className="rounded-full bg-[#22303a]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm">
                       Off-market
                     </span>
                   ) : (
                     <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
-                      Nouveau
+                      {listing.status === "Location" ? "Location" : "Vente"}
                     </span>
                   )}
                 </div>
@@ -1302,7 +1308,7 @@ export function ListingsSection({
                 </div>
 
                 <p className="mt-2 text-[0.68rem] text-[#8a97a4]">
-                  Publié il y à {index + 1} jour{index > 0 ? "s" : ""}
+                  Publié il y a {index + 1} jour{index > 0 ? "s" : ""}
                   {index === 2 && (
                     <span className="ml-2 inline-flex items-center gap-1 text-[#e8a020]">
                       · Très consulté
@@ -1316,15 +1322,12 @@ export function ListingsSection({
 
         {/* Footer de section dynamique */}
         <div className="mt-12 flex flex-col items-center gap-4">
-          {/* <p className="text-[0.75rem] text-[#8a97a4] font-medium italic">
-            {activeMarket.note}
-          </p> */}
           <button
             type="button"
             onClick={scrollToTop}
             className="group inline-flex items-center gap-3 rounded-full bg-[#3B5998] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#22303a]"
           >
-            Explorer tout les biens
+            Explorer tous les biens
             <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         </div>
@@ -1343,13 +1346,22 @@ export function MostViewSection({
   onNavigate: (path: string) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState("Tous");
+  // 1. Nouvel état pour le statut du bien
+  const [activeStatus, setActiveStatus] = useState<StatusFilter>("Tous");
 
-  // On filtre par pays ET par catégorie
+  // 2. Filtrage cumulatif : Pays + Catégorie + Statut
   const displayedListings = listings.filter((l) => {
     const matchCountry = l.country === activeMarket.id;
-    const matchCategory =
-      activeCategory === "Tous" || l.type === activeCategory;
-    return matchCountry && matchCategory;
+    const matchCategory = activeCategory === "Tous" || l.type === activeCategory;
+    
+    // Logique de filtrage du statut (s'appuie sur les propriétés de tes objets "listing")
+    const matchStatus =
+      activeStatus === "Tous" ||
+      (activeStatus === "Off-market" && l.offmarket) ||
+      (activeStatus === "Vente" && l.status === "Vente" && !l.offmarket) ||
+      (activeStatus === "Location" && l.status === "Location" && !l.offmarket);
+
+    return matchCountry && matchCategory && matchStatus;
   });
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1360,42 +1372,63 @@ export function MostViewSection({
       className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
     >
       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
-
-        {/* Header avec Titre dynamique */}
-        <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        
+        {/* Header avec Titre dynamique et filtres */}
+        <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <CountrySwitch
               activeMarket={activeMarket}
               onMarketChange={onMarketChange}
             />
-
             <h2 className="mt-4 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
               Les plus populaires
             </h2>
+            <div className="inline-flex p-1 bg-[#f1f3f7] rounded-xl border border-[#e2e8f0] mt-4 self-start sm:self-auto">
+              {(["Tous", "Vente", "Location", "Off-market"] as StatusFilter[]).map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setActiveStatus(status)}
+                  className={`px-4 py-2 rounded-lg text-[0.65rem] font-bold uppercase tracking-[0.1em] transition-all duration-200 ${
+                    activeStatus === status
+                      ? "bg-[#3B5998] text-white shadow-sm"
+                      : "text-[#677484] hover:text-[#22303a]"
+                  }`}
+                >
+                  {status === "Tous" ? "Tout" : status === "Vente" ? "À Vendre" : status === "Location" ? "À Louer" : "Off-Market"}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Filtres de catégories */}
-          <div className="flex flex-wrap gap-2">
-            {[
-              "Tous",
-              "Maison",
-              "Appartement",
-              "Villa",
-              "Bungallow",
-              "Autre",
-            ].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`inline-flex items-center gap-1.5 rounded-full border px-5 py-2.5 text-[0.7rem] font-bold uppercase tracking-[0.12em] transition-all ${
-                  activeCategory === cat
-                    ? "border-[#3B5998] bg-[#3B5998] text-white"
-                    : "border-[#d6dce6] bg-white text-[#677484] hover:border-[#3B5998] hover:text-[#3B5998]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* 3. BLOC DES FILTRES COUPLÉS */}
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            
+            {/* Filtre de Statut (A vendre / Louer / Off-market) */}
+            
+
+            {/* Filtres de catégories existants */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Tous",
+                "Maison",
+                "Appartement",
+                "Villa",
+                "Bungallow",
+                "Autre",
+              ].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.12em] transition-all ${
+                    activeCategory === cat
+                      ? "border-[#3B5998] bg-[#3B5998] text-white"
+                      : "border-[#d6dce6] bg-white text-[#677484] hover:border-[#3B5998] hover:text-[#3B5998]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1420,15 +1453,15 @@ export function MostViewSection({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
-                {/* Badge */}
+                {/* Badge Dynamique mis à jour selon le statut réel */}
                 <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
                   {listing.offmarket ? (
-                    <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+                    <span className="rounded-full bg-[#22303a]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm">
                       Off-market
                     </span>
                   ) : (
                     <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
-                      Populaire
+                      {listing.status === "Location" ? "Location" : "Vente"}
                     </span>
                   )}
                 </div>
@@ -1474,7 +1507,7 @@ export function MostViewSection({
                 </div>
 
                 <p className="mt-2 text-[0.68rem] text-[#8a97a4]">
-                  Publié il y à {index + 1} jour{index > 0 ? "s" : ""}
+                  Publié il y a {index + 1} jour{index > 0 ? "s" : ""}
                   {index === 2 && (
                     <span className="ml-2 inline-flex items-center gap-1 text-[#e8a020]">
                       · Très consulté
@@ -1488,15 +1521,12 @@ export function MostViewSection({
 
         {/* Footer de section dynamique */}
         <div className="mt-12 flex flex-col items-center gap-4">
-          {/* <p className="text-[0.75rem] text-[#8a97a4] font-medium italic">
-            {activeMarket.note}
-          </p> */}
           <button
             type="button"
             onClick={scrollToTop}
             className="group inline-flex items-center gap-3 rounded-full bg-[#3B5998] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#22303a]"
           >
-            Explorer tout les biens
+            Explorer tous les biens
             <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         </div>
@@ -1504,6 +1534,178 @@ export function MostViewSection({
     </section>
   );
 }
+
+// export function MostViewSection({
+//   activeMarket,
+//   onMarketChange,
+//   onNavigate,
+// }: {
+//   activeMarket: Market;
+//   onMarketChange: (marketId: string) => void;
+//   onNavigate: (path: string) => void;
+// }) {
+//   const [activeCategory, setActiveCategory] = useState("Tous");
+
+//   // On filtre par pays ET par catégorie
+//   const displayedListings = listings.filter((l) => {
+//     const matchCountry = l.country === activeMarket.id;
+//     const matchCategory =
+//       activeCategory === "Tous" || l.type === activeCategory;
+//     return matchCountry && matchCategory;
+//   });
+
+//   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+//   return (
+//     <section
+//       id="listing"
+//       className="bg-white/80 backdrop-blur-sm border-[#d7d1c7]"
+//     >
+//       <div className="mx-auto max-w-[1500px] px-6 py-14 lg:px-16">
+
+//         {/* Header avec Titre dynamique */}
+//         <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+//           <div>
+//             <CountrySwitch
+//               activeMarket={activeMarket}
+//               onMarketChange={onMarketChange}
+//             />
+
+//             <h2 className="mt-4 text-4xl font-black uppercase tracking-[0.07em] text-[#22303a]">
+//               Les plus populaires
+//             </h2>
+//           </div>
+
+//           {/* Filtres de catégories */}
+//           <div className="flex flex-wrap gap-2">
+//             {[
+//               "Tous",
+//               "Maison",
+//               "Appartement",
+//               "Villa",
+//               "Bungallow",
+//               "Autre",
+//             ].map((cat) => (
+//               <button
+//                 key={cat}
+//                 onClick={() => setActiveCategory(cat)}
+//                 className={`inline-flex items-center gap-1.5 rounded-full border px-5 py-2.5 text-[0.7rem] font-bold uppercase tracking-[0.12em] transition-all ${
+//                   activeCategory === cat
+//                     ? "border-[#3B5998] bg-[#3B5998] text-white"
+//                     : "border-[#d6dce6] bg-white text-[#677484] hover:border-[#3B5998] hover:text-[#3B5998]"
+//                 }`}
+//               >
+//                 {cat}
+//               </button>
+//             ))}
+//           </div>
+//         </div>
+
+//         {/* Grille de cartes */}
+//         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+//           {displayedListings.map((listing, index) => (
+//             <motion.article
+//               key={listing.id}
+//               initial={{ opacity: 0, y: 18 }}
+//               whileInView={{ opacity: 1, y: 0 }}
+//               viewport={{ once: true, amount: 0.2 }}
+//               transition={{ duration: 0.45, delay: index * 0.07 }}
+//               className="overflow-hidden rounded-[16px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
+//             >
+//               {/* Image */}
+//               <div className="relative h-52 overflow-hidden">
+//                 <img
+//                   src={getMarket(listing.country).image}
+//                   alt={listing.title}
+//                   className="h-full w-full object-cover transition duration-500 hover:scale-105"
+//                   style={{ objectPosition: listing.focus }}
+//                 />
+//                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+
+//                 {/* Badge */}
+//                 <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+//                   {listing.offmarket ? (
+//                     <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+//                       Off-market
+//                     </span>
+//                   ) : (
+//                     <span className="rounded-full bg-[#3B5998]/90 px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white">
+//                       Populaire
+//                     </span>
+//                   )}
+//                 </div>
+
+//                 {/* Title overlay */}
+//                 <div className="absolute bottom-3 left-4 right-4">
+//                   <p className="text-[0.63rem] font-semibold uppercase tracking-[0.18em] text-white/75">
+//                     {listing.district}
+//                   </p>
+//                   <h3 className="mt-1 text-lg font-black uppercase leading-tight tracking-[0.06em] text-white">
+//                     {listing.title}
+//                   </h3>
+//                 </div>
+//               </div>
+
+//               {/* Body */}
+//               <div className="p-4">
+//                 <div className="flex items-baseline justify-between">
+//                   <p className="text-lg font-black tracking-tight text-[#22303a]">
+//                     {listing.price}
+//                   </p>
+//                   <button
+//                     type="button"
+//                     className="rounded-full border border-[#d6dce4] p-1.5 text-[#8a97a4] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+//                   >
+//                     <Heart className="h-3.5 w-3.5" />
+//                   </button>
+//                 </div>
+
+//                 <div className="mt-2 flex flex-wrap items-center gap-3 text-[0.68rem] text-[#667484]">
+//                   <span className="flex items-center gap-1">
+//                     <Building2 className="h-3 w-3" />
+//                     {listing.surface}
+//                   </span>
+//                   <span className="flex items-center gap-1">
+//                     <BedDouble className="h-3 w-3" />
+//                     {listing.suites}
+//                   </span>
+//                   <span className="flex items-center gap-1">
+//                     <MapPin className="h-3 w-3" />
+//                     {listing.district}
+//                   </span>
+//                 </div>
+
+//                 <p className="mt-2 text-[0.68rem] text-[#8a97a4]">
+//                   Publié il y à {index + 1} jour{index > 0 ? "s" : ""}
+//                   {index === 2 && (
+//                     <span className="ml-2 inline-flex items-center gap-1 text-[#e8a020]">
+//                       · Très consulté
+//                     </span>
+//                   )}
+//                 </p>
+//               </div>
+//             </motion.article>
+//           ))}
+//         </div>
+
+//         {/* Footer de section dynamique */}
+//         <div className="mt-12 flex flex-col items-center gap-4">
+//           {/* <p className="text-[0.75rem] text-[#8a97a4] font-medium italic">
+//             {activeMarket.note}
+//           </p> */}
+//           <button
+//             type="button"
+//             onClick={scrollToTop}
+//             className="group inline-flex items-center gap-3 rounded-full bg-[#3B5998] px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#22303a]"
+//           >
+//             Explorer tout les biens
+//             <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+//           </button>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
 
 export function ListingsSection3({
   activeMarket,
@@ -1616,6 +1818,165 @@ export function ListingsSection3({
   );
 }
 
+// dropdpo section
+export function DpoSection() {
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Intégration de ta logique d'envoi ici
+    console.log("Message DPO envoyé:", form);
+    setIsSubmitted(true);
+  };
+
+  return (
+    <section className="bg-[#f8fafc] border-t border-b border-[#e2e8f0] px-6 py-16 lg:px-16">
+      <div className="mx-auto max-w-[1400px]">
+        
+        {/* Titre de la section */}
+        <div className="mb-12 max-w-2xl">
+          <h2 className="mt-3 text-3xl font-black uppercase tracking-tight text-[#22303a] sm:text-4xl leading-[1.1]">
+            Notre DPO veille à la protection de vos données personnelles !
+          </h2>
+        </div>
+
+        {/* Layout principal */}
+        <div className="grid gap-8 lg:grid-cols-12 items-stretch">
+          
+          {/* BLOC GAUCHE — LES ENGAGEMENTS (40% de la largeur sur desktop) */}
+          <div className="lg:col-span-5 flex flex-col gap-4 justify-between">
+            
+            {/* Carte 100% Confidentiel */}
+            <div className="flex gap-4 rounded-2xl border border-white bg-white p-6 shadow-[0_12px_32px_rgba(25,33,46,0.04)]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#3B5998]/10 text-[#3B5998]">
+                <Lock className="h-6 w-6" />
+              </div>
+              <div className="flex flex-col">
+                <h4 className="text-[15px] font-black uppercase tracking-wide text-[#22303a]">
+                  100% confidentiel
+                </h4>
+                <p className="mt-1.5 text-[13px] font-medium leading-relaxed text-[#677484]">
+                  Vos données personnelles ne feront l’objet d’aucun partage avec un quelconque tiers sans votre consentement préalable.
+                </p>
+              </div>
+            </div>
+
+            {/* Carte Respect RGPD */}
+            <div className="flex gap-4 rounded-2xl border border-white bg-white p-6 shadow-[0_12px_32px_rgba(25,33,46,0.04)]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FBBF24]/15 text-[#e8a020]">
+                <ShieldCheck className="h-6 w-6" />
+              </div>
+              <div className="flex flex-col">
+                <h4 className="text-[15px] font-black uppercase tracking-wide text-[#22303a]">
+                  Respect formel du RGPD
+                </h4>
+                <p className="mt-1.5 text-[13px] font-medium leading-relaxed text-[#677484]">
+                  Colibi a mis en place toutes les mesures afin d’assujettir l’exploitation de sa plateforme au strict respect des règles du RGPD.
+                </p>
+              </div>
+            </div>
+
+            {/* Note RGPD discrète de pied de page à gauche */}
+            <div className="hidden lg:block p-4 rounded-xl border border-dashed border-[#d6dce6] bg-slate-50">
+              <p className="text-[11px] font-semibold text-[#8a97a4] leading-relaxed">
+                Conformément à la réglementation européenne, vous disposez d'un droit d'accès, de rectification et de suppression de vos données de notre plateforme.
+              </p>
+            </div>
+          </div>
+
+          {/* BLOC DROITE — FORMULAIRE DE CONTACT (70% de la largeur sur desktop) */}
+          <div className="lg:col-span-7 rounded-3xl border border-[#d9e0e8] bg-white p-6 sm:p-8 shadow-[0_20px_50px_rgba(25,33,46,0.06)] relative overflow-hidden">
+            
+            <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-[#3B5998]/5 blur-3xl pointer-events-none" />
+            
+            <div className="mb-6">
+              <h3 className="text-xl font-black uppercase tracking-tight text-[#22303a]">
+                Vos questions au DPO
+              </h3>
+              <p className="text-[13px] font-medium text-[#677484] mt-1">
+                Une interrogation sur le traitement de vos informations ? Posez votre question directement à notre délégué.
+              </p>
+            </div>
+
+            {!isSubmitted ? (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-[#22303a]">
+                      Nom complet
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      placeholder="Ex: Ezra Fanomezantsoa"
+                      className="w-full rounded-xl border border-[#d6dce6] px-4 py-3 text-xs font-semibold text-[#22303a] placeholder-[#8a97a4] transition focus:border-[#3B5998] focus:outline-none focus:ring-2 focus:ring-[#3B5998]/10"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-[#22303a]">
+                      Adresse e-mail
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      placeholder="Ex: contact@colibi.com"
+                      className="w-full rounded-xl border border-[#d6dce6] px-4 py-3 text-xs font-semibold text-[#22303a] placeholder-[#8a97a4] transition focus:border-[#3B5998] focus:outline-none focus:ring-2 focus:ring-[#3B5998]/10"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-[#22303a]">
+                    Votre message ou question
+                  </label>
+                  <textarea
+                    rows={4}
+                    required
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    placeholder="Décrivez votre demande concernant la gestion de vos données..."
+                    className="w-full rounded-xl border border-[#d6dce6] px-4 py-3 text-xs font-semibold text-[#22303a] placeholder-[#8a97a4] transition focus:border-[#3B5998] focus:outline-none focus:ring-2 focus:ring-[#3B5998]/10 resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#3B5998] py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-[#22303a] shadow-md hover:shadow-xl active:scale-[0.99]"
+                >
+                  Envoyer ma demande
+                  <Send className="h-3.5 w-3.5 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </button>
+              </form>
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col items-center justify-center py-12 text-center"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 mb-4">
+                  <CheckCircle2 className="h-8 w-8" />
+                </div>
+                <h4 className="text-lg font-black uppercase tracking-tight text-[#22303a]">
+                  Message transmis !
+                </h4>
+                <p className="mt-2 text-xs font-medium text-[#677484] max-w-sm leading-relaxed">
+                  Merci, {form.name}. Notre délégué à la protection des données (DPO) prendra contact avec vous à l'adresse <span className="font-bold text-[#22303a]">{form.email}</span> sous 48h.
+                </p>
+              </motion.div>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // WhyIASection — Pourquoi section
 // ---------------------------------------------------------------------------
@@ -1624,17 +1985,17 @@ export function WhyIASection() {
     {
       icon: <Globe className="h-5 w-5" />,
       title: "Rapide & instantané",
-      desc: "Analyse en temps réel de milliers d'annonces pour des résultats immédiats.",
+      desc: "L’IA analyse en temps réel les annonces pour des résultats immédiats.",
     },
     {
       icon: <TrendingUp className="h-5 w-5" />,
       title: "Personnalisé",
-      desc: "L'IA comprend vos priorités (style de vie, budget) pour affiner chaque suggestion.",
+      desc: "L’IA prend en compte vos priorités (budget, préférences esthétiques,…) pour affiner chaque suggestion.",
     },
     {
       icon: <Zap className="h-5 w-5" />,
       title: "Ultra pertinent",
-      desc: "Fini le hors-sujet. Nous filtrons l'intention réelle derrière vos mots.",
+      desc: "L’IA classe les résultats en fonction de vos critères.",
     },
     {
       icon: <ShieldCheck className="h-5 w-5" />,
@@ -1656,8 +2017,7 @@ export function WhyIASection() {
               Pourquoi utiliser <br /> notre IA.
             </h2>
             <p className="mt-6 text-lg text-[#667484] leading-relaxed max-w-md">
-              Notre moteur IA comprend vos besoins en langage naturel. Plus de
-              filtres complexes, juste une conversation.
+              Notre moteur IA comprend vos besoins exprimés en langage courant. Plus de filtres complexes, juste une conversation avec Colo 
             </p>
           </div>
 

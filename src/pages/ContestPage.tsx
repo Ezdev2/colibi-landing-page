@@ -29,7 +29,13 @@ type GameItem = {
   action: () => void;
 };
 
-function GameSection({ game, reverse = false }: { game: GameItem; reverse?: boolean }) {
+function GameSection({
+  game,
+  reverse = false,
+}: {
+  game: GameItem;
+  reverse?: boolean;
+}) {
   return (
     <article
       className={`grid grid-cols-1 lg:grid-cols-2 ${reverse ? "lg:[direction:rtl]" : ""}`}
@@ -66,14 +72,51 @@ function GameSection({ game, reverse = false }: { game: GameItem; reverse?: bool
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 blur-2xl" />
 
         {/* ── Image content (LTR always) ── */}
-        <div className={`relative z-10 w-full max-w-[420px] ${reverse ? "[direction:ltr]" : ""}`}>
+        <div
+          className={`relative z-10 w-full max-w-[420px] ${reverse ? "[direction:ltr]" : ""}`}
+        >
           {/* Floating reward badge */}
-          <div
-            className="absolute rounded-lg -top-2 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#78350F] shadow-lg"
-            style={{ backgroundColor: "#FBBF24" }}
-          >
-            <Trophy className="h-3 w-3" />
-            {game.reward}
+          <div className="absolute -top-2 right-4 z-20">
+            {/* Sparkles */}
+            <span className="absolute -top-1 -left-1 text-yellow-400 text-[10px] animate-ping">
+              ✦
+            </span>
+
+            <span
+              className="absolute top-0 -right-1 text-yellow-400 animate-ping"
+              style={{ animationDelay: "0.8s" }}
+            >
+              {" "}
+              ✦
+            </span>
+            <span
+              className="absolute -bottom-1 right-4 text-yellow-400 animate-ping"
+              style={{ animationDelay: "1.5s" }}
+            >
+              ✦{" "}
+            </span>
+
+            <span
+              className="absolute top-1 -right-2 text-yellow-400 text-[6px] animate-ping"
+              style={{ animationDelay: "1s" }}
+            >
+              ✦
+            </span>
+
+            <div
+              className="
+      rounded-lg
+      inline-flex items-center gap-1.5
+      px-3 py-1.5
+      text-[10px] font-bold uppercase tracking-[0.16em]
+      text-[#78350F]
+      bg-amber-400
+      shadow-lg shadow-amber-300/50
+    "
+            >
+              <Trophy className="h-3 w-3" />
+              {game.reward}
+            </div>
           </div>
 
           {game.layout === "mockup" && (
@@ -82,11 +125,19 @@ function GameSection({ game, reverse = false }: { game: GameItem; reverse?: bool
                 <div className="absolute -inset-8 rounded-full bg-[#FBBF24]/10 blur-3xl" />
                 <motion.div
                   animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                   className="relative w-[220px] overflow-hidden sm:w-[240px]"
                 >
                   {/* <div className="absolute left-1/2 top-0 z-10 h-4 w-24 -translate-x-1/2 bg-gray-900" /> */}
-                  <img src={game.image} alt={game.imageAlt} className="w-full object-cover" />
+                  <img
+                    src={game.image}
+                    alt={game.imageAlt}
+                    className="w-full object-cover"
+                  />
                 </motion.div>
               </div>
             </div>
@@ -100,7 +151,11 @@ function GameSection({ game, reverse = false }: { game: GameItem; reverse?: bool
             >
               <div className="absolute -inset-4 bg-white/5 blur-2xl" />
               <div className="relative border border-white/20 bg-white/10 p-2 shadow-2xl backdrop-blur-sm">
-                <img src={game.image} alt={game.imageAlt} className="w-full object-cover" />
+                <img
+                  src={game.image}
+                  alt={game.imageAlt}
+                  className="w-full object-cover"
+                />
               </div>
             </motion.div>
           )}
@@ -120,7 +175,11 @@ function GameSection({ game, reverse = false }: { game: GameItem; reverse?: bool
                   <span className="h-2 w-2 rounded-full bg-white/30" />
                   <div className="ml-3 h-2 w-28 rounded-full bg-white/15" />
                 </div>
-                <img src={game.image} alt={game.imageAlt} className="w-full object-cover" />
+                <img
+                  src={game.image}
+                  alt={game.imageAlt}
+                  className="w-full object-cover"
+                />
               </div>
             </motion.div>
           )}
@@ -137,8 +196,10 @@ function GameSection({ game, reverse = false }: { game: GameItem; reverse?: bool
       {/* ══════════════════════════
           CONTENT
           ══════════════════════════ */}
-      <div className={`flex items-center bg-white p-8 lg:p-16 ${reverse ? "[direction:ltr]" : ""}`}>
-        <div className="max-w-xl">
+      <div
+        className={`flex items-center bg-white p-8 lg:p-16 ${reverse ? "[direction:ltr]" : ""}`}
+      >
+        <div className="w-full">
           {/* Tags */}
           <div className="mb-5 flex flex-wrap items-center gap-3">
             <span
@@ -168,17 +229,24 @@ function GameSection({ game, reverse = false }: { game: GameItem; reverse?: bool
           </p>
 
           {/* Description */}
-          <p className="mt-6 text-sm leading-7 text-[#546372]">{game.description}</p>
+          <p className="mt-6 text-sm leading-7 text-[#546372]">
+            {game.description}
+          </p>
 
           {/* Challenge callout */}
-          <div className="mt-6 border-l-3 border-[#3B5998] bg-[#3B5998]/5 px-5 py-4" style={{ borderLeftWidth: 3 }}>
+          <div
+            className="mt-6 border-l-3 border-[#3B5998] bg-[#3B5998]/5 px-5 py-4"
+            style={{ borderLeftWidth: 3 }}
+          >
             <div className="flex items-start gap-2">
               <Sparkles className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#3B5998]" />
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#3B5998]">
                   Le défi
                 </p>
-                <p className="mt-1 text-sm font-semibold text-[#1a2535]">{game.challenge}</p>
+                <p className="mt-1 text-sm font-semibold text-[#1a2535]">
+                  {game.challenge}
+                </p>
               </div>
             </div>
           </div>
@@ -193,7 +261,9 @@ function GameSection({ game, reverse = false }: { game: GameItem; reverse?: bool
                 >
                   {i + 1}
                 </div>
-                <span className="pt-1 text-sm leading-6 text-[#546372]">{step}</span>
+                <span className="pt-1 text-sm leading-6 text-[#546372]">
+                  {step}
+                </span>
               </div>
             ))}
           </div>
@@ -225,12 +295,13 @@ export default function ContestPage() {
       reward: "500€",
       rewardText: "text-[#8a5b00]",
       description:
-        "Immogo vous permet de scanner votre environnement avec la caméra et de voir apparaître les biens à vendre autour de vous en temps réel. Pointez, découvrez, et trouvez le bien mystère avant tout le monde.",
-      challenge: "Le premier participant à trouver le bon bien remportera la récompense.",
+        "« Colibi AR vous permet de scanner votre environnement avec la caméra et de marquer votre intérêt pour un bien off-market, que vous pourrez négocier en direct avec le propriétaire.",
+      challenge:
+        "Le premier participant à marquer son intérêt pour la tanière de Colo remportera un montant de 500,00 EUR et 1 an d’abonnement à « Colibi-premium ».",
       steps: [
-        "Ouvrez Immogo depuis la page concours",
+        "Télécharger Immogo depuis la page concours",
         "Scannez votre environnement pour repérer les biens",
-        "Trouvez le bien mystère et validez votre participation",
+        "Pointez, découvrez et trouvez la tanière de Colo avant tout le monde.",
       ],
       cta: "Télécharger Immogo",
       accent: "#3B5998",
@@ -239,27 +310,29 @@ export default function ContestPage() {
       layout: "mockup",
       action: () => navigate("/search?mode=classic"),
     },
-    // {
-    //   id: 2,
-    //   title: "Le bien mystère en Off-market",
-    //   subtitle: "Exclusif · Rare · Premium",
-    //   reward: "500€",
-    //   rewardText: "text-[#3B5998]",
-    //   description:
-    //     "La recherche Off-market vous donne accès à des biens non publiés et ultra qualifiés. Des propriétés souvent plus exclusives, négociées en direct, que vous ne trouverez nulle part ailleurs.",
-    //   challenge: "Le premier participant à cliquer sur le bon bien remportera la récompense.",
-    //   steps: [
-    //     "Activez le mode Off-market dans la recherche",
-    //     "Repérez le bien mystère grâce aux indices",
-    //     "Cliquez dessus pour enregistrer votre participation",
-    //   ],
-    //   cta: "Recherche Off-market",
-    //   accent: "#3B5998",
-    //   image: "/images/luxembourg-hero-luxe.png",
-    //   imageAlt: "Capture recherche Off-market",
-    //   layout: "capture",
-    //   action: () => navigate("/search?mode=offmarket"),
-    // },
+    {
+      id: 2,
+      title: "Le quartier mystère sur Colibi (St(reet)).",
+      subtitle: "Exclusif · Rare · Premium",
+      reward: "500€",
+      rewardText: "text-[#3B5998]",
+      description:
+        "Colibi St vous permet de générer à l’aide de l’IA un nouvel environnement de vie et de le soumettre à vos voisins ainsi qu’aux autorités locales.",
+      challenge:
+        "Colo a redessiné un quartier dans les environs. Le premier participant à démasquer le quartier re«généré » par Colo remportera un montant de 500,00 EUR et 1 an d’abonnement à « Colibi-premium ».",
+      steps: [
+        "Ouvrez l’application  «Colibi AR » sur votre portable",
+        "Activez le mode « Recherche off-market »",
+        "Repérez la tanière de Colo, pointez le curseur sur le bien et exprimez votre marque d’intérêt.",
+        "Si le bien visé est la tanière de Colo et que vous êtes le premier à manifester votre marque d’intérêt pour ce bien, une pastille dorée apparaîtra à l’écran.",
+      ],
+      cta: "Recherche Off-market",
+      accent: "#3B5998",
+      image: "/images/luxembourg-hero-luxe.png",
+      imageAlt: "Capture recherche Off-market",
+      layout: "capture",
+      action: () => navigate("/search?mode=offmarket"),
+    },
     {
       id: 3,
       title: "Parrainage",
@@ -268,7 +341,8 @@ export default function ContestPage() {
       rewardText: "text-[#1E40AF]",
       description:
         "Invitez vos amis à rejoindre Colibi grâce à votre lien de parrainage unique. Plus vous partagez, plus vous débloquez de récompenses exclusives.",
-      challenge: "Dès que 5 amis souscrivent à un abonnement, vous recevez 1 mois PREMIUM offert.",
+      challenge:
+        "Si l’un de vos amis souscrit à abonnement « Colibi », vous recevez un mois d’abonnement Premium offert. Si une deuxième de vos connaissances souscrit à un abonnement « Colibi », vous recevez un deuxième mois d’abonnement Premium offert.",
       steps: [
         "Copiez votre lien de parrainage personnel",
         "Partagez-le avec vos amis et votre réseau",
@@ -312,24 +386,23 @@ export default function ContestPage() {
                 </span>
               </div>
 
-              <h1 className="mt-6 text-4xl font-black leading-tight tracking-[0.08em] text-[#222c35] sm:text-5xl lg:text-6xl">
+              {/* <h1 className="mt-6 text-4xl font-black leading-tight tracking-[0.08em] text-[#222c35] sm:text-5xl lg:text-6xl">
                 Comment participer ?
-              </h1>
+              </h1> */}
 
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#546372] sm:text-base">
-                Trouvez le bien mystère avec Immogo, découvrez-le en Off-market, ou invitez vos amis
-                pour débloquer votre mois PREMIUM offert. Trois jeux, trois chances de gagner.
-              </p>
+              {/* <p className="mt-4 max-w-3xl text-sm leading-7 text-[#546372] sm:text-base">
+                Trouvez le bien mystère avec Immogo, découvrez-le en Off-market,
+                ou invitez vos amis pour débloquer votre mois PREMIUM offert.
+                Trois jeux, trois chances de gagner.
+              </p> */}
 
               {/* Reward pills */}
               <div className="mt-6 flex flex-wrap gap-3">
                 <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#3B5998] backdrop-blur-xl">
-                  <Trophy className="h-3.5 w-3.5" />
-                  2 × 500€ à gagner
+                  <Trophy className="h-3.5 w-3.5" />2 × 500€ à gagner
                 </div>
                 <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#3B5998] backdrop-blur-xl">
-                  <Crown className="h-3.5 w-3.5" />
-                  1 mois PREMIUM offert
+                  <Crown className="h-3.5 w-3.5" />1 mois PREMIUM offert
                 </div>
                 <div className="inline-flex items-center gap-2 bg-[#FBBF24]/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#8a5b00] backdrop-blur-xl">
                   <Sparkles className="h-3.5 w-3.5" />
@@ -353,78 +426,75 @@ export default function ContestPage() {
       {/* ══════════════════════════════
           BOTTOM CTA
           ══════════════════════════════ */}
-      <section className="mx-auto max-w-6xl px-6 py-10 sm:py-14">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        onClick={() => navigate("/contest")}
-        className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-[#3B5998] shadow-[0_20px_50px_rgba(59,89,152,0.25)] transition hover:shadow-[0_24px_60px_rgba(59,89,152,0.35)]"
-      >
-        {/* ── Background watermark text ── */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-          <span className="select-none whitespace-nowrap text-[120px] font-black uppercase leading-none tracking-tighter text-white/[0.05] sm:text-[160px]">
-            CONCOURS · CONCOURS
-          </span>
-        </div>
-
-        {/* Glow */}
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#FBBF24]/15 blur-3xl" />
-        <div className="pointer-events-none absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-[#FBBF24]/10 blur-3xl" />
-
-        {/* ── Layout: Mascot LEFT · Headline CENTER · Numbers + CTA RIGHT ── */}
-        <div className="relative z-10 grid grid-cols-1 items-center gap-4 px-6 py-6 sm:grid-cols-[auto_1fr_auto] sm:gap-8 sm:px-10 sm:py-7">
-          {/* LEFT — Mascot */}
-          <div className="hidden items-center sm:flex">
-            <motion.img
-              animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              src="/images/mascot-loop.gif"
-              alt="Mascotte Colibi"
-              className="w-24 sm:w-28"
-            />
+      {/* <section className="mx-auto max-w-6xl px-6 py-10 sm:py-14">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          onClick={() => navigate("/contest")}
+          className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-[#3B5998] shadow-[0_20px_50px_rgba(59,89,152,0.25)] transition hover:shadow-[0_24px_60px_rgba(59,89,152,0.35)]"
+        >
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+            <span className="select-none whitespace-nowrap text-[120px] font-black uppercase leading-none tracking-tighter text-white/[0.05] sm:text-[160px]">
+              CONCOURS · CONCOURS
+            </span>
           </div>
 
-          {/* CENTER — Big headline */}
-          <div className="relative">
-            <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#FBBF24] backdrop-blur-sm">
-              <Gift className="h-3.5 w-3.5" />
-              Colibi fête son lancement
+          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#FBBF24]/15 blur-3xl" />
+          <div className="pointer-events-none absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-[#FBBF24]/10 blur-3xl" />
+
+          <div className="relative z-10 grid grid-cols-1 items-center gap-4 px-6 py-6 sm:grid-cols-[auto_1fr_auto] sm:gap-8 sm:px-10 sm:py-7">
+            <div className="hidden items-center sm:flex">
+              <motion.img
+                animate={{ y: [0, -5, 0] }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                src="/images/mascot-loop.gif"
+                alt="Mascotte Colibi"
+                className="w-24 sm:w-28"
+              />
             </div>
-            <h2 className="mt-4 text-2xl font-black uppercase tracking-[0.06em] text-white sm:text-3xl">
-              Prêt à tenter votre chance ?
-            </h2>
-            <p className="mt-2 text-sm text-blue-100/60">
-              Commencez dès maintenant — le premier à trouver gagne.
-            </p>
-          </div>
 
-          {/* RIGHT — Prize + CTA */}
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center">
-            {/* CTA */}
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => navigate("/")}
-                className="group inline-flex items-center gap-2 bg-[#FBBF24] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.18em] text-[#1a2535] transition hover:bg-[#f59e0b]"
-              >
-                <MapPin className="h-4 w-4" />
-                Retour à l'accueil
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-2 border border-white/20 bg-white/10 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-sm transition hover:bg-white/20"
-              >
-                <Users className="h-4 w-4" />
-                Se connecter
-              </Link>
+            <div className="relative">
+              <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#FBBF24] backdrop-blur-sm">
+                <Gift className="h-3.5 w-3.5" />
+                Colibi fête son lancement
+              </div>
+              <h2 className="mt-4 text-2xl font-black uppercase tracking-[0.06em] text-white sm:text-3xl">
+                Prêt à tenter votre chance ?
+              </h2>
+              <p className="mt-2 text-sm text-blue-100/60">
+                Commencez dès maintenant — le premier à trouver gagne.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center">
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  className="group inline-flex items-center gap-2 bg-[#FBBF24] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.18em] text-[#1a2535] transition hover:bg-[#f59e0b]"
+                >
+                  <MapPin className="h-4 w-4" />
+                  Retour à l'accueil
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </button>
+                <Link
+                  to="/login"
+                  className="inline-flex items-center gap-2 border border-white/20 bg-white/10 px-8 py-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-sm transition hover:bg-white/20"
+                >
+                  <Users className="h-4 w-4" />
+                  Se connecter
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </motion.div>
-    </section>
+        </motion.div>
+      </section> */}
 
       <Footer market={activeMarket} />
     </main>

@@ -11,6 +11,7 @@ import {
   WhyIASection,
   FieldShell,
   MostViewSection,
+  DpoSection,
 } from "../shared/components";
 import { Camera, Zap } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
@@ -455,6 +456,8 @@ export default function ProposalOnePage() {
       />
 
       <WhyIASection />
+
+      <DpoSection />
 
       <ContestBanner />
 

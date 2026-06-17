@@ -89,6 +89,7 @@ export const searchModes: {
   },
 ];
 
+
 export const listings: Listing[] = [
   // ── FRANCE ────────────────────────────────────────────────────────────────
   {
@@ -105,6 +106,7 @@ export const listings: Listing[] = [
     tags: ["maison-architecte", "vue-monument"],
     offmarket: false,
     focus: "center",
+    status: "Vente",
   },
   {
     id: "france-02",
@@ -120,6 +122,7 @@ export const listings: Listing[] = [
     tags: ["appartement-meuble", "investissement-prime"],
     offmarket: false,
     focus: "45% center",
+    status: "Location",
   },
   {
     id: "france-03",
@@ -165,6 +168,7 @@ export const listings: Listing[] = [
     tags: ["penthouse", "vue-monument"],
     offmarket: false,
     focus: "center",
+    status: "Vente",
   },
   {
     id: "france-06",
@@ -180,6 +184,7 @@ export const listings: Listing[] = [
     tags: ["appartement-meuble", "vue-monument"],
     offmarket: false,
     focus: "50% center",
+    status: "Location",
   },
   {
     id: "france-07",
@@ -242,6 +247,7 @@ export const listings: Listing[] = [
     tags: ["maison-architecte", "investissement-prime"],
     offmarket: false,
     focus: "40% center",
+    status: "Vente",
   },
   {
     id: "lux-03",
@@ -257,6 +263,7 @@ export const listings: Listing[] = [
     tags: ["appartement-meuble", "investissement-prime"],
     offmarket: false,
     focus: "58% center",
+    status: "Vente",
   },
   {
     id: "lux-04",
@@ -287,6 +294,7 @@ export const listings: Listing[] = [
     tags: ["appartement-meuble", "investissement-prime"],
     offmarket: false,
     focus: "52% center",
+    status: "Location",
   },
   {
     id: "lux-06",
@@ -302,6 +310,7 @@ export const listings: Listing[] = [
     tags: ["penthouse", "vue-monument"],
     offmarket: false,
     focus: "center",
+    status: "Vente",
   },
   {
     id: "lux-07",
@@ -332,6 +341,7 @@ export const listings: Listing[] = [
     tags: ["maison-architecte", "vue-monument"],
     offmarket: false,
     focus: "38% center",
+    status: "Vente",
   },
 
   // ── BELGIUM ───────────────────────────────────────────────────────────────
@@ -349,6 +359,7 @@ export const listings: Listing[] = [
     tags: ["appartement-meuble", "penthouse"],
     offmarket: false,
     focus: "center",
+    status: "Location",
   },
   {
     id: "bel-02",
@@ -394,6 +405,7 @@ export const listings: Listing[] = [
     tags: ["penthouse", "vue-monument"],
     offmarket: false,
     focus: "center",
+    status: "Vente",
   },
   {
     id: "bel-05",
@@ -409,6 +421,7 @@ export const listings: Listing[] = [
     tags: ["maison-architecte", "terrain-premium"],
     offmarket: false,
     focus: "42% center",
+    status: "Vente",
   },
   {
     id: "bel-06",
@@ -454,5 +467,6 @@ export const listings: Listing[] = [
     tags: ["appartement-meuble"],
     offmarket: false,
     focus: "center",
+    status: "Location",
   },
 ];
