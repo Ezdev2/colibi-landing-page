@@ -1835,8 +1835,8 @@ export function DpoSection() {
       <div className="mx-auto max-w-[1400px]">
         
         {/* Titre de la section */}
-        <div className="mb-12 max-w-2xl">
-          <h2 className="mt-3 text-3xl font-black uppercase tracking-tight text-[#22303a] sm:text-4xl leading-[1.1]">
+        <div className="mb-12">
+          <h2 className="mt-3 text-3xl font-black text-center uppercase tracking-tight text-[#22303a] sm:text-4xl leading-[1.1]">
             Notre DPO veille à la protection de vos données personnelles !
           </h2>
         </div>
