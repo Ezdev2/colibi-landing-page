@@ -23,8 +23,6 @@ import {
   Sun,
   Moon,
   Download,
-  Share2,
-  MoreHorizontal,
   Eye,
   CircleDot,
   ChevronDown,
@@ -34,6 +32,8 @@ import {
   Save,
   Info,
   FolderOpen,
+  Pencil,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { buildPath } from "../shared/utils";
@@ -117,6 +117,16 @@ const COLIBI_BLUE_DARK = '#243B70';
 const COLIBI_BLUE_SOFT = '#EAF0FF';
 
 const METERS_PER_UNIT = 1;
+
+// NOTE: placeholder material thumbnails — swap for the real brand textures.
+const WALL_MATERIAL_IMAGES: Record<WallMaterial, string> = {
+  brick: 'https://images.unsplash.com/photo-1495578942200-c5f5d2137def?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  concrete: 'https://images.unsplash.com/photo-1534593963832-01c3595183bd?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+};
+
+// NOTE: placeholder header banner for "Mes biens" modal — swap for the real asset.
+const PROPERTY_MODAL_HEADER_IMAGE =
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80';
 
 /* ============================================================================
    MOCK DATA
@@ -249,10 +259,14 @@ export default function ColibiHome() {
   const [currentFloor, setCurrentFloor] = useState<FloorId>(0);
 
   const [showHomeMenu, setShowHomeMenu] = useState(false);
+  const [showFloorMenu, setShowFloorMenu] = useState(false);
   const [showFloorOptions, setShowFloorOptions] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showMyProperties, setShowMyProperties] = useState(false);
+  const [showSceneOptions, setShowSceneOptions] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [renameValue, setRenameValue] = useState('');
 
   const [showAllFloors, setShowAllFloors] = useState(true);
   const [onlyShowCurrentFloor, setOnlyShowCurrentFloor] = useState(false);
@@ -266,9 +280,18 @@ export default function ColibiHome() {
   const [pendingCatalogId, setPendingCatalogId] = useState<string | null>(null);
   const [measurePoints, setMeasurePoints] = useState<[number, number][]>([]);
   const [leftTab, setLeftTab] = useState<LeftPanelTab>('walls');
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
+
+  // Scene / grid options (controlled from the new "Options" modal)
+  const [showGrid, setShowGrid] = useState(true);
+  const [snapGrid, setSnapGrid] = useState(true);
+  const [gridColor, setGridColor] = useState<'sombre' | 'clair'>('sombre');
+  const [cellSize, setCellSize] = useState(50);
+  const [showLightOrientation, setShowLightOrientation] = useState(true);
+  const [skyBackground, setSkyBackground] = useState<'blanc' | 'ciel' | 'nuit'>('blanc');
 
   const [projectSteps, setProjectSteps] = useState<ProjectStep[]>([
-    { id: 'step-1', name: 'Étape 1', createdAt: getNowLabel() },
+    { id: 'step-1', name: 'Étage 1', createdAt: getNowLabel() },
   ]);
   const [activeStepId, setActiveStepId] = useState('step-1');
 
@@ -311,10 +334,17 @@ export default function ColibiHome() {
     );
   };
 
+  const renameSelectedProperty = (name: string) => {
+    if (!name.trim()) return;
+    updateSelectedProperty((draft) => {
+      draft.name = name.trim();
+    });
+  };
+
   const addProjectStep = () => {
     const step: ProjectStep = {
       id: `step-${Date.now()}`,
-      name: `Étape ${projectSteps.length + 1}`,
+      name: `Étage ${projectSteps.length + 1}`,
       createdAt: getNowLabel(),
     };
     setProjectSteps((prev) => [...prev, step]);
@@ -323,11 +353,11 @@ export default function ColibiHome() {
 
   const deleteActiveStep = () => {
     if (projectSteps.length <= 1) {
-      alert('Impossible de supprimer la dernière étape.');
+      alert('Impossible de supprimer le dernier étage.');
       return;
     }
 
-    const ok = confirm(`Supprimer ${activeStep?.name ?? 'cette étape'} ?`);
+    const ok = confirm(`Supprimer ${activeStep?.name ?? 'cet étage'} ?`);
     if (!ok) return;
 
     setProjectSteps((prev) => {
@@ -523,7 +553,7 @@ export default function ColibiHome() {
                     isDark={isDark}
                     label="Brique"
                     subtitle="Texture chaude"
-                    color="#a24b24"
+                    image={WALL_MATERIAL_IMAGES.brick}
                     selected={selectedWallMaterial === 'brick'}
                     onClick={() => applyMaterialToWallOrFloor('brick')}
                   />
@@ -531,7 +561,7 @@ export default function ColibiHome() {
                     isDark={isDark}
                     label="Béton"
                     subtitle="Aspect minéral"
-                    color="#64748b"
+                    image={WALL_MATERIAL_IMAGES.concrete}
                     selected={selectedWallMaterial === 'concrete'}
                     onClick={() => applyMaterialToWallOrFloor('concrete')}
                   />
@@ -633,7 +663,7 @@ export default function ColibiHome() {
                   : 'Placement'
               } />
               <InfoLineThemed isDark={isDark} label="Étage" value={getFloorLabel(currentFloor)} />
-              <InfoLineThemed isDark={isDark} label="Étape" value={activeStep?.name ?? 'Étape 1'} />
+              <InfoLineThemed isDark={isDark} label="Étage actif" value={activeStep?.name ?? 'Étage 1'} />
 
               {selectedWallId && <InfoLineThemed isDark={isDark} label="Mur" value={selectedWallId} />}
 
@@ -756,6 +786,10 @@ export default function ColibiHome() {
             selectedWallId={selectedWallId}
             selectedFurnitureId={selectedFurnitureId}
             measurePoints={measurePoints}
+            showGrid={showGrid}
+            gridColor={gridColor}
+            cellSize={cellSize}
+            skyBackground={skyBackground}
             onHit={handleWorkspaceHit}
           />
         </div>
@@ -772,10 +806,14 @@ export default function ColibiHome() {
         <div className="flex items-center gap-4">
           <Link to={buildPath("/", { country: "france" })} className="flex items-center gap-3">
             <div
-              className="w-9 h-9 rounded-xl text-white flex items-center justify-center font-black shadow-sm"
+              className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm overflow-hidden"
               style={{ backgroundColor: COLIBI_BLUE }}
             >
-              C
+              <img
+                src="/images/Logo_blanc.png"
+                alt="Colibi"
+                className="w-6 h-6 object-contain"
+              />
             </div>
             <div className="leading-tight">
               <p className={`text-sm font-bold ${ui.textStrong}`}>W-ArtHome</p>
@@ -792,13 +830,7 @@ export default function ColibiHome() {
               className={`flex items-center gap-2 px-3 py-2 rounded-2xl text-sm transition ${ui.hoverSoft}`}
             >
               <Home size={16} className={ui.iconMuted} />
-              <span className={ui.text}>{selectedProperty.name}</span>
-              <span
-                className="text-[10px] font-semibold px-2 py-1 rounded-full text-white"
-                style={{ backgroundColor: COLIBI_BLUE }}
-              >
-                {activeStep?.name ?? 'Étape 1'}
-              </span>
+              <span className={`${ui.text} font-semibold`}>{selectedProperty.name}</span>
               <ChevronDown size={15} className={ui.iconMuted} />
             </button>
 
@@ -809,66 +841,42 @@ export default function ColibiHome() {
                 }`}
               >
                 <div className={`px-4 py-3 border-b ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
-                  <p className={`text-xs font-bold ${ui.textStrong}`}>{selectedProperty.name}</p>
-                  <p className={`text-[11px] ${ui.mutedText}`}>
-                    {projectSteps.length} étape{projectSteps.length > 1 ? 's' : ''} de conception
+                  {isRenaming ? (
+                    <input
+                      autoFocus
+                      value={renameValue}
+                      onChange={(e) => setRenameValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          renameSelectedProperty(renameValue);
+                          setIsRenaming(false);
+                        }
+                        if (e.key === 'Escape') setIsRenaming(false);
+                      }}
+                      onBlur={() => {
+                        renameSelectedProperty(renameValue);
+                        setIsRenaming(false);
+                      }}
+                      className={`w-full text-sm font-bold rounded-xl px-2 py-1 outline-none border ${
+                        isDark ? 'bg-[#13244A] border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
+                      }`}
+                    />
+                  ) : (
+                    <p className={`text-xs font-bold ${ui.textStrong}`}>{selectedProperty.name}</p>
+                  )}
+                  <p className={`text-[11px] mt-1 ${ui.mutedText}`}>
+                    Modifié le {selectedProperty.updatedAt}
                   </p>
                 </div>
 
-                <div className="p-2">
-                  {projectSteps.map((step) => (
-                    <button
-                      key={step.id}
-                      onClick={() => {
-                        setActiveStepId(step.id);
-                        setShowHomeMenu(false);
-                      }}
-                      className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-2xl text-left transition ${
-                        activeStepId === step.id
-                          ? 'text-white'
-                          : `${ui.text} ${ui.hoverSoft}`
-                      }`}
-                      style={activeStepId === step.id ? { backgroundColor: COLIBI_BLUE } : undefined}
-                    >
-                      <div>
-                        <p className="text-sm font-semibold">{step.name}</p>
-                        <p className={`text-[10px] ${activeStepId === step.id ? 'text-white/75' : ui.mutedText}`}>
-                          Créée le {step.createdAt}
-                        </p>
-                      </div>
-                      {activeStepId === step.id && <Check size={15} />}
-                    </button>
-                  ))}
-                </div>
-
-                <div className={`h-px ${isDark ? 'bg-white/10' : 'bg-slate-100'}`} />
-
                 <div className="p-2 space-y-1">
                   <DropdownAction
                     isDark={isDark}
-                    icon={<Plus size={15} />}
-                    label="Ajouter une étape"
-                    onClick={addProjectStep}
-                  />
-                  <DropdownAction
-                    isDark={isDark}
-                    icon={<Trash2 size={15} />}
-                    label="Supprimer l’étape active"
-                    danger
-                    onClick={deleteActiveStep}
-                  />
-                </div>
-
-                <div className={`h-px ${isDark ? 'bg-white/10' : 'bg-slate-100'}`} />
-
-                <div className="p-2 space-y-1">
-                  <DropdownAction
-                    isDark={isDark}
-                    icon={<Save size={15} />}
-                    label="Sauvegarder"
+                    icon={<Pencil size={15} />}
+                    label="Renommer"
                     onClick={() => {
-                      alert('Bien sauvegardé !');
-                      setShowHomeMenu(false);
+                      setRenameValue(selectedProperty.name);
+                      setIsRenaming(true);
                     }}
                   />
                   <DropdownAction
@@ -882,17 +890,83 @@ export default function ColibiHome() {
                   />
                   <DropdownAction
                     isDark={isDark}
+                    icon={<Save size={15} />}
+                    label="Sauvegarder"
+                    onClick={() => {
+                      alert('Bien sauvegardé !');
+                      setShowHomeMenu(false);
+                    }}
+                  />
+                  <DropdownAction
+                    isDark={isDark}
                     icon={<Copy size={15} />}
                     label="Dupliquer le bien"
                     onClick={duplicateProperty}
                   />
-                  <DropdownAction
-                    isDark={isDark}
-                    icon={<FolderOpen size={15} />}
-                    label="Voir mes biens"
+                </div>
+
+                <div className={`h-px ${isDark ? 'bg-white/10' : 'bg-slate-100'}`} />
+
+                <div className="p-2">
+                  <button
                     onClick={() => {
                       setShowMyProperties(true);
                       setShowHomeMenu(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-bold transition ${
+                      isDark ? 'text-white hover:bg-white/8' : 'text-slate-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    <FolderOpen size={15} />
+                    <span>Voir mes biens</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Étages dropdown — separate from "Nouveau bien" */}
+          <div className="relative">
+            <button
+              onClick={() => setShowFloorMenu((v) => !v)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-2xl text-sm transition ${ui.hoverSoft}`}
+            >
+              <Layers size={16} className={ui.iconMuted} />
+              <span className={ui.text}>Étages</span>
+              <ChevronDown size={15} className={ui.iconMuted} />
+            </button>
+
+            {showFloorMenu && (
+              <div
+                className={`absolute top-full left-0 mt-3 w-[260px] rounded-[26px] border shadow-2xl overflow-hidden z-50 ${
+                  isDark ? 'bg-[#0B1730] border-white/10' : 'bg-white border-slate-200'
+                }`}
+              >
+                <div className={`px-4 py-3 border-b ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
+                  <p className={`text-xs font-bold ${ui.textStrong}`}>{getFloorLabel(currentFloor)} actif</p>
+                  <p className={`text-[11px] ${ui.mutedText}`}>
+                    {projectSteps.length} étage{projectSteps.length > 1 ? 's' : ''} créé{projectSteps.length > 1 ? 's' : ''}
+                  </p>
+                </div>
+
+                <div className="p-2 space-y-1">
+                  <DropdownAction
+                    isDark={isDark}
+                    icon={<Plus size={15} />}
+                    label="Ajouter un étage"
+                    onClick={() => {
+                      addProjectStep();
+                      setShowFloorMenu(false);
+                    }}
+                  />
+                  <DropdownAction
+                    isDark={isDark}
+                    icon={<Trash2 size={15} />}
+                    label="Supprimer l'étage actif"
+                    danger
+                    onClick={() => {
+                      deleteActiveStep();
+                      setShowFloorMenu(false);
                     }}
                   />
                 </div>
@@ -955,26 +1029,31 @@ export default function ColibiHome() {
             {isDark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
 
+          {/* "Publier" -> "Sauvegarder" */}
           <button
             className="px-4 h-10 rounded-xl text-white text-xs font-bold flex items-center gap-2 hover:brightness-95 transition"
             style={{ backgroundColor: COLIBI_BLUE }}
+            onClick={() => alert('Bien sauvegardé !')}
           >
-            <Download size={15} />
+            <Save size={15} />
             Sauvegarder
           </button>
 
+          {/* Share icon -> Cart icon */}
           <button
             className={`w-10 h-10 rounded-xl border flex items-center justify-center transition ${ui.headerButton}`}
-            title="Partager"
+            title="Panier"
+            onClick={() => setShowCart(true)}
           >
-            <Share2 size={16} />
+            <ShoppingBag size={16} />
           </button>
 
+          {/* "More" icon -> Profile icon */}
           <button
             className={`w-10 h-10 rounded-xl border flex items-center justify-center transition ${ui.headerButton}`}
-            title="Plus"
+            title="Profil"
           >
-            <MoreHorizontal size={16} />
+            <User size={16} />
           </button>
         </div>
       </header>
@@ -1004,7 +1083,7 @@ export default function ColibiHome() {
             <RailButtonThemed isDark={isDark} onClick={() => setShowCart(true)}>
               <ShoppingBag size={18} />
             </RailButtonThemed>
-            <RailButtonThemed isDark={isDark}>
+            <RailButtonThemed isDark={isDark} active={showSceneOptions} onClick={() => setShowSceneOptions(true)}>
               <Settings size={18} />
             </RailButtonThemed>
           </div>
@@ -1045,61 +1124,98 @@ export default function ColibiHome() {
         </div>
       </div>
 
-      {/* Right panel */}
-      <div className="absolute top-24 right-4 bottom-4 w-[360px] z-30">
-        <div
-          className={`h-full rounded-[32px] border backdrop-blur-xl shadow-[0_16px_35px_rgba(15,23,42,0.10)] p-4 flex flex-col ${
-            isDark
-              ? 'bg-[#0B1730]/90 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.42)]'
-              : 'bg-white/94 border-slate-200'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Eye size={16} style={{ color: COLIBI_BLUE }} />
-              <span className={`text-sm font-semibold ${ui.textStrong}`}>Design Panel</span>
+      {/* Right panel — collapsible Design Panel */}
+      <div className={`absolute top-24 right-4 bottom-4 z-30 transition-all duration-300 ${isPanelOpen ? 'w-[360px]' : 'w-[64px]'}`}>
+        {isPanelOpen ? (
+          <div
+            className={`h-full rounded-[32px] border backdrop-blur-xl shadow-[0_16px_35px_rgba(15,23,42,0.10)] p-4 flex flex-col ${
+              isDark
+                ? 'bg-[#0B1730]/90 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.42)]'
+                : 'bg-white/94 border-slate-200'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Eye size={16} style={{ color: COLIBI_BLUE }} />
+                <span className={`text-sm font-semibold ${ui.textStrong}`}>Design Panel</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowSceneOptions(true)}
+                  className={`w-9 h-9 rounded-full border flex items-center justify-center ${ui.headerButton}`}
+                  title="Paramètres de la scène"
+                >
+                  <SlidersHorizontal size={15} />
+                </button>
+                <button
+                  onClick={() => setIsPanelOpen(false)}
+                  className={`w-9 h-9 rounded-full border flex items-center justify-center ${ui.headerButton}`}
+                  title="Réduire"
+                >
+                  <ChevronRightIcon />
+                </button>
+              </div>
             </div>
 
-            <button className={`w-9 h-9 rounded-full border flex items-center justify-center ${ui.headerButton}`}>
-              <Settings size={16} />
-            </button>
-          </div>
+            <div className="grid grid-cols-4 gap-2 mb-5">
+              {LEFT_TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setLeftTab(tab.id)}
+                  className={`flex flex-col items-center justify-center gap-1 py-3 rounded-2xl border transition ${
+                    leftTab === tab.id
+                      ? 'text-white border-transparent'
+                      : `${ui.card} ${ui.mutedText} ${ui.cardHover}`
+                  }`}
+                  style={leftTab === tab.id ? { backgroundColor: COLIBI_BLUE } : undefined}
+                >
+                  {tab.icon}
+                  <span className="text-[10px] font-bold">{tab.label}</span>
+                </button>
+              ))}
+            </div>
 
-          <div className="grid grid-cols-4 gap-2 mb-5">
-            {LEFT_TABS.map((tab) => (
+            <div className="flex-1 overflow-y-auto pr-1">
+              {renderPanelContent()}
+            </div>
+
+            <div className={`pt-4 mt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
               <button
-                key={tab.id}
-                onClick={() => setLeftTab(tab.id)}
-                className={`flex flex-col items-center justify-center gap-1 py-3 rounded-2xl border transition ${
-                  leftTab === tab.id
-                    ? 'text-white border-transparent'
-                    : `${ui.card} ${ui.mutedText} ${ui.cardHover}`
-                }`}
-                style={leftTab === tab.id ? { backgroundColor: COLIBI_BLUE } : undefined}
+                onClick={() => {
+                  setTool('select');
+                  setPendingCatalogId(null);
+                  setMeasurePoints([]);
+                }}
+                className={`w-full py-3 rounded-2xl border text-sm transition ${ui.card} ${ui.cardHover} ${ui.text}`}
               >
-                {tab.icon}
-                <span className="text-[10px] font-bold">{tab.label}</span>
+                Réinitialiser l'outil
               </button>
-            ))}
+            </div>
           </div>
-
-          <div className="flex-1 overflow-y-auto pr-1">
-            {renderPanelContent()}
-          </div>
-
-          <div className={`pt-4 mt-4 border-t ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
-            <button
-              onClick={() => {
-                setTool('select');
-                setPendingCatalogId(null);
-                setMeasurePoints([]);
-              }}
-              className={`w-full py-3 rounded-2xl border text-sm transition ${ui.card} ${ui.cardHover} ${ui.text}`}
+        ) : (
+          <button
+            onClick={() => setIsPanelOpen(true)}
+            className={`h-full w-full rounded-[32px] border backdrop-blur-xl shadow-[0_16px_35px_rgba(15,23,42,0.10)] flex flex-col items-center justify-center gap-4 px-2 transition ${
+              isDark
+                ? 'bg-[#0B1730]/90 border-white/10 hover:bg-[#13244A]'
+                : 'bg-white/94 border-slate-200 hover:bg-slate-50'
+            }`}
+            title="Ouvrir pour dessiner le plan 2D"
+          >
+            <div
+              className="w-10 h-10 rounded-2xl flex items-center justify-center text-white"
+              style={{ backgroundColor: COLIBI_BLUE }}
             >
-              Réinitialiser l’outil
-            </button>
-          </div>
-        </div>
+              <ChevronLeftIcon />
+            </div>
+            <span
+              className={`text-[10px] font-bold uppercase tracking-[0.15em] [writing-mode:vertical-rl] ${ui.mutedText}`}
+            >
+              Ouvrir pour dessiner le plan 2D
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Bottom status */}
@@ -1124,7 +1240,7 @@ export default function ColibiHome() {
         </div>
       )}
 
-      {/* Floor options */}
+      {/* Floor visibility options */}
       {showFloorOptions && (
         <div
           className={`absolute left-28 bottom-6 z-40 w-[320px] rounded-[30px] border backdrop-blur-xl p-5 shadow-2xl ${
@@ -1144,7 +1260,7 @@ export default function ColibiHome() {
           <div className="space-y-4">
             <ToggleThemed
               isDark={isDark}
-              label="Afficher uniquement l’étage actuel"
+              label="Afficher uniquement l'étage actuel"
               checked={onlyShowCurrentFloor}
               onToggle={() => {
                 const next = !onlyShowCurrentFloor;
@@ -1180,6 +1296,93 @@ export default function ColibiHome() {
                 <span className="text-xs font-bold">{f}</span>
               </button>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Scene options modal — Grid + Visualisation 3D (settings icon on Design Panel) */}
+      {showSceneOptions && (
+        <div className="absolute inset-0 bg-black/45 backdrop-blur-sm flex items-center justify-center z-50">
+          <div
+            className={`w-[420px] max-h-[88vh] overflow-y-auto rounded-[30px] border shadow-2xl relative ${
+              isDark ? 'bg-[#0B1730] border-white/10' : 'bg-white border-slate-200'
+            }`}
+          >
+            <div className={`px-6 py-5 flex items-center justify-between border-b sticky top-0 backdrop-blur-xl ${
+              isDark ? 'border-white/10 bg-[#0B1730]/95' : 'border-slate-100 bg-white/95'
+            }`}>
+              <h3 className={`text-sm font-black uppercase tracking-[0.15em] ${ui.textStrong}`}>Options</h3>
+              <button
+                onClick={() => setShowSceneOptions(false)}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white"
+                style={{ backgroundColor: COLIBI_BLUE }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div>
+                <PanelSectionTitle title="Grid" isDark={isDark} />
+                <div className="space-y-3">
+                  <ToggleThemed isDark={isDark} label="Afficher grid" checked={showGrid} onToggle={() => setShowGrid((v) => !v)} />
+                  <ToggleThemed isDark={isDark} label="Snap grid" checked={snapGrid} onToggle={() => setSnapGrid((v) => !v)} />
+
+                  <div className="flex items-center justify-between pt-1">
+                    <span className={`text-sm ${ui.text}`}>Couleur du grid</span>
+                    <select
+                      value={gridColor}
+                      onChange={(e) => setGridColor(e.target.value as 'sombre' | 'clair')}
+                      className={`text-sm font-semibold rounded-xl px-3 py-2 border outline-none ${ui.card} ${ui.text}`}
+                    >
+                      <option value="sombre">Sombre</option>
+                      <option value="clair">Clair</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={`text-sm ${ui.text}`}>Taille cellule</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={10}
+                      max={100}
+                      value={cellSize}
+                      onChange={(e) => setCellSize(Number(e.target.value))}
+                      className="w-full accent-[#3B5998]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className={`h-px ${isDark ? 'bg-white/10' : 'bg-slate-100'}`} />
+
+              <div>
+                <PanelSectionTitle title="Visualisation 3D" isDark={isDark} />
+                <div className="space-y-3">
+                  <ToggleThemed
+                    isDark={isDark}
+                    label="Afficher option orientation de la lumière"
+                    checked={showLightOrientation}
+                    onToggle={() => setShowLightOrientation((v) => !v)}
+                  />
+
+                  <div className="flex items-center justify-between">
+                    <span className={`text-sm ${ui.text}`}>Sky background</span>
+                    <select
+                      value={skyBackground}
+                      onChange={(e) => setSkyBackground(e.target.value as 'blanc' | 'ciel' | 'nuit')}
+                      className={`text-sm font-semibold rounded-xl px-3 py-2 border outline-none ${ui.card} ${ui.text}`}
+                    >
+                      <option value="blanc">Blanc</option>
+                      <option value="ciel">Ciel</option>
+                      <option value="nuit">Nuit</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -1293,9 +1496,9 @@ export default function ColibiHome() {
 
             <div className="space-y-3">
               <InfoLineThemed isDark={isDark} label="Nom" value={selectedProperty.name} />
-              <InfoLineThemed isDark={isDark} label="Étape active" value={activeStep?.name ?? 'Étape 1'} />
-              <InfoLineThemed isDark={isDark} label="Nombre d’étapes" value={String(projectSteps.length)} />
-              <InfoLineThemed isDark={isDark} label="Étages" value={String(selectedProperty.floorsCount)} />
+              <InfoLineThemed isDark={isDark} label="Étage actif" value={activeStep?.name ?? 'Étage 1'} />
+              <InfoLineThemed isDark={isDark} label="Nombre d'étages" value={String(projectSteps.length)} />
+              <InfoLineThemed isDark={isDark} label="Étages du bien" value={String(selectedProperty.floorsCount)} />
               <InfoLineThemed isDark={isDark} label="Pièces" value={String(selectedProperty.rooms.length)} />
               <InfoLineThemed isDark={isDark} label="Surface totale" value={`${totalSurface.toFixed(2)} m²`} />
               <InfoLineThemed isDark={isDark} label="Meubles placés" value={String(selectedProperty.furnitures.length)} />
@@ -1304,7 +1507,7 @@ export default function ColibiHome() {
         </div>
       )}
 
-      {/* My properties */}
+      {/* My properties — modal with image header banner + 3D thumbnail list */}
       {showMyProperties && (
         <div className="absolute inset-0 bg-black/45 backdrop-blur-sm flex items-center justify-center z-50">
           <div
@@ -1320,20 +1523,26 @@ export default function ColibiHome() {
             </button>
 
             <div
-              className={`h-44 relative flex items-end px-8 pb-8 border-b ${
-                isDark
-                  ? 'border-white/10 bg-[radial-gradient(circle_at_top_left,#3B5998_0%,#13244A_42%,#081225_100%)]'
-                  : 'border-slate-100 bg-[radial-gradient(circle_at_top_left,#EAF0FF_0%,#FFFFFF_62%,#F3F6FB_100%)]'
-              }`}
+              className="h-44 relative flex items-end px-8 pb-8 border-b border-white/10 bg-cover bg-center"
+              style={{ backgroundImage: `url(${PROPERTY_MODAL_HEADER_IMAGE})` }}
             >
-              <div>
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(8,18,37,0.25) 0%, rgba(8,18,37,0.92) 100%)'
+                    : 'linear-gradient(180deg, rgba(36,59,112,0.15) 0%, rgba(8,18,37,0.78) 100%)',
+                }}
+              />
+
+              <div className="relative">
                 <p
                   className="text-[11px] uppercase tracking-[0.2em] mb-2 font-bold"
-                  style={{ color: isDark ? '#AFC2F5' : COLIBI_BLUE }}
+                  style={{ color: '#AFC2F5' }}
                 >
                   Portfolio
                 </p>
-                <h2 className={`text-3xl font-black ${ui.textStrong}`}>Mes biens — W-ArtHome</h2>
+                <h2 className="text-3xl font-black text-white">Mes biens — W-ArtHome</h2>
               </div>
             </div>
 
@@ -1421,6 +1630,22 @@ function getThemeClasses(isDark: boolean) {
 /* ============================================================================
    SMALL COMPONENTS
 ============================================================================ */
+
+function ChevronRightIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChevronLeftIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 function PanelSectionTitle({ title, isDark }: { title: string; isDark: boolean }) {
   return (
@@ -1526,14 +1751,14 @@ function ThemedToolButton({
 function ThemedMaterialCard({
   label,
   subtitle,
-  color,
+  image,
   selected,
   onClick,
   isDark,
 }: {
   label: string;
   subtitle: string;
-  color: string;
+  image: string;
   selected: boolean;
   onClick: () => void;
   isDark: boolean;
@@ -1552,10 +1777,8 @@ function ThemedMaterialCard({
       }`}
     >
       <div
-        className="w-full h-20 rounded-2xl mb-3 shadow-inner"
-        style={{
-          background: `radial-gradient(circle at 30% 25%, rgba(255,255,255,0.45), transparent 35%), linear-gradient(135deg, ${color}, ${isDark ? '#071227' : '#e2e8f0'})`,
-        }}
+        className="w-full h-20 rounded-2xl mb-3 shadow-inner bg-cover bg-center"
+        style={{ backgroundImage: `url(${image})` }}
       />
 
       <div className="flex items-start justify-between gap-2">
@@ -2084,6 +2307,10 @@ function ThreeWorkspace({
   selectedWallId,
   selectedFurnitureId,
   measurePoints,
+  showGrid = true,
+  gridColor = 'sombre',
+  cellSize = 50,
+  skyBackground = 'blanc',
   onHit,
 }: {
   property: PropertyModel;
@@ -2092,6 +2319,10 @@ function ThreeWorkspace({
   selectedWallId: string | null;
   selectedFurnitureId: string | null;
   measurePoints: [number, number][];
+  showGrid?: boolean;
+  gridColor?: 'sombre' | 'clair';
+  cellSize?: number;
+  skyBackground?: 'blanc' | 'ciel' | 'nuit';
   onHit: (hit: WorkspaceHit) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -2099,7 +2330,9 @@ function ThreeWorkspace({
   useEffect(() => {
     const container = containerRef.current!;
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf4f7fb);
+    const bgColor =
+      skyBackground === 'nuit' ? 0x0b1730 : skyBackground === 'ciel' ? 0xbfdcf7 : 0xf4f7fb;
+    scene.background = new THREE.Color(bgColor);
 
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 2000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -2136,7 +2369,11 @@ function ThreeWorkspace({
     ground.userData.kind = 'ground';
     scene.add(ground);
 
-    const grid = new THREE.GridHelper(100, 100, 0xd0dcee, 0xe8eef8);
+    const gridLineColor = gridColor === 'sombre' ? 0x9fb0d6 : 0xe8eef8;
+    const gridCenterColor = gridColor === 'sombre' ? 0x6f86bd : 0xd0dcee;
+    const gridDivisions = Math.max(10, Math.round(100 / (cellSize / 25)));
+    const grid = new THREE.GridHelper(100, gridDivisions, gridCenterColor, gridLineColor);
+    grid.visible = showGrid;
     scene.add(grid);
 
     const clearGroup = (g: THREE.Group) => { while (g.children.length) g.remove(g.children[0]); };
@@ -2445,7 +2682,7 @@ function ThreeWorkspace({
       brickTexture.dispose(); concreteTexture.dispose(); renderer.dispose();
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
     };
-  }, [property, currentFloor, showAllFloors, selectedWallId, selectedFurnitureId, measurePoints, onHit]);
+  }, [property, currentFloor, showAllFloors, selectedWallId, selectedFurnitureId, measurePoints, showGrid, gridColor, cellSize, skyBackground, onHit]);
 
   return <div ref={containerRef} className="absolute inset-0" />;
 }
