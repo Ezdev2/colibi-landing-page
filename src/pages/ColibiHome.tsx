@@ -1059,8 +1059,8 @@ export default function ColibiHome() {
       {/* Toggle panel */}
       <button
         onClick={() => setShowLeftPanel((v) => !v)}
-        className="absolute top-1/2 -translate-y-1/2 bg-[#2B4C7E] text-white p-2 rounded-r-xl shadow-lg z-30 hover:bg-[#1E355A] transition"
-        style={{ left: showLeftPanel ? '288px' : '0px', transition: 'left 0.3s ease' }}
+        className="absolute top-1/2 -translate-y-1/2 bg-[#2B4C7E] text-white px-1 py-6 rounded-r-xl shadow-lg z-30 hover:bg-[#1E355A] transition"
+        style={{ left: showLeftPanel ? '302px' : '0px', transition: 'left 0.3s ease' }}
       >
         {showLeftPanel ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
       </button>
