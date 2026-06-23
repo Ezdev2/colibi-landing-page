@@ -38,6 +38,7 @@ import {
 import { Link } from 'react-router-dom';
 import { buildPath } from "../shared/utils";
 import * as THREE from 'three';
+import { MascotWidget } from '@/shared/components';
 
 /* ============================================================================
    TYPES
@@ -1061,13 +1062,13 @@ export default function ColibiHome() {
       {/* Left rail */}
       <div className="absolute top-24 left-4 bottom-4 w-[92px] z-30">
         <div
-          className={`h-full rounded-[28px] border backdrop-blur-xl p-3 flex flex-col justify-between shadow-[0_16px_35px_rgba(15,23,42,0.10)] ${
+          className={`h-3/4 rounded-[28px] border backdrop-blur-xl p-3 flex flex-col justify-between shadow-[0_16px_35px_rgba(15,23,42,0.10)] ${
             isDark
               ? 'bg-[#0B1730]/88 border-white/10 shadow-[0_20px_45px_rgba(0,0,0,0.35)]'
               : 'bg-white/92 border-slate-200'
           }`}
         >
-          <div className="space-y-3">
+          <div className="space-y-3 flex flex-col items-center">
             <RailButtonThemed isDark={isDark} active={tool === 'select'} onClick={() => { setTool('select'); setPendingCatalogId(null); }}>
               <CircleDot size={18} />
             </RailButtonThemed>
@@ -1122,6 +1123,7 @@ export default function ColibiHome() {
             </span>
           </div>
         </div>
+        <MascotWidget />
       </div>
 
       {/* Right panel — collapsible Design Panel */}

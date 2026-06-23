@@ -2052,7 +2052,7 @@ export function WhyIASection() {
 // MascotWidget — mascotte fixée en bas à gauche
 // ---------------------------------------------------------------------------
 export function MascotWidget({
-  message = "Bienvenu sur Colibi, en quoi puis-je vous aider ?",
+  message = "Bienvenu sur Colibi Home !",
 }: {
   message?: string;
 }) {
@@ -2060,12 +2060,12 @@ export function MascotWidget({
   const { setMode, submitSearch } = useHeroSearch("/");
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 flex items-start">
+    <div className="fixed bottom-0 left-4 z-50 flex gap-4 items-start">
       {/* Mascot button */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="group relative transition h-20 w-20 sm:h-50 sm:w-50"
+        className="group relative transition h-20 w-20 sm:h-50 sm:w-[fit-content]"
         aria-label="Assistant Colibi"
       >
         {/* Glow ring when popup closed */}
@@ -2073,9 +2073,9 @@ export function MascotWidget({
           <span className="absolute inset-0 animate-ping rounded-full" />
         )}
         <img
-          src="/images/mascot.jpg"
+          src="/images/mascot-loop.gif"
           alt="Mascotte Colibi"
-          className="h-full w-full object-cover transition group-hover:scale-105"
+          className="w-30 object-cover transition group-hover:scale-105"
         />
       </button>
       {/* Popup bubble */}
@@ -2109,14 +2109,10 @@ export function MascotWidget({
             >
               <button
                 type="button"
-                onClick={() => {
-                  setMode("ai");
-                  submitSearch();
-                }}
                 className="inline-flex items-center gap-2 rounded-full border border-[#3B5998]/20 bg-white/80 px-5 py-2.5 text-[0.8rem] font-semibold text-[#3B5998] shadow-[0_8px_20px_rgba(59,89,152,0.12)] backdrop-blur-sm transition hover:bg-white"
               >
                 <Sparkles className="h-4 w-4" />
-                En savoir plus sur nous →
+                Dessiner votre plan 2D →
               </button>
             </motion.div>
 
