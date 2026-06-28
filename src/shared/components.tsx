@@ -2057,10 +2057,41 @@ export function MascotWidget({
   message?: string;
 }) {
   const [open, setOpen] = useState(true);
-  const { setMode, submitSearch } = useHeroSearch("/");
+  // const { setMode, submitSearch } = useHeroSearch("/");
 
   return (
-    <div className="fixed bottom-0 left-4 z-50 flex gap-4 items-start">
+    <div className="fixed top-12 left-0 z-50 flex items-center">
+      {/* Mascot button */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="group relative transition h-20 w-20 sm:h-50 sm:w-[fit-content]"
+        aria-label="Assistant Colibi"
+      >
+        {/* Glow ring when popup closed */}
+        {!open && (
+          <span className="absolute inset-0 animate-ping rounded-full" />
+        )}
+        <img
+          src="/images/mascotte-menu.png"
+          alt="Mascotte Colibi"
+          className="w-30 object-cover transition group-hover:scale-105 z-60"
+        />
+      </button>
+    </div>
+  );
+}
+
+export function MascotWidgetWithMessage({
+  message = "Bienvenu sur Colibi Home !",
+}: {
+  message?: string;
+}) {
+  const [open, setOpen] = useState(true);
+  // const { setMode, submitSearch } = useHeroSearch("/");
+
+  return (
+    <div className="fixed top-0 left-4 z-50 flex gap-4 items-start">
       {/* Mascot button */}
       <button
         type="button"
@@ -2088,7 +2119,6 @@ export function MascotWidget({
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="relative max-w-[280px] rounded-[16px] border border-white/70 bg-white/92 px-4 py-3 shadow-[0_12px_32px_rgba(20,28,40,0.14)] backdrop-blur-xl"
           >
-            {/* Close button */}
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -2100,7 +2130,6 @@ export function MascotWidget({
             <p className="text-[0.8rem] font-medium leading-5 text-[#2e3a45]">
               {message}
             </p>
-            {/* AI CTA bubble */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
