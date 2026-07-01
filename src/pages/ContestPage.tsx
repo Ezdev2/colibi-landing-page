@@ -14,6 +14,7 @@ import { TopNav, Footer, useHeroSearch } from "../shared/components";
 
 type GameItem = {
   id: number;
+  logo?: string;
   title: string;
   subtitle: string;
   reward: string;
@@ -38,7 +39,7 @@ function GameSection({
 }) {
   return (
     <article
-      className={`grid grid-cols-1 lg:grid-cols-2 ${reverse ? "lg:[direction:rtl]" : ""}`}
+      className={`grid grid-cols-1 lg:grid-cols-[40%_60%] ${reverse ? "lg:[direction:rtl]" : ""}`}
     >
       {/* ══════════════════════════
           MEDIA — fond style "ad modal"
@@ -78,26 +79,26 @@ function GameSection({
           {/* Floating reward badge */}
           <div className="absolute -top-2 right-4 z-20">
             {/* Sparkles */}
-            <span className="absolute -top-1 -left-1 text-yellow-400 text-[10px] animate-ping">
+            <span className="absolute -top-1 -left-1 text-white/50 text-[10px] animate-ping">
               ✦
             </span>
 
             <span
-              className="absolute top-0 -right-1 text-yellow-400 animate-ping"
+              className="absolute top-0 -right-1 text-white/50 animate-ping"
               style={{ animationDelay: "0.8s" }}
             >
               {" "}
               ✦
             </span>
             <span
-              className="absolute -bottom-1 right-4 text-yellow-400 animate-ping"
+              className="absolute -bottom-1 right-4 text-white/50 animate-ping"
               style={{ animationDelay: "1.5s" }}
             >
               ✦{" "}
             </span>
 
             <span
-              className="absolute top-1 -right-2 text-yellow-400 text-[6px] animate-ping"
+              className="absolute top-1 -right-2 text-white/50 text-[6px] animate-ping"
               style={{ animationDelay: "1s" }}
             >
               ✦
@@ -109,9 +110,9 @@ function GameSection({
       inline-flex items-center gap-1.5
       px-3 py-1.5
       text-[10px] font-bold uppercase tracking-[0.16em]
-      text-[#78350F]
-      bg-amber-400
-      shadow-lg shadow-amber-300/50
+      text-[#fff]
+      bg-[#800020]
+      shadow-md shadow-[#5c0120]/40
     "
             >
               <Trophy className="h-3 w-3" />
@@ -221,9 +222,16 @@ function GameSection({
           </div>
 
           {/* Title */}
-          <h2 className="text-3xl font-black uppercase leading-[1.1] tracking-[0.04em] text-[#222c35] sm:text-4xl">
-            {game.title}
-          </h2>
+         <h2 className="flex flex-wrap items-center gap-3 text-3xl font-black uppercase leading-[1.1] tracking-[0.04em] text-[#222c35] sm:text-4xl">
+  {game.title}
+  {game.logo && (
+    <img 
+      src={game.logo} 
+      alt="Logo" 
+      className="h-8 w-auto object-contain sm:h-10" 
+    />
+  )}
+</h2>
           <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a9aac]">
             {game.subtitle}
           </p>
@@ -290,7 +298,8 @@ export default function ContestPage() {
   const games: GameItem[] = [
     {
       id: 1,
-      title: "Le bien mystère avec Immogo",
+      title: "Le bien mystère avec",
+      logo: "/images/logo-AT.png",
       subtitle: "Scannez · Découvrez · Gagnez",
       reward: "500€",
       rewardText: "text-[#8a5b00]",
@@ -312,7 +321,8 @@ export default function ContestPage() {
     },
     {
       id: 2,
-      title: "Le quartier mystère sur Colibi (St(reet)).",
+      title: "Le quartier mystère sur",
+      logo: "/images/logo-ST.png",
       subtitle: "Exclusif · Rare · Premium",
       reward: "500€",
       rewardText: "text-[#3B5998]",
@@ -340,11 +350,10 @@ export default function ContestPage() {
       reward: "1 mois PREMIUM",
       rewardText: "text-[#1E40AF]",
       description:
-        "Invitez vos amis à rejoindre Colibi grâce à votre lien de parrainage unique. Plus vous partagez, plus vous débloquez de récompenses exclusives.",
+        "Invitez vos amis à rejoindre Colibi grâce à votre lien de parrainage unique. Plus il fera des émules, plus vous serez récompensé.",
       challenge:
         "Si l’un de vos amis souscrit à abonnement « Colibi », vous recevez un mois d’abonnement Premium offert. Si une deuxième de vos connaissances souscrit à un abonnement « Colibi », vous recevez un deuxième mois d’abonnement Premium offert.",
       steps: [
-        "Copiez votre lien de parrainage personnel",
         "Partagez-le avec vos amis et votre réseau",
         "Suivez l'avancement de vos filleuls en temps réel",
       ],
