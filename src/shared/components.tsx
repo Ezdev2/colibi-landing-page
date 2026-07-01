@@ -2060,7 +2060,7 @@ export function MascotWidget({
   // const { setMode, submitSearch } = useHeroSearch("/");
 
   return (
-    <div className="fixed top-12 left-0 z-50 flex items-center">
+    <div className="fixed top-30 -left-2 z-50 flex items-center">
       {/* Mascot button */}
       <button
         type="button"
@@ -2073,9 +2073,9 @@ export function MascotWidget({
           <span className="absolute inset-0 animate-ping rounded-full" />
         )}
         <img
-          src="/images/mascotte-menu.png"
+          src="/images/mascot-left.png"
           alt="Mascotte Colibi"
-          className="w-30 object-cover transition group-hover:scale-105 z-60"
+          className="w-24 object-cover transition group-hover:scale-105 z-60"
         />
       </button>
     </div>

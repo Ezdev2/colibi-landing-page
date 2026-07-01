@@ -22,7 +22,6 @@ import {
   Check,
   Sun,
   Moon,
-  Download,
   Eye,
   CircleDot,
   ChevronDown,
