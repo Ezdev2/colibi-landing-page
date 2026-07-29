@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import {
   ArrowLeft,
@@ -20,6 +20,10 @@ import {
   TrendingUp,
   UserRoundCheck,
   WalletCards,
+  Leaf,
+  LayoutGrid,
+  List,
+  X,
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Footer, TopNav } from "../shared/components";
@@ -28,31 +32,58 @@ import { buildPath, getMarket } from "../shared/utils";
 
 const serviceActions = [
   {
-    label: "Finance",
+    label: "Finances",
     description: "Simuler votre financement",
     icon: HandCoins,
-    featured: true,
+    featured: false,
   },
   { label: "Travaux", description: "Préparer votre projet", icon: Paintbrush },
-  { label: "Estimation", description: "Estimer la valeur", icon: TrendingUp },
-  { label: "Documents", description: "Accéder au dossier", icon: FileText },
+  { label: "Fournisseur", description: "Trouver des fournisseurs", icon: TrendingUp },
+  { label: "Urbanisme", description: "Obtenir les autorisations nécessaires", icon: FileText },
   {
-    label: "Visite privée",
-    description: "Planifier un rendez-vous",
-    icon: CalendarDays,
+    label: "Environnement",
+    description: "Vérifier la conformité du bien",
+    icon: Leaf,
   },
-  { label: "Conciergerie", description: "Services sur mesure", icon: Sparkles },
+  { label: "Localiser mon bien", description: "Trouver la position exacte", icon: MapPin },
   {
     label: "Assurances",
     description: "Protéger votre bien",
     icon: ShieldCheck,
   },
   {
-    label: "Gestion locative",
-    description: "Gérer votre patrimoine",
+    label: "Gestion Location",
+    description: "Gérer la location de votre bien",
     icon: WalletCards,
   },
 ];
+
+const serviceDocuments: Record<
+  string,
+  {
+    title: string;
+    type: string;
+    owner: string;
+    email: string;
+    status: "Signé" | "À signer";
+    date: string;
+  }[]
+> = {
+  Finances: [
+    { title: "Attestation de financement", type: "Attestation bancaire", owner: "Émilie Laurent", email: "emilie.laurent@conseil-finance.fr", status: "Signé", date: "18 juin 2026" },
+    { title: "Simulation de prêt", type: "Document de synthèse", owner: "Émilie Laurent", email: "emilie.laurent@conseil-finance.fr", status: "À signer", date: "24 juin 2026" },
+  ],
+  Travaux: [
+    { title: "Certificat énergétique", type: "Certificat de performance énergétique", owner: "Julien Morel", email: "julien.morel@diagnostics-pro.fr", status: "Signé", date: "12 mai 2026" },
+    { title: "Certificat électrique", type: "Contrôle de conformité électrique", owner: "Sofia Benali", email: "sofia.benali@controle-elec.fr", status: "À signer", date: "15 mai 2026" },
+  ],
+  Fournisseur: [{ title: "Liste des fournisseurs référencés", type: "Annuaire fournisseurs", owner: "Clara Martin", email: "clara.martin@colibi.fr", status: "Signé", date: "03 juillet 2026" }],
+  Urbanisme: [{ title: "Certificat d’urbanisme", type: "Document administratif", owner: "Mairie de secteur", email: "urbanisme@ville.fr", status: "Signé", date: "08 avril 2026" }],
+  Environnement: [{ title: "Rapport environnemental", type: "Diagnostic environnemental", owner: "Nora Diallo", email: "nora.diallo@diagnostics-pro.fr", status: "Signé", date: "16 mai 2026" }],
+  "Localiser mon bien": [{ title: "Plan de localisation", type: "Plan cadastral", owner: "Service cartographie", email: "cartographie@colibi.fr", status: "Signé", date: "28 avril 2026" }],
+  Assurances: [{ title: "Proposition d’assurance", type: "Devis habitation", owner: "Lucas Petit", email: "lucas.petit@protection.fr", status: "À signer", date: "26 juin 2026" }],
+  "Gestion Location": [{ title: "Mandat de gestion", type: "Mandat locatif", owner: "Manon Roche", email: "manon.roche@gestion-immo.fr", status: "À signer", date: "04 juillet 2026" }],
+};
 
 type TimelineEvent = {
   month: string;
@@ -113,6 +144,12 @@ export default function ListingDetailPage() {
       ]
     : [];
   const [activeImage, setActiveImage] = useState(0);
+  const [activeService, setActiveService] = useState<string | null>(null);
+  const [openDocument, setOpenDocument] = useState<{
+    title: string;
+    type: string;
+  } | null>(null);
+  const [documentsView, setDocumentsView] = useState<"list" | "grid">("list");
 
   if (!listing) {
     return (
@@ -255,32 +292,48 @@ export default function ListingDetailPage() {
               ))}
             </div>
           </div>
-          <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(280px,0.7fr)_minmax(0,0.3fr)] lg:items-start">
-            <section>
-              <div className="flex flex-wrap gap-2">
-                <span className="rounded-full bg-[#eef3ff] px-3 py-1.5 text-[0.64rem] font-bold uppercase tracking-[0.16em] text-[#3B5998]">
-                  {listing.type}
-                </span>
-                <span className="rounded-full bg-[#3B5998] px-3 py-1.5 text-[0.64rem] font-bold uppercase tracking-[0.16em] text-white">
-                  {listing.offmarket
-                    ? "Off-market"
-                    : (listing.status ?? "Vente")}
-                </span>
+          <div className="my-12">
+            <section className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+              <div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="rounded-full bg-[#eef3ff] px-3 py-1.5 text-[0.64rem] font-bold uppercase tracking-[0.16em] text-[#3B5998]">
+                    {listing.type}
+                  </span>
+                  <span className="rounded-full bg-[#3B5998] px-3 py-1.5 text-[0.64rem] font-bold uppercase tracking-[0.16em] text-white">
+                    {listing.offmarket
+                      ? "Off-market"
+                      : (listing.status ?? "Vente")}
+                  </span>
+                </div>
+                <p className="mt-6 flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#71808d]">
+                  <MapPin className="h-4 w-4 text-[#3B5998]" />{" "}
+                  {listing.district}, {market.city}
+                </p>
+                <h1 className="mt-3 max-w-3xl text-2xl font-black uppercase leading-[0.96] tracking-[0.04em] text-[#1f2d38] sm:text-4xl">
+                  {listing.title}
+                </h1>
+                <p className="mt-6 max-w-3xl text-base leading-7 text-[#647383]">
+                  {listing.summary}
+                </p>
+                <div className="my-5 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    className="rounded-full bg-[#3B5998] px-5 py-3 text-[0.68rem] font-black uppercase tracking-[0.14em] text-white transition hover:bg-[#3B5998]"
+                  >
+                    Contacter le proprietaire
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#3B5998] px-5 py-3 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-[#3B5998] transition hover:border-[#3B5998] hover:text-[#3B5998]"
+                  >
+                    <Heart className="h-4 w-4" /> Ajouter aux favoris
+                  </button>
+                </div>
               </div>
-              <p className="mt-6 flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[#71808d]">
-                <MapPin className="h-4 w-4 text-[#3B5998]" /> {listing.district}
-                , {market.city}
-              </p>
-              <h1 className="mt-3 max-w-3xl text-2xl font-black uppercase leading-[0.96] tracking-[0.04em] text-[#1f2d38] sm:text-4xl">
-                {listing.title}
-              </h1>
-              <p className="mt-6 max-w-3xl text-base leading-7 text-[#647383]">
-                {listing.summary}
-              </p>
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-8 grid gap-5 rounded-[26px] border border-[#e1e7ef] bg-[#fbfcfe] p-6 shadow-[0_10px_28px_rgba(25,33,46,0.05)] sm:grid-cols-[0.8fr_1.2fr]"
+                className="mt-8 grid gap-5 items-center rounded-[26px] border border-[#e1e7ef] bg-[#fbfcfe] p-6 shadow-[0_10px_28px_rgba(25,33,46,0.05)] sm:grid-cols-[0.8fr_1.2fr]"
               >
                 <div className="border-b border-[#e4e9ef] pb-5 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-5">
                   <p className="text-[0.66rem] font-bold uppercase tracking-[0.18em] text-[#71808d]">
@@ -311,23 +364,8 @@ export default function ListingDetailPage() {
                   </div>
                 </div>
               </motion.div>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  className="rounded-full bg-[#3B5998] px-5 py-3 text-[0.68rem] font-black uppercase tracking-[0.14em] text-white transition hover:bg-[#3B5998]"
-                >
-                  Contacter le proprietaire
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#3B5998] px-5 py-3 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-[#3B5998] transition hover:border-[#3B5998] hover:text-[#3B5998]"
-                >
-                  <Handshake className="h-4 w-4" /> Proposer une offre de
-                  location
-                </button>
-              </div>
             </section>
-            <aside className="rounded-[26px] border border-[#e1e7ef] bg-[#fafbfd] p-6 lg:sticky lg:top-6">
+            {/* <aside className="rounded-[26px] border border-[#e1e7ef] bg-[#fafbfd] p-6 lg:sticky lg:top-6">
               <p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#3B5998]">
                 Liste des évènements associés à ce bien
               </p>
@@ -362,7 +400,7 @@ export default function ListingDetailPage() {
                   </div>
                 ))}
               </div>
-            </aside>
+            </aside> */}
           </div>
 
           {/* Timeline secondaire */}
@@ -378,10 +416,10 @@ export default function ListingDetailPage() {
               <div className="mt-10 overflow-x-auto pb-2">
                 <div className="relative flex min-w-[900px] justify-between gap-2 px-4 lg:min-w-0">
                   {/* ligne de fond */}
-                  <span className="absolute left-4 right-4 top-[142px] h-[3px] rounded-full bg-[#e3e9f1]" />
+                  <span className="absolute left-4 right-4 top-[102px] h-[3px] rounded-full bg-[#e3e9f1]" />
                   {/* ligne de progression */}
                   <span
-                    className="absolute left-4 top-[142px] h-[3px] rounded-full bg-gradient-to-r from-[#3B5998] to-[#7d9ae0] transition-all duration-700"
+                    className="absolute left-4 top-[102px] h-[3px] rounded-full bg-gradient-to-r from-[#3B5998] to-[#7d9ae0] transition-all duration-700"
                     style={{
                       width: `calc((100% - 2rem) * ${progressPercent / 100})`,
                     }}
@@ -394,7 +432,7 @@ export default function ListingDetailPage() {
                         key={event.month}
                         className="relative z-10 flex w-[170px] shrink-0 flex-col items-center text-center"
                       >
-                        <div className="flex h-[92px] w-full items-end justify-center">
+                        <div className="flex h-[54px] w-full items-end justify-center">
                           {isTop && <TimelineCard event={event} />}
                         </div>
 
@@ -438,7 +476,7 @@ export default function ListingDetailPage() {
                           </span>
                         </div>
 
-                        <div className="mt-3 flex h-[92px] w-full items-start justify-center">
+                        <div className="mt-3 flex h-[54px] w-full items-start justify-center">
                           {!isTop && <TimelineCard event={event} />}
                         </div>
                       </div>
@@ -495,43 +533,29 @@ export default function ListingDetailPage() {
             </div>
           </section> */}
           <section className="mt-14 rounded-[32px] border border-[#e1e7ef] bg-[#fbfcfe] p-5 sm:p-8">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            {activeService ? (
               <div>
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#3B5998]">
-                  Services associés
-                </p>
-                <h2 className="mt-2 text-2xl font-black uppercase tracking-[0.05em]">
-                  Pilotez votre bien
-                </h2>
+                <button type="button" onClick={() => setActiveService(null)} className="inline-flex items-center gap-2 text-[0.68rem] font-black uppercase tracking-[0.15em] text-[#637383] transition hover:text-[#3B5998]"><ArrowLeft className="h-4 w-4" /> Retour aux détails du bien</button>
+                <div className="mt-5 flex flex-col gap-3 border-b border-[#e1e7ef] pb-6 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#3B5998]">{activeService}</p><h2 className="mt-2 text-2xl font-black uppercase tracking-[0.05em]">Documents et certificats associés</h2></div><div className="flex items-center gap-3"><p className="text-sm text-[#71808d]">{serviceDocuments[activeService]?.length ?? 0} document(s)</p><div className="flex rounded-lg border border-[#dfe5ec] bg-white p-1"><button type="button" onClick={() => setDocumentsView("list")} className={`flex h-8 w-8 items-center justify-center rounded-md transition ${documentsView === "list" ? "bg-[#3B5998] text-white" : "text-[#71808d] hover:text-[#3B5998]"}`} aria-label="Vue liste"><List className="h-4 w-4" /></button><button type="button" onClick={() => setDocumentsView("grid")} className={`flex h-8 w-8 items-center justify-center rounded-md transition ${documentsView === "grid" ? "bg-[#3B5998] text-white" : "text-[#71808d] hover:text-[#3B5998]"}`} aria-label="Vue grille"><LayoutGrid className="h-4 w-4" /></button></div></div></div>
+                <div className={`mt-6 gap-4 ${documentsView === "grid" ? "grid lg:grid-cols-2" : "flex flex-col"}`}>{serviceDocuments[activeService]?.map((document) => <article key={document.title} className={`rounded-[22px] border border-[#e1e7ef] bg-white p-5 shadow-[0_8px_22px_rgba(25,33,46,0.04)] ${documentsView === "list" ? "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between" : ""}`}><div className={documentsView === "list" ? "flex min-w-0 items-start gap-4" : ""}><div className="flex min-w-0 gap-3"><span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#fff1f1] text-[0.65rem] font-black text-[#d44747]">PDF</span><div><p className="text-[0.64rem] font-bold uppercase tracking-[0.14em] text-[#7b8996]">{document.type}</p><h3 className="mt-1 text-sm font-black uppercase tracking-[0.035em] text-[#2b3a46]">{document.title}</h3></div></div><div className={`text-sm ${documentsView === "list" ? "mt-0 sm:ml-8 sm:border-l sm:border-[#edf0f4] sm:pl-8" : "mt-5 border-t border-[#edf0f4] pt-4"}`}><p className="font-semibold text-[#40505d]">{document.owner}</p><a href={`mailto:${document.email}`} className="mt-1 block text-[#617baf] transition hover:text-[#3B5998]">{document.email}</a><p className="mt-2 text-[0.72rem] text-[#84919c]">Émis le {document.date}</p></div></div><div className={`flex shrink-0 items-center gap-3 ${documentsView === "list" ? "sm:pl-4" : "mt-5"}`}><span className={`rounded-full px-2.5 py-1 text-[0.6rem] font-black uppercase tracking-[0.1em] ${document.status === "Signé" ? "bg-[#e8f6ed] text-[#27854d]" : "bg-[#fff5df] text-[#b77913]"}`}>{document.status}</span><button type="button" onClick={() => setOpenDocument(document)} className="inline-flex items-center gap-2 rounded-full bg-[#22303a] px-4 py-2.5 text-[0.66rem] font-black uppercase tracking-[0.13em] text-white transition hover:bg-[#3B5998]"><FileText className="h-4 w-4" /> Voir</button></div></article>)}</div>
               </div>
-            </div>
-            <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {serviceActions.map(
-                ({ label, description, icon: Icon, featured }) => (
-                  <button
-                    key={label}
-                    type="button"
-                    className={`group flex min-h-28 flex-col rounded-[20px] border p-4 text-left transition hover:-translate-y-1 ${featured ? "border-[#3B5998] bg-[#3B5998] text-white shadow-[0_12px_24px_rgba(59,89,152,0.22)]" : "border-[#e0e6ee] bg-white text-[#263440] hover:border-[#3B5998]"}`}
-                  >
-                    <Icon
-                      className={`h-5 w-5 ${featured ? "text-white" : "text-[#3B5998]"}`}
-                    />
-                    <span className="mt-auto text-sm font-black uppercase tracking-[0.05em]">
-                      {label}
-                    </span>
-                    <span
-                      className={`mt-1 text-[0.67rem] ${featured ? "text-white/70" : "text-[#718090]"}`}
-                    >
-                      {description}
-                    </span>
-                  </button>
-                ),
-              )}
-            </div>
+            ) : (
+              <><div><p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#3B5998]">Services associés</p><h2 className="mt-2 text-2xl font-black uppercase tracking-[0.05em]">Pilotez votre bien</h2></div><div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{serviceActions.map(({ label, description, icon: Icon, featured }) => <button key={label} type="button" onClick={() => setActiveService(label)} className={`group flex min-h-28 flex-col rounded-[20px] border p-4 text-left transition hover:-translate-y-1 ${featured ? "border-[#3B5998] bg-[#3B5998] text-white shadow-[0_12px_24px_rgba(59,89,152,0.22)]" : "border-[#e0e6ee] bg-white text-[#263440] hover:border-[#3B5998]"}`}><Icon className={`h-5 w-5 ${featured ? "text-white" : "text-[#3B5998]"}`} /><span className="mt-auto text-sm font-black uppercase tracking-[0.05em]">{label}</span><span className={`mt-1 text-[0.67rem] ${featured ? "text-white/70" : "text-[#718090]"}`}>{description}</span></button>)}</div></>
+            )}
           </section>
         </div>
       </div>
       <Footer market={market} />
+      <AnimatePresence>
+        {openDocument && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpenDocument(null)} className="fixed inset-0 z-[100] flex items-center justify-center bg-[#162331]/55 p-4 backdrop-blur-sm">
+            <motion.div initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.98 }} onClick={(event) => event.stopPropagation()} className="w-full max-w-3xl overflow-hidden rounded-[28px] bg-white shadow-2xl">
+              <div className="flex items-center justify-between border-b border-[#e5e9ef] px-6 py-4"><div><p className="text-[0.62rem] font-bold uppercase tracking-[0.15em] text-[#d44747]">Aperçu PDF</p><h2 className="mt-1 text-base font-black uppercase tracking-[0.03em] text-[#263440]">{openDocument.title}</h2></div><button type="button" onClick={() => setOpenDocument(null)} className="rounded-full p-2 text-[#687785] transition hover:bg-[#f1f4f7] hover:text-[#263440]" aria-label="Fermer"><X className="h-5 w-5" /></button></div>
+              <div className="m-5 flex h-[360px] items-center justify-center rounded-2xl border border-dashed border-[#cfd8e4] bg-[#f6f8fb] p-8 text-center"><div><span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#fff0f0] text-sm font-black text-[#d44747]">PDF</span><p className="mt-4 text-sm font-semibold text-[#52616e]">Aperçu du document</p><p className="mt-1 text-sm text-[#81909c]">Le lecteur PDF sera connecté ici.</p></div></div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
