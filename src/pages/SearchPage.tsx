@@ -281,7 +281,8 @@ export default function SearchPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.45, delay: index * 0.05 }}
-                    className="overflow-hidden rounded-[30px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.06)]"
+                    onClick={() => navigate(`/listing/${listing.id}`)}
+                    className="cursor-pointer overflow-hidden rounded-[30px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.06)] transition hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)]"
                   >
                     <div className="relative h-56 overflow-hidden">
                       <img
@@ -346,15 +347,16 @@ export default function SearchPage() {
                           <button
                             key={tag}
                             type="button"
-                            onClick={() =>
+                            onClick={(event) => {
+                              event.stopPropagation();
                               navigate(
                                 buildPath("/search", {
                                   country: activeMarket.id,
                                   mode: "classic",
                                   filter: tag,
                                 })
-                              )
-                            }
+                              );
+                            }}
                             className="rounded-full border border-[#d6dce4] px-3 py-1.5 text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-[#556473] transition hover:border-[#3B5998] hover:text-[#3B5998]"
                           >
                             {getFilterLabel(tag) ?? tag}

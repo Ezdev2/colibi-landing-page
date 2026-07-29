@@ -10,6 +10,7 @@ import ContestPage from "./pages/ContestPage";
 import ColibiHome from "./pages/ColibiHome";
 import ColibiHomeOne from "./pages/ColibiHomeOne";
 import ColibiHomeTwo from "./pages/ColibiHomeTwo";
+import ListingDetailPage from "./pages/ListingDetailPage";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/proposal-2" element={<ProposalTwoPage />} />
         <Route path="/proposal-3" element={<ProposalThreePage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/listing/:listingId" element={<ListingDetailPage />} />
       </Routes>
     </BrowserRouter>
   );

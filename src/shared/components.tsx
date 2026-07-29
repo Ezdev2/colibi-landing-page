@@ -1242,7 +1242,8 @@ export function ListingsSection({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45, delay: index * 0.07 }}
-              className="overflow-hidden rounded-[16px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
+              onClick={() => onNavigate(`/listing/${listing.id}`)}
+              className="cursor-pointer overflow-hidden rounded-[16px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)]"
             >
               {/* Image */}
               <div className="relative h-52 overflow-hidden">
@@ -1286,6 +1287,7 @@ export function ListingsSection({
                   </p>
                   <button
                     type="button"
+                    onClick={(event) => event.stopPropagation()}
                     className="rounded-full border border-[#d6dce4] p-1.5 text-[#8a97a4] transition hover:border-[#3B5998] hover:text-[#3B5998]"
                   >
                     <Heart className="h-3.5 w-3.5" />
@@ -1441,7 +1443,8 @@ export function MostViewSection({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.45, delay: index * 0.07 }}
-              className="overflow-hidden rounded-[16px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)] hover:-translate-y-1"
+              onClick={() => onNavigate(`/listing/${listing.id}`)}
+              className="cursor-pointer overflow-hidden rounded-[16px] border border-[#d9e0e8] bg-white shadow-[0_16px_36px_rgba(25,33,46,0.07)] transition hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(25,33,46,0.12)]"
             >
               {/* Image */}
               <div className="relative h-52 overflow-hidden">
@@ -1485,6 +1488,7 @@ export function MostViewSection({
                   </p>
                   <button
                     type="button"
+                    onClick={(event) => event.stopPropagation()}
                     className="rounded-full border border-[#d6dce4] p-1.5 text-[#8a97a4] transition hover:border-[#3B5998] hover:text-[#3B5998]"
                   >
                     <Heart className="h-3.5 w-3.5" />
