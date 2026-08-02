@@ -93,25 +93,30 @@ type TimelineEvent = {
   state: "done" | "today" | "upcoming";
 };
 
+type TimelineDateGroup = {
+  month: string;
+  date: string;
+  state: "done" | "today" | "upcoming";
+  events: TimelineEvent[];
+};
+
 function TimelineCard({ event }: { event: TimelineEvent }) {
   return (
     <div
-      className={`w-full rounded-xl border px-3 py-2 transition-shadow ${
+      className={`relative w-full border-l border-r border-[#e9edf3] bg-transparent px-2.5 py-2 transition-shadow before:absolute before:inset-x-1 before:top-1 before:h-px before:rounded-full before:bg-[#dfe7f3] before:content-[''] ${
         event.state === "today"
-          ? "border-[#b8caef] bg-[#eef3ff] shadow-[0_8px_18px_rgba(59,89,152,0.12)]"
-          : event.state === "done"
-            ? "border-[#e1e7ef] bg-white"
-            : "border-[#e5e9ef] bg-white/70"
+          ? "shadow-[0_8px_18px_rgba(59,89,152,0.08)]"
+          : ""
       }`}
     >
       <p
-        className={`text-[0.62rem] font-black uppercase tracking-[0.13em] ${
+        className={`text-[0.58rem] font-black uppercase tracking-[0.12em] ${
           event.state === "today" ? "text-[#3B5998]" : "text-[#8895a1]"
         }`}
       >
         {event.date}
       </p>
-      <h3 className="mt-1 text-[0.72rem] font-black uppercase leading-tight tracking-[0.025em] text-[#2b3a46]">
+      <h3 className="mt-1 text-[0.7rem] font-black uppercase leading-tight tracking-[0.025em] text-[#2b3a46]">
         {event.title}
       </h3>
     </div>
@@ -199,45 +204,115 @@ export default function ListingDetailPage() {
       icon: Home,
     },
   ];
-  const monthlyTimeline: TimelineEvent[] = [
+  const monthlyTimeline: TimelineDateGroup[] = [
     {
       month: "Mars 2026",
       date: "08 MAR",
-      title: "Premier contact",
-      text: "Expression d'intérêt enregistrée.",
       state: "done",
+      events: [
+        {
+          month: "Mars 2026",
+          date: "08 MAR",
+          title: "Premier contact",
+          text: "Expression d'intérêt enregistrée.",
+          state: "done",
+        },
+      ],
     },
     {
       month: "Avril 2026",
       date: "17 AVR",
-      title: "Visite du bien",
-      text: "Visite privée réalisée avec le conseiller.",
       state: "done",
+      events: [
+        {
+          month: "Avril 2026",
+          date: "17 AVR",
+          title: "Visite du bien",
+          text: "Visite privée réalisée avec le conseiller.",
+          state: "done",
+        },
+      ],
     },
     {
       month: "Mai 2026",
       date: "06 MAI",
-      title: "Dossier partagé",
-      text: "Documents et informations du bien consultés.",
       state: "done",
+      events: [
+        {
+          month: "Mai 2026",
+          date: "06 MAI",
+          title: "Dossier partagé",
+          text: "Documents et informations du bien consultés.",
+          state: "done",
+        },
+      ],
     },
     {
       month: "Juin 2026",
       date: "21 JUIN",
-      title: "Étude financière",
-      text: "Simulation de financement mise à jour.",
       state: "done",
+      events: [
+        {
+          month: "Juin 2026",
+          date: "21 JUIN",
+          title: "Étude financière",
+          text: "Simulation de financement mise à jour.",
+          state: "done",
+        },
+        {
+          month: "Juin 2026",
+          date: "21 JUIN",
+          title: "Contrat de mission",
+          text: "Validation du mandat de vente et des prochaines étapes.",
+          state: "done",
+        },
+      ],
     },
     {
       month: "Juillet 2026",
       date: "AUJ. · 29 JUIL",
-      title: "Aujourd'hui",
-      text: "Prochaine action à définir sur ce bien.",
       state: "today",
+      events: [
+        {
+          month: "Juillet 2026",
+          date: "AUJ. · 29 JUIL",
+          title: "Aujourd'hui",
+          text: "Prochaine action à définir sur ce bien.",
+          state: "today",
+        },
+        {
+          month: "Juillet 2026",
+          date: "AUJ. · 29 JUIL",
+          title: "Validation finale",
+          text: "Vérification des pièces et préparation à la signature.",
+          state: "today",
+        },
+        {
+          month: "Juillet 2026",
+          date: "AUJ. · 29 JUIL",
+          title: "Pré-contrat",
+          text: "Rédaction du dossier de vente et contrôle final.",
+          state: "today",
+        },
+        {
+          month: "Juillet 2026",
+          date: "AUJ. · 29 JUIL",
+          title: "Signature notaire",
+          text: "Préparation des derniers documents à signer.",
+          state: "today",
+        },
+        {
+          month: "Juillet 2026",
+          date: "AUJ. · 29 JUIL",
+          title: "Mise en ligne",
+          text: "Publication marketing et diffusion du bien.",
+          state: "today",
+        },
+      ],
     },
   ];
 
-  const todayIndex = monthlyTimeline.findIndex((e) => e.state === "today");
+  const todayIndex = monthlyTimeline.findIndex((group) => group.state === "today");
   const activeIndex =
     todayIndex === -1 ? monthlyTimeline.length - 1 : todayIndex;
   const progressPercent =
@@ -404,7 +479,7 @@ export default function ListingDetailPage() {
           </div>
 
           {/* Timeline secondaire */}
-          <section className="relative left-1/2 w-screen -translate-x-1/2 border-y border-[#e5e9ef] bg-[#fbfcfe] py-12">
+          <section className="relative left-1/2 w-screen -translate-x-1/2 border-y border-[#e5e9ef] bg-[#fff] py-12">
             <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
               <p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#3B5998]">
                 Woodline
@@ -413,75 +488,156 @@ export default function ListingDetailPage() {
                 Liste des évènements associés à ce bien
               </h2>
 
-              <div className="mt-10 overflow-x-auto pb-2">
-                <div className="relative flex min-w-[900px] justify-between gap-2 px-4 lg:min-w-0">
-                  {/* ligne de fond */}
-                  <span className="absolute left-4 right-4 top-[102px] h-[3px] rounded-full bg-[#e3e9f1]" />
-                  {/* ligne de progression */}
-                  <span
-                    className="absolute left-4 top-[102px] h-[3px] rounded-full bg-gradient-to-r from-[#3B5998] to-[#7d9ae0] transition-all duration-700"
-                    style={{
-                      width: `calc((100% - 2rem) * ${progressPercent / 100})`,
-                    }}
-                  />
+              <div className="mt-10 rounded-[30px] border border-[#e4eaf3] bg-[linear-gradient(180deg,#f9fbff_0%,#f4f8ff_100%)] p-4 shadow-[0_18px_46px_rgba(30,42,58,0.08)] sm:p-5">
+                <div className="mb-5 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#3B5998]">
+                      Calendrier
+                    </p>
+                    <h3 className="mt-2 text-xl font-black uppercase tracking-[0.04em] text-[#22303a]">
+                      Évènements du projet
+                    </h3>
+                  </div>
+                  <span className="rounded-full border border-[#dfe7f3] bg-white px-2.5 py-1 text-[0.58rem] font-black uppercase tracking-[0.12em] text-[#647383]">
+                    3 max
+                  </span>
+                </div>
 
-                  {monthlyTimeline.map((event, index) => {
-                    const isTop = index % 2 === 0;
-                    return (
-                      <div
-                        key={event.month}
-                        className="relative z-10 flex w-[170px] shrink-0 flex-col items-center text-center"
-                      >
-                        <div className="flex h-[54px] w-full items-end justify-center">
-                          {isTop && <TimelineCard event={event} />}
-                        </div>
-
-                        <p
-                          className={`mt-2 text-[0.62rem] font-black uppercase tracking-[0.1em] ${
-                            event.state === "today"
-                              ? "text-[#3B5998]"
-                              : "text-[#8a96a2]"
-                          }`}
-                        >
-                          {event.month}
-                        </p>
-
-                        <div className="relative mt-2 flex h-9 items-center justify-center">
-                          {event.state === "today" && (
-                            <span className="absolute h-10 w-10 animate-ping rounded-full bg-[#3B5998]/20" />
-                          )}
+                <div className="overflow-x-auto pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                  <div className="relative min-w-[900px] px-2 pb-4 lg:min-w-0">
+                    <div className="absolute bottom-[2.1rem] left-4 right-4 h-8 rounded-[14px] border border-[#edf2fa] bg-[linear-gradient(180deg,rgba(59,89,152,0.03),rgba(59,89,152,0.01))] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+                      <div className="absolute inset-x-2 top-1/2 h-px -translate-y-1/2 bg-[#dfe7f3]" />
+                      <div className="absolute inset-x-2 top-1/2 flex -translate-y-1/2 justify-between">
+                        {Array.from({ length: 18 }).map((_, index) => (
                           <span
-                            className={`relative flex h-8 w-8 items-center justify-center rounded-full border-[3px] bg-white ${
-                              event.state === "today"
-                                ? "border-[#3B5998] shadow-[0_0_0_6px_rgba(59,89,152,0.14)]"
-                                : event.state === "done"
-                                  ? "border-[#3B5998]"
-                                  : "border-[#dde3ea]"
+                            key={`ruler-${index}`}
+                            className={`h-3.5 w-px rounded-full ${
+                              index % 2 === 0 ? "bg-[#b6c4d8]" : "bg-[#e8edf7]"
                             }`}
-                          >
-                            {event.state === "done" ? (
-                              <Check
-                                className="h-3.5 w-3.5 text-[#3B5998]"
-                                strokeWidth={3}
-                              />
-                            ) : (
-                              <span
-                                className={`h-2 w-2 rounded-full ${
-                                  event.state === "today"
-                                    ? "bg-[#3B5998]"
-                                    : "bg-[#c3ccd6]"
-                                }`}
-                              />
-                            )}
-                          </span>
-                        </div>
-
-                        <div className="mt-3 flex h-[54px] w-full items-start justify-center">
-                          {!isTop && <TimelineCard event={event} />}
-                        </div>
+                          />
+                        ))}
                       </div>
-                    );
-                  })}
+                    </div>
+
+                    <span className="absolute bottom-14 left-4 right-4 h-[3px] rounded-full bg-[#e3e9f1]" />
+                    <span
+                      className="absolute bottom-14 left-4 h-[3px] rounded-full bg-gradient-to-r from-[#3B5998] to-[#7d9ae0] transition-all duration-700"
+                      style={{
+                        width: `calc((100% - 2rem) * ${progressPercent / 100})`,
+                      }}
+                    />
+
+                    <div className="relative z-10 flex items-end justify-between gap-3">
+                      {monthlyTimeline.map((group) => {
+                        const groupState = group.state;
+                      const visibleEvents = group.events.slice(0, 2);
+                      const hiddenEvents = group.events.slice(2);
+
+                        return (
+                          <div
+                            key={`${group.month}-${group.date}`}
+                            className="relative w-[180px] shrink-0"
+                          >
+                            <div className="rounded-[22px] border border-[#eaf0f7] bg-white/80 p-2 shadow-[0_12px_26px_rgba(30,42,58,0.05)] backdrop-blur-sm">
+                              <div className="mb-2 flex items-center justify-between px-0.5 text-[0.56rem] font-black uppercase tracking-[0.12em] text-[#8a96a2]">
+                                <span>{group.month}</span>
+                                <span className="rounded-full bg-[#eef3ff] px-1.5 py-0.5 text-[#3B5998]">
+                                  {group.events.length}
+                                </span>
+                              </div>
+
+                              <div className="flex min-h-[138px] flex-col gap-1.5">
+                                {visibleEvents.map((event) => (
+                                  <TimelineCard
+                                    key={`${group.date}-${event.title}`}
+                                    event={event}
+                                  />
+                                ))}
+
+                                {hiddenEvents.length > 0 && (
+                                  <div className="group relative mt-0.5">
+                                    <button
+                                      type="button"
+                                      aria-label={`Afficher ${hiddenEvents.length} événements supplémentaires de ${group.month}`}
+                                      className="flex h-8 items-center justify-center rounded-full border border-[#b8caef] bg-[#eef3ff] px-2.5 text-[0.62rem] font-black uppercase tracking-[0.12em] text-[#3B5998] shadow-[0_8px_18px_rgba(59,89,152,0.08)] transition hover:border-[#3B5998]"
+                                    >
+                                      +{hiddenEvents.length}
+                                    </button>
+
+                                    <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-3 w-64 -translate-x-1/2 opacity-0 transition duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                                      <div className="rounded-[20px] border border-[#dfe7f3] bg-white p-3 text-left shadow-[0_18px_36px_rgba(30,42,58,0.15)]">
+                                        <p className="text-[0.58rem] font-black uppercase tracking-[0.14em] text-[#71808d]">
+                                          Événements
+                                        </p>
+                                        <div className="mt-2 space-y-2">
+                                          {hiddenEvents.map((event) => (
+                                            <div
+                                              key={`${group.date}-${event.title}-tooltip`}
+                                              className="rounded-xl border border-[#edf1f6] bg-[#f8fafc] px-2.5 py-2"
+                                            >
+                                              <p className="text-[0.56rem] font-black uppercase tracking-[0.1em] text-[#8a96a2]">
+                                                {event.date}
+                                              </p>
+                                              <p className="mt-1 text-[0.68rem] font-black uppercase tracking-[0.03em] text-[#2b3a46]">
+                                                {event.title}
+                                              </p>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="relative mt-4 flex h-10 items-center justify-center">
+                              {groupState === "today" && (
+                                <span className="absolute h-10 w-10 animate-ping rounded-full bg-[#3B5998]/20" />
+                              )}
+                              <span
+                                className={`relative flex h-8 w-8 items-center justify-center rounded-full border-[3px] bg-white ${
+                                  groupState === "today"
+                                    ? "border-[#3B5998] shadow-[0_0_0_6px_rgba(59,89,152,0.14)]"
+                                    : groupState === "done"
+                                      ? "border-[#3B5998]"
+                                      : "border-[#dde3ea]"
+                                }`}
+                              >
+                                {groupState === "done" ? (
+                                  <Check
+                                    className="h-3.5 w-3.5 text-[#3B5998]"
+                                    strokeWidth={3}
+                                  />
+                                ) : (
+                                  <span
+                                    className={`h-2 w-2 rounded-full ${
+                                      groupState === "today"
+                                        ? "bg-[#3B5998]"
+                                        : "bg-[#c3ccd6]"
+                                    }`}
+                                  />
+                                )}
+                              </span>
+                            </div>
+
+                            <p
+                              className={`mt-3 text-center text-[0.62rem] font-black uppercase tracking-[0.1em] ${
+                                groupState === "today"
+                                  ? "text-[#3B5998]"
+                                  : "text-[#8a96a2]"
+                              }`}
+                            >
+                              {group.month}
+                            </p>
+                            <p className="mt-1 text-center text-[0.62rem] font-bold uppercase tracking-[0.12em] text-[#a0a9b3]">
+                              {group.date}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
