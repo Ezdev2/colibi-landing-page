@@ -1965,7 +1965,7 @@ export default function ColibiHome() {
           onDoubleClick={toggleDrawerMaximized}
           title="Glisser pour redimensionner · double-clic pour agrandir/réduire"
           className={`w-full flex-shrink-0 h-4 flex items-center justify-center cursor-row-resize group ${
-            isDrawerOpen ? "" : "pointer-events-none opacity-0"
+            isDrawerOpen ? "" : "pointer-events-none hidden"
           }`}
         >
           <div
@@ -1979,7 +1979,7 @@ export default function ColibiHome() {
 
         {/* Header */}
         <div
-          className={`flex-shrink-0 flex items-center justify-between px-5 pb-3 ${isDrawerOpen ? "" : "h-full pt-0"}`}
+          className={`flex-shrink-0 flex items-center justify-between px-5 ${isDrawerOpen ? "pb-3" : "h-full pt-0"}`}
         >
           <button
             onClick={() => setIsDrawerOpen((v) => !v)}
@@ -2223,7 +2223,7 @@ export default function ColibiHome() {
           onClick={() =>
             setUserRole((r) => (r === "client" ? "professionnel" : "client"))
           }
-          className={`absolute top-2.5 right-5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] opacity-40 hover:opacity-90 transition ${ui.mutedText}`}
+          className={`p-2 px-4 bg-gray-200 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] opacity-40 hover:opacity-90 transition ${ui.mutedText}`}
           title="Basculer la vue (démo provisoire — à retirer avant prod)"
         >
           <UserCog size={11} />
@@ -3170,7 +3170,7 @@ function VSCodeTabBar({
           <button
             key={tab.id}
             onClick={() => onSelect(tab.id)}
-            className={`relative flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-t-xl border border-b-0 transition ${
+            className={`relative flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-t-sm border border-b-0 transition ${
               active
                 ? isDark
                   ? "bg-[#13244A] text-white border-white/10"
@@ -3182,7 +3182,7 @@ function VSCodeTabBar({
             style={
               active
                 ? {
-                    boxShadow: `inset 0 2px 0 0 ${COLIBI_BLUE}`,
+                    boxShadow: `inset 0 0.5px 0 0 ${COLIBI_BLUE}`,
                   }
                 : undefined
             }
