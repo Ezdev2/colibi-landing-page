@@ -41,6 +41,7 @@ import {
   Clock3,
   FileCheck2,
   FileClock,
+  Sparkles,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { buildPath } from "../shared/utils";
@@ -617,6 +618,12 @@ export default function ColibiHome() {
   const [measurePoints, setMeasurePoints] = useState<[number, number][]>([]);
   const [leftTab, setLeftTab] = useState<LeftPanelTab>("walls");
   const [isPanelOpen, setIsPanelOpen] = useState(true);
+  // Le panneau de conception (carrelage, murs, meubles…) est temporairement
+  // masqué au profit de l'aside relooking. Remettre `true` pour le réafficher.
+  const showDesignPanel = false;
+  // Ancien appel du drawer inférieur : conservé mais volontairement désactivé.
+  // Remettre `true` si ce panneau doit de nouveau apparaître en bas.
+  const showLegacyBottomRelooking = false;
 
   // Scene / grid options (controlled from the new "Options" modal)
   const [showGrid, setShowGrid] = useState(true);
@@ -973,7 +980,8 @@ export default function ColibiHome() {
   // Offset fixe : la scène (2D/3D), le rail gauche et le panneau droit ne se
   // redimensionnent plus jamais quand le drawer est étiré — celui-ci flotte
   // par-dessus (comportement "absolute" / overlay), il ne pousse plus le reste.
-  const contentBottomOffset = 16 + DRAWER_COLLAPSED_HEIGHT + 12;
+  // Le sélecteur de vue est désormais un petit footer, sans drawer inférieur.
+  const contentBottomOffset = 48;
   const drawerTransitionClass = isDraggingDrawer
     ? ""
     : "transition-all duration-300 ease-out";
@@ -1738,7 +1746,8 @@ export default function ColibiHome() {
         </div>
       </div>
 
-      {/* Right panel — collapsible Design Panel */}
+      {/* Panneau de conception historique : désactivé, à réactiver via showDesignPanel. */}
+      {showDesignPanel && (
       <div
         className={`absolute top-24 right-4 z-30 transition-all duration-300 ${isPanelOpen ? "w-[360px]" : "w-[64px]"}`}
         style={{ bottom: contentBottomOffset }}
@@ -1842,6 +1851,158 @@ export default function ColibiHome() {
           </button>
         )}
       </div>
+      )}
+
+      {/* Aside relooking — remplace le panneau de conception à droite. */}
+      <aside
+        className={`absolute top-24 right-4 bottom-14 z-30 w-[440px] rounded-[32px] border backdrop-blur-xl shadow-[0_16px_35px_rgba(15,23,42,0.10)] p-4 flex flex-col ${
+          isDark
+            ? "bg-[#0B1730]/90 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.42)]"
+            : "bg-white/94 border-slate-200"
+        }`}
+        aria-label="Mes relookings"
+      >
+        {userRole === "client" ? (
+          <RelookingTabBar
+            isDark={isDark}
+            tabs={[
+              {
+                id: "mesRelookings",
+                label: "Mes relookings",
+                icon: <Sparkles size={14} />,
+                count: clientRelookings.length,
+              },
+              {
+                id: "avecPro",
+                label: "Avec un pro",
+                icon: <Building2 size={14} />,
+                count: clientSolicitations.length,
+              },
+            ]}
+            activeId={clientDrawerTab}
+            onSelect={(id) => setClientDrawerTab(id as ClientDrawerTab)}
+          />
+        ) : (
+          <RelookingTabBar
+            isDark={isDark}
+            tabs={[
+              {
+                id: "avecContrat",
+                label: "Avec contrat",
+                icon: <FileCheck2 size={14} />,
+                count: proManagedProperties.filter((item) => item.hasContract).length,
+              },
+              {
+                id: "sansContrat",
+                label: "Sans contrat",
+                icon: <FileClock size={14} />,
+                count: proManagedProperties.filter((item) => !item.hasContract).length,
+              },
+            ]}
+            activeId={proDrawerTab}
+            onSelect={(id) => setProDrawerTab(id as ProDrawerTab)}
+          />
+        )}
+
+        <div className="flex-1 min-h-0 overflow-y-auto pt-3.5 pr-1">
+          {userRole === "client" && clientDrawerTab === "mesRelookings" && (
+            <div className="grid grid-cols-2 gap-3">
+              <NewRelookingCard isDark={isDark} label="Nouveau relooking" onClick={createNewClientRelooking}>
+                <MiniFloorPlanPreview2D property={selectedProperty} floorId={currentFloor} isDark={isDark} />
+              </NewRelookingCard>
+              {clientRelookings.map((item) => {
+                const property = findPropertyById(properties, item.propertyId);
+                const isActive = selectedPropertyId === item.propertyId && currentFloor === item.floorId;
+                return (
+                  <ClientRelookingCard
+                    key={item.id}
+                    item={item}
+                    property={property}
+                    isDark={isDark}
+                    isActive={isActive}
+                    isRenaming={renamingRelookingId === item.id}
+                    renameValue={renamingRelookingValue}
+                    onRenameValueChange={setRenamingRelookingValue}
+                    onStartRename={() => {
+                      setRenamingRelookingId(item.id);
+                      setRenamingRelookingValue(item.title);
+                    }}
+                    onCommitRename={() => {
+                      renameClientRelooking(item.id, renamingRelookingValue);
+                      setRenamingRelookingId(null);
+                    }}
+                    onClick={() => {
+                      loadRelookingIntoWorkspace(item.propertyId, item.floorId);
+                      setViewMode("2D");
+                    }}
+                  />
+                );
+              })}
+              {clientRelookings.length === 0 && <EmptyHint isDark={isDark} text="Aucun relooking personnel pour l'instant." />}
+            </div>
+          )}
+
+          {userRole === "client" && clientDrawerTab === "avecPro" && (
+            <div className="grid grid-cols-2 gap-3">
+              <NewRelookingCard isDark={isDark} label="Nouvelle sollicitation" onClick={createNewSolicitation}>
+                <MiniPropertyPreview3D property={selectedProperty} />
+              </NewRelookingCard>
+              {clientSolicitations.map((item) => {
+                const property = findPropertyById(properties, item.propertyId);
+                return (
+                  <ProRelookingCard
+                    key={item.id}
+                    title={item.title}
+                    subtitle={item.professionalName}
+                    status={item.status}
+                    updatedAt={item.updatedAt}
+                    property={property}
+                    isDark={isDark}
+                    isActive={selectedPropertyId === item.propertyId}
+                    onClick={() => {
+                      loadRelookingIntoWorkspace(item.propertyId);
+                      setViewMode("3D");
+                    }}
+                  />
+                );
+              })}
+              {clientSolicitations.length === 0 && <EmptyHint isDark={isDark} text="Aucune sollicitation envoyée à un professionnel." />}
+            </div>
+          )}
+
+          {userRole === "professionnel" && (
+            <div className="grid grid-cols-2 gap-3">
+              {proManagedProperties
+                .filter((item) => proDrawerTab === "avecContrat" ? item.hasContract : !item.hasContract)
+                .map((item) => {
+                  const property = findPropertyById(properties, item.propertyId);
+                  return (
+                    <ProRelookingCard
+                      key={item.id}
+                      title={property.name}
+                      subtitle={item.clientName}
+                      status={item.status}
+                      updatedAt={item.updatedAt}
+                      property={property}
+                      isDark={isDark}
+                      isActive={selectedPropertyId === item.propertyId}
+                      onClick={() => {
+                        loadRelookingIntoWorkspace(item.propertyId);
+                        setViewMode("3D");
+                      }}
+                    />
+                  );
+                })}
+              {proManagedProperties.filter((item) => proDrawerTab === "avecContrat" ? item.hasContract : !item.hasContract).length === 0 && (
+                <EmptyHint
+                  isDark={isDark}
+                  text={proDrawerTab === "avecContrat" ? "Aucun bien sous contrat pour l'instant." : "Aucune sollicitation sans contrat pour l'instant."}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      </aside>
 
       {/* Bottom status */}
       {(pendingCatalogId || measuredDistance) && (
@@ -1939,7 +2100,8 @@ export default function ColibiHome() {
         </div>
       )}
 
-      {/* Bottom drawer — Mes relookings (résizable comme un panneau de studio vidéo, flotte au-dessus de la scène) */}
+      {/* Ancien drawer inférieur — appel désactivé, à réactiver via showLegacyBottomRelooking. */}
+      {showLegacyBottomRelooking && (
       <div
         className={`absolute left-4 right-4 bottom-4 z-[45] flex flex-col rounded-[28px] border overflow-hidden shadow-[0_-16px_40px_rgba(15,23,42,0.14)] ${drawerTransitionClass} ${
           isDark
@@ -2230,6 +2392,21 @@ export default function ColibiHome() {
           {userRole === "client" ? "Vue client" : "Vue pro"}
         </button>
       </div>
+      )}
+
+      {/* Sélecteur de rôle discret, conservé en footer pour les vues client et professionnel. */}
+      <button
+        onClick={() =>
+          setUserRole((r) => (r === "client" ? "professionnel" : "client"))
+        }
+        className={`absolute bottom-0 left-1/2 -translate-x-1/2 z-40 px-4 py-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] opacity-40 hover:opacity-90 transition ${
+          isDark ? "bg-white/10 text-blue-100" : "bg-slate-200/85 text-slate-600"
+        }`}
+        title="Basculer la vue client / professionnel (démo)"
+      >
+        <UserCog size={11} />
+        {userRole === "client" ? "Vue client" : "Vue professionnel"}
+      </button>
 
       {/* Scene options modal — Grid + Visualisation 3D (settings icon on Design Panel) */}
       {showSceneOptions && (
@@ -3196,15 +3373,91 @@ function VSCodeTabBar({
   );
 }
 
-function EmptyHint({ isDark, text }: { isDark: boolean; text: string }) {
+/** Barre d'onglets moderne et épurée pour le panneau Relooking avec icônes et compteurs */
+function RelookingTabBar({
+  tabs,
+  activeId,
+  onSelect,
+  isDark,
+}: {
+  tabs: { id: string; label: string; icon?: React.ReactNode; count?: number }[];
+  activeId: string;
+  onSelect: (id: string) => void;
+  isDark: boolean;
+}) {
   return (
-    <p
-      className={`text-sm col-span-full py-6 text-center ${
-        isDark ? "text-blue-100/40" : "text-slate-400"
+    <div
+      className={`p-1 rounded-2xl border flex items-center gap-1 shrink-0 ${
+        isDark
+          ? "bg-[#071224]/80 border-white/10 shadow-inner"
+          : "bg-slate-100/90 border-slate-200/80 shadow-inner"
       }`}
     >
-      {text}
-    </p>
+      {tabs.map((tab) => {
+        const active = tab.id === activeId;
+        return (
+          <button
+            key={tab.id}
+            onClick={() => onSelect(tab.id)}
+            className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all duration-200 ${
+              active
+                ? isDark
+                  ? "bg-[#13244A] text-white shadow-[0_2px_8px_rgba(0,0,0,0.3)] border border-white/15 font-bold"
+                  : "bg-white text-[#3B5998] shadow-[0_2px_8px_rgba(15,23,42,0.06)] border border-slate-200/80 font-bold"
+                : isDark
+                  ? "text-blue-100/50 hover:text-white hover:bg-white/5 border border-transparent"
+                  : "text-slate-500 hover:text-slate-900 hover:bg-white/50 border border-transparent"
+            }`}
+          >
+            {tab.icon && (
+              <span
+                className={`transition-colors ${
+                  active
+                    ? isDark
+                      ? "text-[#6B8AFF]"
+                      : "text-[#3B5998]"
+                    : isDark
+                      ? "text-blue-100/40"
+                      : "text-slate-400"
+                }`}
+              >
+                {tab.icon}
+              </span>
+            )}
+            <span className="truncate">{tab.label}</span>
+            {typeof tab.count === "number" && (
+              <span
+                className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                  active
+                    ? isDark
+                      ? "bg-[#3B5998]/40 text-blue-200 border border-[#3B5998]/60"
+                      : "bg-[#3B5998]/10 text-[#3B5998] border border-[#3B5998]/20"
+                    : isDark
+                      ? "bg-white/5 text-blue-100/40"
+                      : "bg-slate-200/70 text-slate-500"
+                }`}
+              >
+                {tab.count}
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function EmptyHint({ isDark, text }: { isDark: boolean; text: string }) {
+  return (
+    <div
+      className={`col-span-2 py-8 px-4 text-center rounded-2xl border border-dashed ${
+        isDark
+          ? "border-white/10 text-blue-100/40 bg-white/[0.02]"
+          : "border-slate-200 text-slate-400 bg-slate-50/50"
+      }`}
+    >
+      <p className="text-xs">{text}</p>
+    </div>
   );
 }
 
@@ -3225,14 +3478,14 @@ function NewRelookingCard({
   return (
     <button
       onClick={onClick}
-      className={`group rounded-3xl border-2 border-dashed overflow-hidden text-left transition ${
+      className={`group rounded-2xl border-2 border-dashed overflow-hidden text-left transition flex flex-col ${
         isDark
           ? "border-[#3B5998]/50 bg-[#0F1D3A] hover:border-[#3B5998]"
           : "border-[#3B5998]/35 bg-[#F8FAFF] hover:border-[#3B5998]"
       }`}
     >
       <div
-        className={`relative w-full h-28 border-b ${
+        className={`relative w-full h-24 border-b ${
           isDark ? "border-white/10" : "border-slate-100"
         }`}
       >
@@ -3245,24 +3498,24 @@ function NewRelookingCard({
           }`}
         >
           <div
-            className="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform"
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform"
             style={{ backgroundColor: COLIBI_BLUE }}
           >
-            <Plus size={20} />
+            <Plus size={16} />
           </div>
         </div>
       </div>
 
-      <div className="p-3">
+      <div className="p-2.5 flex-1 flex flex-col justify-between">
         <p
-          className={`text-xs font-bold ${
+          className={`text-xs font-bold truncate ${
             isDark ? "text-white" : "text-slate-900"
           }`}
         >
           {label}
         </p>
         <p
-          className={`text-[10px] mt-0.5 ${
+          className={`text-[10px] mt-0.5 truncate ${
             isDark ? "text-blue-100/45" : "text-slate-400"
           }`}
         >
@@ -3424,20 +3677,20 @@ function ClientRelookingCard({
 }) {
   return (
     <div
-      className={`rounded-3xl border overflow-hidden text-left transition group ${
+      className={`rounded-2xl border overflow-hidden text-left transition group flex flex-col ${
         isActive
           ? isDark
-            ? "border-[#3B5998] bg-[#13244A]"
-            : "border-[#3B5998] bg-[#EAF0FF]"
+            ? "border-[#3B5998] bg-[#13244A] ring-2 ring-[#3B5998]/40"
+            : "border-[#3B5998] bg-[#EAF0FF] ring-2 ring-[#3B5998]/30"
           : isDark
             ? "border-white/10 bg-[#0F1D3A] hover:border-[#3B5998]/60"
-            : "border-slate-200 bg-white hover:border-[#3B5998]/40"
+            : "border-slate-200 bg-white hover:border-[#3B5998]/40 shadow-sm"
       }`}
     >
       <button
         onClick={onClick}
-        className={`w-full h-28 border-b ${
-          isDark ? "border-white/10" : "border-slate-100"
+        className={`w-full h-24 border-b relative ${
+          isDark ? "border-white/10 bg-[#081225]" : "border-slate-100 bg-slate-50"
         }`}
       >
         <MiniFloorPlanPreview2D
@@ -3447,7 +3700,7 @@ function ClientRelookingCard({
         />
       </button>
 
-      <div className="p-3">
+      <div className="p-2.5 flex-1 flex flex-col justify-between">
         {isRenaming ? (
           <input
             autoFocus
@@ -3465,18 +3718,19 @@ function ClientRelookingCard({
             }`}
           />
         ) : (
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-1">
             <button
               onClick={onClick}
-              className={`text-xs font-bold truncate text-left ${
+              className={`text-xs font-bold truncate text-left flex-1 ${
                 isDark ? "text-white" : "text-slate-900"
               }`}
+              title={item.title}
             >
               {item.title}
             </button>
             <button
               onClick={onStartRename}
-              className={`flex-shrink-0 opacity-0 group-hover:opacity-100 transition ${
+              className={`flex-shrink-0 p-0.5 rounded opacity-0 group-hover:opacity-100 transition ${
                 isDark ? "text-blue-100/50 hover:text-white" : "text-slate-400 hover:text-slate-900"
               }`}
               title="Renommer"
@@ -3489,9 +3743,9 @@ function ClientRelookingCard({
         <div className="flex items-center gap-1 mt-2">
           <Clock3
             size={10}
-            className={isDark ? "text-blue-100/40" : "text-slate-400"}
+            className={`flex-shrink-0 ${isDark ? "text-blue-100/40" : "text-slate-400"}`}
           />
-          <p className={`text-[10px] ${isDark ? "text-blue-100/40" : "text-slate-400"}`}>
+          <p className={`text-[10px] truncate ${isDark ? "text-blue-100/40" : "text-slate-400"}`}>
             {item.updatedAt} · {getFloorLabel(item.floorId)}
           </p>
         </div>
@@ -3522,48 +3776,52 @@ function ProRelookingCard({
   return (
     <button
       onClick={onClick}
-      className={`rounded-3xl border overflow-hidden text-left transition ${
+      className={`rounded-2xl border overflow-hidden text-left transition group flex flex-col ${
         isActive
           ? isDark
-            ? "border-[#3B5998] bg-[#13244A]"
-            : "border-[#3B5998] bg-[#EAF0FF]"
+            ? "border-[#3B5998] bg-[#13244A] ring-2 ring-[#3B5998]/40"
+            : "border-[#3B5998] bg-[#EAF0FF] ring-2 ring-[#3B5998]/30"
           : isDark
             ? "border-white/10 bg-[#0F1D3A] hover:border-[#3B5998]/60"
-            : "border-slate-200 bg-white hover:border-[#3B5998]/40"
+            : "border-slate-200 bg-white hover:border-[#3B5998]/40 shadow-sm"
       }`}
     >
       <div
-        className={`w-full h-28 border-b relative ${
+        className={`w-full h-24 border-b relative ${
           isDark ? "border-white/10 bg-[#081225]" : "border-slate-100 bg-slate-50"
         }`}
       >
         <MiniPropertyPreview3D property={property} />
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-1.5 right-1.5 scale-90 origin-top-right">
           <StatusBadgeThemed status={status} isDark={isDark} />
         </div>
       </div>
 
-      <div className="p-3">
-        <p
-          className={`text-xs font-bold truncate ${
-            isDark ? "text-white" : "text-slate-900"
-          }`}
-        >
-          {title}
-        </p>
-        <p
-          className={`text-[11px] truncate mt-0.5 ${
-            isDark ? "text-blue-100/55" : "text-slate-500"
-          }`}
-        >
-          {subtitle}
-        </p>
+      <div className="p-2.5 flex-1 flex flex-col justify-between">
+        <div>
+          <p
+            className={`text-xs font-bold truncate ${
+              isDark ? "text-white" : "text-slate-900"
+            }`}
+            title={title}
+          >
+            {title}
+          </p>
+          <p
+            className={`text-[11px] truncate mt-0.5 ${
+              isDark ? "text-blue-100/55" : "text-slate-500"
+            }`}
+            title={subtitle}
+          >
+            {subtitle}
+          </p>
+        </div>
         <div className="flex items-center gap-1 mt-2">
           <Clock3
             size={10}
-            className={isDark ? "text-blue-100/40" : "text-slate-400"}
+            className={`flex-shrink-0 ${isDark ? "text-blue-100/40" : "text-slate-400"}`}
           />
-          <p className={`text-[10px] ${isDark ? "text-blue-100/40" : "text-slate-400"}`}>
+          <p className={`text-[10px] truncate ${isDark ? "text-blue-100/40" : "text-slate-400"}`}>
             {updatedAt}
           </p>
         </div>
