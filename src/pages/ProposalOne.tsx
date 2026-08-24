@@ -85,7 +85,7 @@ export default function ProposalOnePage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl font-black leading-[1.05] tracking-[-0.01em] text-[#1a2535] sm:text-6xl"
+              className="text-4xl font-black leading-[1.05] tracking-[-0.01em] text-[#1a2535] sm:text-6xl"
             >
               Trouvez le bien idéal
               <br />
@@ -104,39 +104,46 @@ export default function ProposalOnePage() {
               {/* {activeMarket.country} */}
             </motion.p>
 
-            {/* Search tabs — scrollable horizontalement sur mobile */}
+            {/* Search tabs */}
             <div className="mt-8">
-              <div className="mb-1 flex overflow-x-auto scrollbar-hide sm:inline-flex sm:overflow-visible rounded-full border border-white/60 bg-white/70 p-1 shadow-[0_8px_24px_rgba(20,28,40,0.08)] backdrop-blur-xl">
+              <div className="mb-1 grid grid-cols-3 gap-1 w-full max-w-md mx-auto rounded-2xl border border-white/60 bg-white/70 p-1.5 shadow-[0_8px_24px_rgba(20,28,40,0.08)] backdrop-blur-xl sm:flex sm:w-auto sm:max-w-none sm:inline-flex sm:rounded-full sm:p-1 sm:overflow-visible">
                 {[
                   {
                     id: "classic" as const,
                     label: "Recherche classique",
+                    mobileLabel: "Classique",
                     icon: Search,
                   },
                   {
                     id: "ai" as const,
                     label: "Recherche avec IA",
+                    mobileLabel: "Avec l'IA",
                     icon: Sparkles,
                   },
                   {
                     id: "offmarket" as const,
                     label: "Je cherche off-market",
+                    mobileLabel: "Off-market",
                     icon: Heart,
                   },
-                ].map(({ id, label, icon: Icon }) => (
+                ].map(({ id, label, mobileLabel, icon: Icon }) => (
                   <button
                     key={id}
                     type="button"
                     onClick={() => setMode(id)}
-                    className={`inline-flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-[0.70rem] font-semibold uppercase tracking-[0.14em] transition sm:px-5 ${
+                    className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-center transition sm:inline-flex sm:flex-row sm:gap-2 sm:rounded-full sm:px-5 sm:py-2.5 sm:text-[0.70rem] sm:font-semibold sm:uppercase sm:tracking-[0.14em] ${
                       mode === id
                         ? "bg-[#3B5998] text-white shadow-[0_6px_18px_rgba(59,89,152,0.3)]"
                         : "text-[#344150] hover:bg-white/80"
                     }`}
                   >
-                    <Icon className="h-3.5 w-3.5 flex-shrink-0" />
-                    {/* Label caché sur très petit écran, visible à partir de sm */}
-                    <span className="hidden xs:inline sm:inline">{label}</span>
+                    <Icon className="h-4 w-4 flex-shrink-0 sm:h-3.5 sm:w-3.5" />
+                    {/* Label mobile en dessous de l'icône */}
+                    <span className="text-[11px] font-bold leading-tight sm:hidden">
+                      {mobileLabel}
+                    </span>
+                    {/* Label desktop en ligne */}
+                    <span className="hidden sm:inline">{label}</span>
                   </button>
                 ))}
               </div>
